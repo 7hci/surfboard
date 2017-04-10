@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OnBoarder</title>
+    <link rel="icon" type="image/png" href="static/img/favicon.png">
+    <link rel="stylesheet" href="static/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/00fb325d47.js"></script>
+</head>
+<body>
+<div class="main-content">
+    <form id="onboardingForm" class="onboard-form" method="POST" action="/onboard">
+        <div class="form-title-row">
+            <h1>7HCI Onboarding</h1>
+        </div>
+        <div class="form-row">
+            <label>
+                <span>First Name</span>
+                <input type="text" name="first_name"
+                        {% if contractor %}
+                       placeholder="{{ contractor.first_name }}" disabled
+                        {% endif %}
+                >
+            </label>
+        </div>
+        <div class="form-row">
+            <label>
+                <span>Last Name</span>
+                <input type="text" name="last_name"
+                        {% if contractor %}
+                       placeholder="{{ contractor.last_name }}" disabled
+                        {% endif %}
+                >
+            </label>
+        </div>
+        <div class="form-row">
+            <label>
+                <span>E-mail</span>
+                <input type="email" name="email"
+                        {% if contractor %}
+                       placeholder="{{ contractor.get_email() }}" disabled
+                        {% endif %}
+                >
+            </label>
+        </div>
+        <div class="form-row">
+            <label for="resident">U.S. Resident </label> <input type="checkbox" name="resident" id="resident"
+                {% if contractor %}
+                    disabled
+                    {%  if contractor.is_resident %}
+                        checked
+                    {% endif %}
+                {% else %}
+                    checked
+                {% endif %}>
+        </div>
+        {% if not messages %}
+        <div class="form-row">
+            <button id="submitButton" type="submit">Onboard!</button>
+        </div>
+        {% endif %}
+        <br>
+        <br>
+            {% if messages %}
+            {% for message in messages %}
+            <p class="{{ message.status }}">
+                {{ message.text }}
+                {% if message.status == "success" %}
+                    <i class="fa fa-check-circle"></i>
+                {% else %}
+                    <i class="fa fa-exclamation-circle"></i>
+                {% endif %}
+            </p>
+            {% endfor %}
+            {% endif %}
+    </form>
+
+</div>
+</body>
+</html>
