@@ -13,9 +13,12 @@ def get_user_email(http_auth):
     return info["emailAddress"]
 
 
-def send_info_email(http_auth, contractor):
+def send_drive_email(http_auth, contractor, email_created):
+    # Wait until e-mail has been created for contractor
+    email_created.wait()
+
     # TODO: Take me out for production!!!
-    return {"text": "Sent document request to contractor", "status": "success"}
+    # return {"text": "Sent document instructions to contractor", "status": "success"}
 
     gmail = discovery.build("gmail", "v1", http_auth)
 
@@ -37,17 +40,20 @@ def send_info_email(http_auth, contractor):
 
     gmail.users().messages().send(userId="me", body=complete_message).execute()
 
-    return {"text": "Sent document request to contractor", "status": "success"}
+    return {"text": "Sent document instructions to contractor", "status": "success"}
 
 
-def send_login_email(http_auth, contractor, email):
+def send_login_email(http_auth, contractor, email_created):
+    # Wait until e-mail has been created for contractor
+    email_created.wait()
+
     # TODO: Take me out for production!!!
-    return {"text": "Sent e-mail to contractor", "status": "success"}
+    # return {"text": "Sent e-mail to contractor", "status": "success"}
 
     gmail = discovery.build("gmail", "v1", http_auth)
 
     message = MIMEMultipart()
-    message["to"] = email
+    message["to"] = contractor.private_email
     message["from"] = session["email"]
     message["subject"] = "New E-mail Account Credentials"
 

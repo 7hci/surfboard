@@ -1,11 +1,12 @@
 from apiclient import discovery
 
 
-def add_user_to_domain(http_auth, contractor):
+def add_user_to_domain(http_auth, contractor, email_created):
     # TODO: Take me out for production!!!
+    # email_created.set()
     # return {"text": "Added user to domain", "status": "success"}
 
-    #try:
+    try:
         admin = discovery.build('admin', 'directory_v1', http_auth)
 
         properties = {"primaryEmail": contractor.get_email(),
@@ -17,7 +18,8 @@ def add_user_to_domain(http_auth, contractor):
                       "changePasswordAtNextLogin": True}
 
         created_user = admin.users().insert(body=properties).execute()
+        email_created.set()
 
         return {"text": "Added " + created_user.get("primaryEmail") + " to domain", "status": "success"}
-    #except:
-        #return {"text": "Problem with adding user to domain", "status": "failure"}
+    except:
+        return {"text": "Problem with adding user to domain", "status": "failure"}
