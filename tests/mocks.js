@@ -32,7 +32,7 @@ mock.trello = {
 };
 
 mock.auth = {
-  getAccessToken() {
+  getAccessToken(credentials) {
     return Promise.resolve("mock_token");
   }
 };
