@@ -4,7 +4,7 @@ module.exports = {
     "clientSecret": "",
     "redirectUri": "http://localhost:5000/oauth2callback",
     "scope": "https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/admin.directory.user",
-    "baseUrl": "https://www.googleapis.com"
+    "baseUrl": "http://localhost:5000/mock-api"
   },
   "trello": {
     "key": "",

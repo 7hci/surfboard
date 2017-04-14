@@ -49,8 +49,8 @@ auth.authenticateSession = (req, res, next) => {
 };
 
 auth.getUserInfo = (access_token) => {
-  var profile_url = 'https://www.googleapis.com/gmail/v1/users/me/profile';
-  return request.get({url: profile_url, qs: {access_token: access_token}, json: true});
+  var profileUrl = 'https://www.googleapis.com/gmail/v1/users/me/profile';
+  return request.get({url: profileUrl, qs: {access_token: access_token}, json: true});
 };
 
 auth.hasValidDomain = (emailAddress) => {

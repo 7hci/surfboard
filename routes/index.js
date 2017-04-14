@@ -3,7 +3,10 @@ var router = express.Router();
 var main = require('./main');
 var onboard = require('./onboard');
 var redirect = require('./redirect');
+var mock = require('./mock-api');
 var auth = require('../helper/auth');
+
+if (process.env.NODE_ENV === 'testing') router.route('/mock-api').get(mock.route);
 
 router.route('/oauth2callback').get(redirect.route);
 router.use( auth.authenticateSession );
