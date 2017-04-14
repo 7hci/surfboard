@@ -1,46 +1,46 @@
-let _ = require('lodash');
+var _ = require('lodash');
 
-let Contractor = require('../model/contractor.js');
-let drive = require('../helper/drive');
-let trello = require('../helper/trello');
-let gmail = require('../helper/gmail');
-let slack = require('../helper/slack');
-let domain = require('../helper/domain');
+var Contractor = require('../model/contractor.js');
+var drive = require('../helper/drive');
+var trello = require('../helper/trello');
+var gmail = require('../helper/gmail');
+var slack = require('../helper/slack');
+var domain = require('../helper/domain');
 
-let onboard = exports;
+var onboard = exports;
 
 onboard.captureContractorInfo = (formData) => {
-  let firstName = formData.firstName;
-  let lastName = formData.lastName;
-  let isResident = 'resident' in formData;
-  let privateEmail = formData.email;
+  var firstName = formData.firstName;
+  var lastName = formData.lastName;
+  var isResident = 'resident' in formData;
+  var privateEmail = formData.email;
 
   return new Contractor(firstName, lastName, isResident, privateEmail);
 };
 
 onboard.runCheckedTasks = (checkedTasks, contractor) => {
-  let taskMap = {
+  var taskMap = {
     'sendLoginEmail': gmail.sendLoginEmail,
     'sendDriveEmail': gmail.sendDriveEmail,
     'addAndShareDriveFolder': drive.addAndShareDriveFolder,
     'inviteToSlack': slack.inviteToSlack,
   };
-  let tasksAfterEmailCreation =
+  var tasksAfterEmailCreation =
     _.reduce(checkedTasks, (result, value, key) => {
       if (taskMap[key]) {
-        let curried = _.curry(taskMap[key]);
+        var curried = _.curry(taskMap[key]);
         result.push(curried(contractor));
       }
       return result;
     }, []);
-  let tasksToRun = [];
+  var tasksToRun = [];
   if ('createContractorEmail' in checkedTasks) {
     tasksToRun.push(domain.createContractorEmail(contractor)
       .then(function (addedEmail) {
         return Promise.all(tasksAfterEmailCreation)
-          .then(function (selectedTasksCompleted) {
-            selectedTasksCompleted.push(addedEmail);
-            return selectedTasksCompleted;
+          .then(function (selectedTasksCompvared) {
+            selectedTasksCompvared.push(addedEmail);
+            return selectedTasksCompvared;
           })
       }))
   } else {
@@ -57,7 +57,7 @@ onboard.runCheckedTasks = (checkedTasks, contractor) => {
 };
 
 onboard.route = (req, res) => {
-  let contractor = onboard.captureContractorInfo(req.body);
+  var contractor = onboard.captureContractorInfo(req.body);
 
   console.log('called onboard');
 

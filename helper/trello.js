@@ -1,6 +1,6 @@
-let Promise = require('bluebird');
+var Promise = require('bluebird');
 
-let trello = exports;
+var trello = exports;
 
 trello.createTrelloBoard = (contractor) => {
   return Promise.resolve({'text': 'Created board on Trello', 'status': 'success'});

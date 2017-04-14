@@ -1,9 +1,9 @@
-let express = require('express');
-let router = express.Router();
-let main = require('./main');
-let onboard = require('./onboard');
-let redirect = require('./redirect');
-let auth = require('../helper/auth');
+var express = require('express');
+var router = express.Router();
+var main = require('./main');
+var onboard = require('./onboard');
+var redirect = require('./redirect');
+var auth = require('../helper/auth');
 
 router.route('/oauth2callback').get(redirect.route);
 router.use( auth.authenticateSession );

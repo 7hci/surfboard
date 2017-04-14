@@ -12,9 +12,9 @@ module.exports =
   }
 
   getEmail() {
-    let pattern = /[^a-zA-Z]/g;
-    let sanitizedFirst = this.firstName.replace(pattern, '').toLowerCase();
-    let sanitizedLast = this.lastName.replace(pattern, '').toLowerCase();
+    var pattern = /[^a-zA-Z]/g;
+    var sanitizedFirst = this.firstName.replace(pattern, '').toLowerCase();
+    var sanitizedLast = this.lastName.replace(pattern, '').toLowerCase();
 
     return sanitizedFirst + '.' + sanitizedLast + '@7hci.com';
   }

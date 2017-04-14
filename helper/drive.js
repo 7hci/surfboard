@@ -1,6 +1,6 @@
-let Promise = require('bluebird');
+var Promise = require('bluebird');
 
-let drive = exports;
+var drive = exports;
 
 drive.addAndShareDriveFolder = (contractor) => {
   return Promise.resolve({'text': 'Created and shared Drive folder', 'status': 'success'});

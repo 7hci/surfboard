@@ -1,12 +1,12 @@
-let config = require('config');
-let request = require('request-promise');
-let google = require('googleapis');
-let Promise = require('bluebird');
+var config = require('config');
+var request = require('request-promise');
+var google = require('googleapis');
+var Promise = require('bluebird');
 
-let auth = exports;
+var auth = exports;
 
 auth.getAuthUrl = () => {
-  let oauth2Client = auth.getOAuthClient();
+  var oauth2Client = auth.getOAuthClient();
   return oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: config.get('google.scope'),
@@ -15,13 +15,13 @@ auth.getAuthUrl = () => {
 };
 
 auth.getAccessToken = (credentials) => {
-  let oauth2Client = auth.getOAuthClient();
+  var oauth2Client = auth.getOAuthClient();
   oauth2Client.setCredentials(credentials);
   return oauth2Client.getAccessTokenAsync();
 };
 
 auth.getOAuthClient = () => {
-  let oauth = new google.auth.OAuth2(
+  var oauth = new google.auth.OAuth2(
     config.get('google.clientId'),
     config.get('google.clientSecret'),
     config.get('google.redirectUri')
@@ -36,7 +36,7 @@ auth.authenticateSession = (req, res, next) => {
         return auth.getUserInfo(token)
       })
       .then(function (info) {
-        let user_email = info.emailAddress;
+        var user_email = info.emailAddress;
         if (auth.hasValidDomain(user_email)) {
           next();
         }
@@ -47,7 +47,7 @@ auth.authenticateSession = (req, res, next) => {
 };
 
 auth.getUserInfo = (access_token) => {
-  let profile_url = 'https://www.googleapis.com/gmail/v1/users/me/profile';
+  var profile_url = 'https://www.googleapis.com/gmail/v1/users/me/profile';
   return request.get({url: profile_url, qs: {access_token: access_token}, json: true});
 };
 

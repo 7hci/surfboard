@@ -1,10 +1,10 @@
-let auth = require('../helper/auth.js');
+var auth = require('../helper/auth.js');
 
-let redirect = exports;
+var redirect = exports;
 
 redirect.route = (req, res) => {
-  let oauth2Client = auth.getOAuthClient();
-  let code = req.query.code;
+  var oauth2Client = auth.getOAuthClient();
+  var code = req.query.code;
   oauth2Client.getTokenAsync(code)
     .then(function (tokens) {
       oauth2Client.setCredentials(tokens);

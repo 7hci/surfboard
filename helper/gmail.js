@@ -1,6 +1,6 @@
-let Promise = require('bluebird');
+var Promise = require('bluebird');
 
-let gmail = exports;
+var gmail = exports;
 
 gmail.sendLoginEmail = (contractor) => {
   return Promise.resolve({'text': 'Sent login info to contractor', 'status': 'success'});

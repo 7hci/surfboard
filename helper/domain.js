@@ -1,6 +1,6 @@
-let Promise = require('bluebird');
+var Promise = require('bluebird');
 
-let domain = exports;
+var domain = exports;
 
 domain.createContractorEmail = (contractor) => {
   return Promise.resolve({'text': 'Added ' + contractor.getEmail() + ' to domain', 'status': 'success'});
