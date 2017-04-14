@@ -116,12 +116,13 @@
 </div>
 
 <script>
-    $('input[name=add_user_to_domain]').change(function (){
+    $('input[name=createContractorEmail]').change(function (){
         if ($(this).is(":checked")) {
-            $('input[name=send_login_email]').prop('disabled', false);
+            $('input[name=sendLoginEmail]').prop('disabled', false);
         } else {
-            $('input[name=send_login_email]').prop('disabled', true);
-            $('input[name=send_login_email]').prop('checked', false);
+            $('input[name=sendLoginEmail]')
+              .prop('disabled', true)
+              .prop('checked', false);
         }
     });
 </script>
