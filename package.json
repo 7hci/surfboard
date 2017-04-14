@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
-
+    "start": "node ./bin/www",
+    "test" : "env NODE_ENV=testing mocha tests"
   },
   "dependencies": {
     "bluebird": "^3.5.0",

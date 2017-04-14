@@ -1,5 +1,5 @@
 var mock = exports;
 
-mock.route = (req, res) => {
-  res.send({mock: true});
+mock.route = (req, res, next) => {
+  res.send({id: "testid"});
 };

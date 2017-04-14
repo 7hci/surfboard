@@ -56,7 +56,7 @@ onboard.runCheckedTasks = (checkedTasks, contractor) => {
     })
 };
 
-onboard.route = (req, res) => {
+onboard.route = (req, res, next) => {
   var contractor = onboard.captureContractorInfo(req.body);
 
   console.log('called onboard');
