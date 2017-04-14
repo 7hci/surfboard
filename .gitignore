@@ -34,5 +34,5 @@ npm-debug.log
 *.iml
 
 # Local configuration
-config/production.js*
+config/development.js
 
