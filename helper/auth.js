@@ -39,6 +39,8 @@ auth.authenticateSession = (req, res, next) => {
         var user_email = info.emailAddress;
         if (auth.hasValidDomain(user_email)) {
           next();
+        } else {
+          res.render('error.html',{ errorMessage: 'Invalid e-mail domain.' })
         }
       });
   } else {
