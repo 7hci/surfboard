@@ -29,10 +29,10 @@ domain.createContractorEmail = (contractor, credentials) => {
       if ('id' in userData) {
         return {'text': 'Added ' + contractor.getEmail() + ' to domain', 'status': 'success'};
       } else {
-        return {'text': 'Problem creating e-mail for contractor: ' + userData, 'status': 'failure'};
+        return {'text': 'Problem creating e-mail for contractor', 'status': 'failure'};
       }
     })
     .catch((err) => {
-      return {'text': 'Problem creating e-mail for contractor: ' + err, 'status': 'failure'};
+      return {'text': 'Problem creating e-mail for contractor', 'status': 'failure'};
     });
 };

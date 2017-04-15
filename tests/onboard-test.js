@@ -16,41 +16,55 @@ onboard.__set__({
 
 describe('runCheckedTasks', () => {
   it('should return text and status for every checked task', (done) => {
-    var checkedTasks = {
-      createContractorEmail: 'on',
-      createTrelloBoard: 'on',
-      sendLoginEmail: 'on',
-      addAndShareDriveFolder: 'on',
-      sendDriveEmail: 'on',
-      inviteToSlack: 'on'
+    var request = {
+      body : {
+        createContractorEmail: 'on',
+        createTrelloBoard: 'on',
+        sendLoginEmail: 'on',
+        addAndShareDriveFolder: 'on',
+        sendDriveEmail: 'on',
+        inviteToSlack: 'on'
+      },
+      session: {
+        tokens: {
+          access_token: 'mock_token'
+        }
+      }
     };
     var contractor = new Contractor('Jon', 'Snow', true, 'jonsnow@gmail.com');
-    onboard.runCheckedTasks(checkedTasks, contractor)
+    onboard.runCheckedTasks(request, contractor)
       .then((results) => {
       results.forEach((result) => {
         expect(result).to.include.keys('text', 'status');
       });
-      expect(results.length).to.equal(Object.keys(checkedTasks).length);
+      expect(results.length).to.equal(Object.keys(request.body).length);
     })
       .then(done())
       .catch(done, done);
   });
 
   it('should return text and status for every checked task even if createContractorEmail is not checked', (done) => {
-    var checkedTasks = {
-      createTrelloBoard: 'on',
-      sendLoginEmail: 'on',
-      addAndShareDriveFolder: 'on',
-      sendDriveEmail: 'on',
-      inviteToSlack: 'on'
+    var request = {
+      body : {
+        createTrelloBoard: 'on',
+        sendLoginEmail: 'on',
+        addAndShareDriveFolder: 'on',
+        sendDriveEmail: 'on',
+        inviteToSlack: 'on'
+      },
+      session: {
+        tokens: {
+          access_token: 'mock_token'
+        }
+      }
     };
     var contractor = new Contractor('Jon', 'Snow', true, 'jonsnow@gmail.com');
-    onboard.runCheckedTasks(checkedTasks, contractor)
+    onboard.runCheckedTasks(request, contractor)
       .then((results) => {
       results.forEach((result) => {
         expect(result).to.include.keys('text', 'status');
       });
-      expect(results.length).to.equal(Object.keys(checkedTasks).length);
+      expect(results.length).to.equal(Object.keys(request.body).length);
     })
       .then(done())
       .catch(done, done);

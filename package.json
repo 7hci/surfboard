@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test" : "env NODE_ENV=testing mocha tests"
+    "test": "env NODE_ENV=testing mocha tests"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
@@ -26,8 +26,9 @@
   },
   "devDependencies": {
     "chai": "latest",
+    "nyc": "^10.2.0",
     "proxyquire": "latest",
-    "sinon": "latest",
-    "rewire": "latest"
+    "rewire": "latest",
+    "sinon": "latest"
   }
 }

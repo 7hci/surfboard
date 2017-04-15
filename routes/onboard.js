@@ -40,9 +40,9 @@ onboard.runCheckedTasks = (request, contractor) => {
     tasksToRun.push(domain.createContractorEmail(contractor, credentials)
       .then(function (addedEmail) {
         return Promise.all(tasksAfterEmailCreation)
-          .then(function (selectedTasksCompvared) {
-            selectedTasksCompvared.push(addedEmail);
-            return selectedTasksCompvared;
+          .then(function (selectedTasksCompleted) {
+            selectedTasksCompleted.push(addedEmail);
+            return selectedTasksCompleted;
           })
       }))
   } else {
