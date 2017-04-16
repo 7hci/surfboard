@@ -16,10 +16,10 @@ describe('createFolder', () => {
     var server = http.createServer(app);
     server.listen('5000');
 
-    var contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
+    var contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
     drive.createFolder(contractor, {})
       .then((result) => {
-        expect(result).to.equal("testid"); // see mock-api.js for value returned by mock API
+        expect(result).to.equal('testid_folder'); // see mock-api.js for value returned by mock API
       })
       .then(() => {
           server.close(done);
@@ -29,16 +29,16 @@ describe('createFolder', () => {
   });
 });
 
-describe('addFiles', () => {
-  it('should return an id for the last file copied and moved into new folder', (done) => {
+describe('addFile', () => {
+  it('should return an id for the file we have copied and moved', (done) => {
     app.set('port', '5000');
     var server = http.createServer(app);
     server.listen('5000');
-
-    var contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
-    drive.addFiles(contractor, {})
+    
+    var contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
+    drive.addFile(contractor, {}, {'mock_file':'mock_folder_id'}, 'mock_file_id')
       .then((result) => {
-        expect(result).to.equal("testid"); // see mock-api.js for value returned by mock API
+        expect(result).to.equal('testid_file'); // see mock-api.js for value returned by mock API
       })
       .then(() => {
           server.close(done);

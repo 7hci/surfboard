@@ -37,12 +37,12 @@ module.exports = {
       "forms": ""
     },
     "files" : {
-      "tasks": "",
-      "w9": "",
-      "w8": "",
-      "mssa": "",
-      "directDeposit": "",
-      "bgCheck": ""
+      "Tasks": "",
+      "W9": "",
+      "W8BEN": "",
+      "MSSA": "",
+      "DirectDeposit": "",
+      "BackgroundCheck": ""
     }
   },
   "tasks": {
