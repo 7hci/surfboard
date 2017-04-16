@@ -35,10 +35,10 @@ drive.createFolder = (contractor, credentials) => {
     });
 };
 
-drive.addFiles = (contractor, credentials) => {
+drive.shareFolder = (contractor, credentials, folderId) => {
   var driveUrl = config.get('google.baseUrl') + '/drive/v3/files';
 
-  
+
 };
 
 drive.addFile = (contractor, credentials, file, folderId) => {

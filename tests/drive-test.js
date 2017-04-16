@@ -47,3 +47,22 @@ describe('addFile', () => {
       .catch(done, done);
   });
 });
+
+describe('shareFolder', () => {
+  it('should return an id for the permission resource created', (done) => {
+    app.set('port', '5000');
+    var server = http.createServer(app);
+    server.listen('5000');
+
+    var contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
+    drive.shareFolder(contractor, {}, 'mock_folder_id')
+      .then((result) => {
+        expect(result).to.equal('testid_shared'); // see mock-api.js for value returned by mock API
+      })
+      .then(() => {
+          server.close(done);
+        }
+      )
+      .catch(done, done);
+  });
+});
