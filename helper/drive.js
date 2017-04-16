@@ -6,7 +6,29 @@ var Promise = require('bluebird');
 var drive = exports;
 
 drive.addAndShareDriveFolder = (contractor, credentials) => {
-  return Promise.resolve({'text': 'Created and shared Drive folder', 'status': 'success'});
+  return drive.createFolder(contractor, credentials)
+    .then( (folderId) => {
+      var toDoAfterFolderCreated = [
+        drive.shareFolder(contractor, credentials, folderId),
+        drive.addFile(contractor, credentials, config.get('drive.files.directDeposit'), folderId),
+        drive.addFile(contractor, credentials, config.get('drive.files.bgCheck'), folderId),
+      ];
+      if (contractor.isResident) {
+        toDoAfterFolderCreated.push(
+          drive.addFile(contractor, credentials, config.get('drive.files.w9'), folderId));
+      } else {
+        toDoAfterFolderCreated.push(
+          drive.addFile(contractor, credentials, config.get('drive.files.w8'), folderId));
+      }
+        return Promise.all(toDoAfterFolderCreated);
+    })
+    .then( () => {
+      return Promise.resolve({'text': 'Created and shared Drive folder', 'status': 'success'});
+    })
+    .catch( (err) => {
+      console.log(err);
+      return Promise.resolve({'text': 'Problem creating and sharing Drive folder', 'status': 'failure'});
+    })
 };
 
 drive.createFolder = (contractor, credentials) => {
@@ -64,8 +86,7 @@ drive.shareFolder = (contractor, credentials, folderId) => {
 };
 
 drive.addFile = (contractor, credentials, file, folderId) => {
-  var fileId = file[Object.keys(file)[0]];
-  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ fileId +'/copy';
+  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ file.id +'/copy';
 
   return auth.getAccessToken(credentials)
     .then((token) => {
@@ -74,7 +95,7 @@ drive.addFile = (contractor, credentials, file, folderId) => {
         qs: {access_token: token},
         json: true,
         body: {
-          'name': Object.keys(file)[0],
+          'name': file.name,
           'parents': [{'id': folderId}],
         }
       });

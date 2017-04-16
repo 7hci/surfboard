@@ -34,9 +34,12 @@ describe('addFile', () => {
     app.set('port', '5000');
     var server = http.createServer(app);
     server.listen('5000');
-    
+
     var contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-    drive.addFile(contractor, {}, {'mock_file':'mock_folder_id'}, 'mock_file_id')
+    drive.addFile(contractor, {}, {
+      'name': 'mock_file',
+      'id': 'mock_folder_id'
+    }, 'mock_file_id')
       .then((result) => {
         expect(result).to.equal('testid_file'); // see mock-api.js for value returned by mock API
       })
