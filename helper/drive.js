@@ -30,15 +30,37 @@ drive.createFolder = (contractor, credentials) => {
       if ('id' in fileData) {
         return fileData.id;
       } else {
-        throw new Error('No id in returned response: ' + fileData);
+        throw new Error('No id in create folder response: ' + fileData);
       }
     });
 };
 
 drive.shareFolder = (contractor, credentials, folderId) => {
-  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files';
+  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ folderId +'/permissions';
 
-
+  return auth.getAccessToken(credentials)
+    .then((token) => {
+      return request.post({
+        url: driveUrl,
+        qs: {
+          access_token: token,
+          sendNotificationEmail: true},
+        json: true,
+        body: {
+          "type": "user",
+          "role": "writer",
+          "emailAddress": contractor.getEmail(),
+        }
+      });
+    })
+    .then((response) => {
+      var fileData = JSON.parse(JSON.stringify(response));
+      if ('id' in fileData) {
+        return fileData.id;
+      } else {
+        throw new Error('No id in share folder response: ' + fileData);
+      }
+    });
 };
 
 drive.addFile = (contractor, credentials, file, folderId) => {
@@ -62,7 +84,7 @@ drive.addFile = (contractor, credentials, file, folderId) => {
       if ('id' in fileData) {
         return fileData.id;
       } else {
-        throw new Error('No id in returned response: ' + fileData);
+        throw new Error('No id in copy file response: ' + fileData);
       }
     });
 };
