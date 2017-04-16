@@ -21,6 +21,10 @@ router.post('/drive/v3/files/:fileId/permissions', (req, res, next) => {
   res.send( { id: "testid_shared" } );
 });
 
+router.get('/drive/v3/files/:fileId/export', (req, res, next) => {
+  res.send( 'sample,tasks,list\nsample,tasks,list' );
+});
+
 router.post('/boards', (req, res, next) => {
   res.send( { id: "testid_board" } );
 });

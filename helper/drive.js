@@ -69,9 +69,9 @@ drive.shareFolder = (contractor, credentials, folderId) => {
           sendNotificationEmail: true},
         json: true,
         body: {
-          "type": "user",
-          "role": "writer",
-          "emailAddress": contractor.getEmail(),
+          'type': 'user',
+          'role': 'writer',
+          'emailAddress': contractor.getEmail(),
         }
       });
     })
@@ -115,22 +115,21 @@ drive.getTasksFromFile = (credentials) => {
 
   return auth.getAccessToken(credentials)
     .then((token) => {
-      return request.post({
+      return request.get({
         url: driveUrl,
-        qs: {access_token: token},
-        json: true,
-        body: {
-          'name': file.name,
-          'parents': [folderId],
-        }
+        qs: {
+          access_token: token,
+          mimeType: 'text/csv'
+        },
+        json: true
       });
     })
     .then((response) => {
-      var fileData = JSON.parse(JSON.stringify(response));
-      if ('id' in fileData) {
-        return fileData.id;
+      var fileData = String(response);
+      if (fileData.indexOf(',') > -1) {
+        return fileData.match(/[^\r\n]+/g);
       } else {
-        throw new Error('No id in copy file response: ' + fileData);
+        throw new Error('Did not return CSV: ' + fileData);
       }
     });
 }

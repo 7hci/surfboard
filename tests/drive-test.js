@@ -71,14 +71,15 @@ describe('shareFolder', () => {
 });
 
 describe('getTasksFromFile', () => {
-  it('should return a comma delimited list', (done) => {
+  it('should return an array of comma delimited values', (done) => {
     app.set('port', '5000');
     var server = http.createServer(app);
     server.listen('5000');
 
     drive.getTasksFromFile({})
       .then((result) => {
-        expect(result).to.contain(',');
+        console.log('***' + result);
+        expect(result).to.be.instanceof(Array);
       })
       .then(() => {
           server.close(done);

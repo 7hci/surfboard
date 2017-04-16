@@ -40,7 +40,7 @@ module.exports = {
     "files" : {
       "task": {
         "name": "Tasks",
-        "id": ""
+        "id": "test"
       },
       "w9": {
         "name": "Form W-9",
