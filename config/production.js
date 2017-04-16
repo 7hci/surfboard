@@ -9,6 +9,7 @@ module.exports = {
   "trello": {
     "key": "",
     "token": "",
+    "baseUrl": "https://api.trello.com/1",
     "team": {
       "id": "",
       "members":[
