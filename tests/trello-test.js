@@ -29,13 +29,13 @@ describe('addBoard', () => {
   });
 });
 
-describe('addMember', () => {
+describe('addBoardMember', () => {
   it('should return an id for the created membership in the board', (done) => {
     app.set('port', '5000');
     var server = http.createServer(app);
     server.listen('5000');
 
-    trello.addMember('mock_board_id', 'mock_member_id')
+    trello.addBoardMember('mock_board_id', 'mock_member_id')
       .then((result) => {
         expect(result).to.equal('testid_member'); // see mock-api.js for value returned by mock API
       })
@@ -46,39 +46,39 @@ describe('addMember', () => {
       .catch(done, done);
   });
 });
-
-describe('addList', () => {
-  it('should return an id for the created list', (done) => {
-    app.set('port', '5000');
-    var server = http.createServer(app);
-    server.listen('5000');
-
-    trello.addList('mock_board_id')
-      .then((result) => {
-        expect(result).to.equal('testid_list'); // see mock-api.js for value returned by mock API
-      })
-      .then(() => {
-          server.close(done);
-        }
-      )
-      .catch(done, done);
-  });
-});
-
-describe('addCard', () => {
-  it('should return an id for the created card', (done) => {
-    app.set('port', '5000');
-    var server = http.createServer(app);
-    server.listen('5000');
-
-    trello.addCard('mock_list_id', 'description', 'mock_member_id')
-      .then((result) => {
-        expect(result).to.equal('testid_card'); // see mock-api.js for value returned by mock API
-      })
-      .then(() => {
-          server.close(done);
-        }
-      )
-      .catch(done, done);
-  });
-});
+//
+// describe('addList', () => {
+//   it('should return an id for the created list', (done) => {
+//     app.set('port', '5000');
+//     var server = http.createServer(app);
+//     server.listen('5000');
+//
+//     trello.addList('mock_board_id')
+//       .then((result) => {
+//         expect(result).to.equal('testid_list'); // see mock-api.js for value returned by mock API
+//       })
+//       .then(() => {
+//           server.close(done);
+//         }
+//       )
+//       .catch(done, done);
+//   });
+// });
+//
+// describe('addCard', () => {
+//   it('should return an id for the created card', (done) => {
+//     app.set('port', '5000');
+//     var server = http.createServer(app);
+//     server.listen('5000');
+//
+//     trello.addCard('mock_list_id', 'description', 'mock_member_id')
+//       .then((result) => {
+//         expect(result).to.equal('testid_card'); // see mock-api.js for value returned by mock API
+//       })
+//       .then(() => {
+//           server.close(done);
+//         }
+//       )
+//       .catch(done, done);
+//   });
+// });
