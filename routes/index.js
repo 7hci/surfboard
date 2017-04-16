@@ -8,6 +8,7 @@ var auth = require('../helper/auth');
 
 if (process.env.NODE_ENV === 'testing'){
   router.post('/mock-api/*', mock.route);
+  router.get('/mock-api/*', mock.route);
 }
 
 router.get('/oauth2callback', redirect.route);

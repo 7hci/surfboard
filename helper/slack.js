@@ -8,9 +8,9 @@ var slack = exports;
 slack.inviteToSlack = (contractor) => {
 
   var slackUrl = config.get('slack.baseUrl') + '/users.admin.invite';
-  var token = config.get('slack.baseUrl');
+  var token = config.get('slack.token');
 
-  return request.post({
+  return request.get({
     url: slackUrl,
     json: true,
     qs: {
@@ -30,6 +30,4 @@ slack.inviteToSlack = (contractor) => {
   }).catch( (err) => {
     return {'text': 'Problem inviting to slack', 'status': 'failure'}
   });
-
-  return Promise.resolve({'text': 'Invited to Slack', 'status': 'success'});
 };
