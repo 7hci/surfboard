@@ -42,7 +42,7 @@ drive.createFolder = (contractor, credentials) => {
         json: true,
         body: {
           'name': contractor.getFullName(),
-          'parents': [{'id': config.get('drive.folders.contractors')}],
+          'parents': [config.get('drive.folders.contractors')],
           'mimeType': 'application/vnd.google-apps.folder'
         }
       });
@@ -96,7 +96,7 @@ drive.addFile = (contractor, credentials, file, folderId) => {
         json: true,
         body: {
           'name': file.name,
-          'parents': [{'id': folderId}],
+          'parents': [folderId],
         }
       });
     })
