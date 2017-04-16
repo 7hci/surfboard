@@ -3,8 +3,12 @@ var mock = exports;
 mock.route = (req, res, next) => {
   var mockResponse;
 
+
   switch(req.path) {
     case '/mock-api/admin/directory/v1/users':
+      mockResponse = { id: "testid" };
+      break;
+    case '/mock-api/gmail/v1/users/me/messages/send':
       mockResponse = { id: "testid" };
       break;
     case '/mock-api/users.admin.invite':

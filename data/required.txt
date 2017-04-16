@@ -1,0 +1,14 @@
+Hello {name},
+
+Welcome to the team! You should have already received a separate link to your folder on Google Drive. Inside, you will find four documents to fill out:
+
+1. Form {form}
+2. Master Subcontractor Services Agreement
+3. Direct Deposit Form
+4. Background Check Authorization Form
+
+Please upload completed and signed copies of these four documents to the same folder.
+
+If you have any questions, please feel free to reach out to me.
+
+Thanks!
