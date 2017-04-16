@@ -60,8 +60,29 @@ trello.addBoardMember = (boardId, memberId) => {
     });
 };
 
-trello.addList = (boardId) => {
+trello.addList = (boardId, listName) => {
+  var trelloUrl = config.get('google.baseUrl') + '/lists';
 
+  return request.post({
+    url: trelloUrl,
+    qs: {
+      token: config.get('trello.token'),
+      key: config.get('trello.key')
+    },
+    json: true,
+    body: {
+      'name': listName,
+      'idBoard': boardId
+    }
+  })
+    .then( (response) => {
+      var responseData = JSON.parse(JSON.stringify(response));
+      if ('id' in responseData) {
+        return responseData.id;
+      } else {
+        throw new Error('No id in create list response: ' + responseData);
+      }
+    });
 };
 
 trello.addCard = (listId, description, memberId) => {
