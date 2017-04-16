@@ -28,3 +28,22 @@ describe('inviteToSlack', () => {
       .catch(done, done);
   });
 });
+
+describe('inviteToSlack', () => {
+  it('should return a failure status if the API response is ok: false (already invited contractor)', (done) => {
+    app.set('port', '5000');
+    var server = http.createServer(app);
+    server.listen('5000');
+
+    var contractor = new Contractor("already", "invited", true, "");
+    slack.inviteToSlack(contractor)
+      .then((result) => {
+        expect(result.status).to.equal("failure");
+      })
+      .then(() => {
+          server.close(done);
+        }
+      )
+      .catch(done, done);
+  });
+});
