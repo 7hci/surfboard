@@ -69,3 +69,21 @@ describe('shareFolder', () => {
       .catch(done, done);
   });
 });
+
+describe('getTasksFromFile', () => {
+  it('should return a comma delimited list', (done) => {
+    app.set('port', '5000');
+    var server = http.createServer(app);
+    server.listen('5000');
+
+    drive.getTasksFromFile({})
+      .then((result) => {
+        expect(result).to.contain(',');
+      })
+      .then(() => {
+          server.close(done);
+        }
+      )
+      .catch(done, done);
+  });
+});

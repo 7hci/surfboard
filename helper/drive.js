@@ -109,3 +109,29 @@ drive.addFile = (contractor, credentials, file, folderId) => {
       }
     });
 };
+
+drive.getTasksFromFile = (credentials) => {
+  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ config.get('drive.files.task.id') +'/export';
+
+  return auth.getAccessToken(credentials)
+    .then((token) => {
+      return request.post({
+        url: driveUrl,
+        qs: {access_token: token},
+        json: true,
+        body: {
+          'name': file.name,
+          'parents': [folderId],
+        }
+      });
+    })
+    .then((response) => {
+      var fileData = JSON.parse(JSON.stringify(response));
+      if ('id' in fileData) {
+        return fileData.id;
+      } else {
+        throw new Error('No id in copy file response: ' + fileData);
+      }
+    });
+}
+
