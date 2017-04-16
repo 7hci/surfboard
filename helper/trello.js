@@ -86,5 +86,27 @@ trello.addList = (boardId, listName) => {
 };
 
 trello.addCard = (listId, description, memberId) => {
+  var trelloUrl = config.get('google.baseUrl') + '/cards';
 
+  return request.post({
+    url: trelloUrl,
+    qs: {
+      token: config.get('trello.token'),
+      key: config.get('trello.key')
+    },
+    json: true,
+    body: {
+      'name': description,
+      'idList ': listId,
+      'idMembers': [memberId]
+    }
+  })
+    .then( (response) => {
+      var responseData = JSON.parse(JSON.stringify(response));
+      if ('id' in responseData) {
+        return responseData.id;
+      } else {
+        throw new Error('No id in create card response: ' + responseData);
+      }
+    });
 };

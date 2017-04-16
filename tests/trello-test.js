@@ -65,20 +65,20 @@ describe('addList', () => {
   });
 });
 
-// describe('addCard', () => {
-//   it('should return an id for the created card', (done) => {
-//     app.set('port', '5000');
-//     var server = http.createServer(app);
-//     server.listen('5000');
-//
-//     trello.addCard('mock_list_id', 'description', 'mock_member_id')
-//       .then((result) => {
-//         expect(result).to.equal('testid_card'); // see mock-api.js for value returned by mock API
-//       })
-//       .then(() => {
-//           server.close(done);
-//         }
-//       )
-//       .catch(done, done);
-//   });
-// });
+describe('addCard', () => {
+  it('should return an id for the created card', (done) => {
+    app.set('port', '5000');
+    var server = http.createServer(app);
+    server.listen('5000');
+
+    trello.addCard('mock_list_id', 'description', 'mock_member_id')
+      .then((result) => {
+        expect(result).to.equal('testid_card'); // see mock-api.js for value returned by mock API
+      })
+      .then(() => {
+          server.close(done);
+        }
+      )
+      .catch(done, done);
+  });
+});

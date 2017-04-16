@@ -33,6 +33,10 @@ router.put('/boards/:boardId/members/:memberId', (req, res, next) => {
   res.send( { id: "testid_member" } );
 });
 
+router.post('/cards', (req, res, next) => {
+  res.send( { id: "testid_card" } );
+});
+
 router.get('/users.admin.invite', (req, res, next) => {
       if(req.query.email === 'already.invited@7hci.com') {
         res.send( { ok: false } );
