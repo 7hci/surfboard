@@ -9,7 +9,7 @@ var gmail = exports;
 
 gmail.sendDriveEmail = (contractor, credentials) => {
   var tokenPromise = auth.getAccessToken(credentials);
-  var messagePromise = gmail.createMessageFromFile(contractor, './data/required.txt');
+  var messagePromise = gmail.createMessageFromFile(contractor,__root + 'data/required.txt');
 
   return Promise.all([tokenPromise, messagePromise])
     .spread((token, message) => {
@@ -21,19 +21,21 @@ gmail.sendDriveEmail = (contractor, credentials) => {
           userId: "me"},
         json: true,
         body: {
-          "raw": gmail.getEncodedData(message)
+          "raw": gmail.getEncodedData(contractor, message)
         }
       })
     })
     .then((response) => {
-      var userData = JSON.parse(JSON.stringify(response));
-      if ('id' in userData) {
+      var messageData = JSON.parse(JSON.stringify(response));
+      console.log('response: ' + messageData);
+      if ('id' in messageData) {
         return {'text': 'Sent required documents instructions', 'status': 'success'};
       } else {
         return {'text': 'Problem sending required documents instructions', 'status': 'failure'};
       }
     })
     .catch((err) => {
+      console.log(err);
       return {'text': 'Problem sending required documents instructions', 'status': 'failure'};
     });
 };
@@ -65,7 +67,7 @@ gmail.getEncodedData = (contractor, message) => {
     "Content-Type: text/plain; charset=\"UTF-8\"\n",
     "MIME-Version: 1.0\n",
     "Content-Transfer-Encoding: 7bit\n",
-    "to: ", contractor.privateEmail, "\n",
+    "to: ", contractor.getEmail(), "\n",
     "subject: ", subject, "\n\n",
     message
   ].join('');
