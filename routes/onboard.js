@@ -14,8 +14,9 @@ onboard.captureContractorInfo = (formData) => {
   var lastName = formData.lastName;
   var isResident = 'resident' in formData;
   var privateEmail = formData.email;
+  var override = formData.override;
 
-  return new Contractor(firstName, lastName, isResident, privateEmail);
+  return new Contractor(firstName, lastName, isResident, privateEmail, override);
 };
 
 onboard.runCheckedTasks = (request, contractor) => {

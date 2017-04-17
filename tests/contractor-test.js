@@ -9,9 +9,16 @@ describe('Contractor', () => {
 
     expect(contractor.getFullName()).to.equal('Jon Snow');
   });
+
   it('should return a sanitized, lowercase e-mail address', () => {
     var contractor = new Contractor(' J 6.$;~&*on', 'SNO40"\'\'?w ', true, '');
 
     expect(contractor.getEmail()).to.equal('jon.snow@7hci.com');
+  });
+
+  it('should use override if one is given through the constructor', () => {
+    var contractor = new Contractor('Jonathan', 'Stark', true, '', 'jonsnow');
+
+    expect(contractor.getEmail()).to.equal('jonsnow@7hci.com');
   });
 });

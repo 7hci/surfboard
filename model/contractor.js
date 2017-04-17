@@ -7,7 +7,7 @@ module.exports =
       this.lastName = lastName;
       this.isResident = isResident;
       this.privateEmail = privateEmail;
-      this.override = override.replace(" ", "");
+      this.override = override;
     }
 
     getFullName() {
@@ -17,7 +17,7 @@ module.exports =
     getEmail() {
 
       if (this.override) {
-        return this.override + '@7hci.com';
+       return this.override.replace(" ", "") + '@7hci.com';
       } else {
         var pattern = /[^a-zA-Z]/g;
         var sanitizedFirst = this.firstName.replace(pattern, '').toLowerCase();
