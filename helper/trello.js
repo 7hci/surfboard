@@ -10,27 +10,28 @@ var trello = exports;
 trello.createTrelloBoard = (contractor, credentials) => {
   return trello.addBoard(contractor)
     .then((boardId) => {
-      var toDoAfterBoardCreated = [];
-      for (var member of config.get('trello.team.members')) {
-        toDoAfterBoardCreated.push(trello.addBoardMember(boardId, member.id));
-      }
-      toDoAfterBoardCreated.push(trello.addList(boardId, 'Done'));
-      toDoAfterBoardCreated.push(trello.addList(boardId, 'In Progress'));
-      toDoAfterBoardCreated.push(trello.addList(boardId, 'On Deck'));
-      toDoAfterBoardCreated.push(
-        Promise.all([trello.addList(boardId, 'To Do'), drive.getTasksFromFile(credentials)])
-          .spread( (listId, tasks) => {
-            var cardsToAdd = [];
-            for (var task of tasks) {
-              var description = task.split(',')[0];
-              var memberName = task.split(',')[1];
-              cardsToAdd.push(trello.addCard(listId, description, memberName));
-            }
-            return Promise.all(cardsToAdd);
+      return Promise.all(
+        Promise.map(config.get('trello.team.members'), (member) => {
+          trello.addBoardMember(boardId, member.id);
+        }),
+        trello.addList(boardId, 'Done')
+          .then(() => {
+            return trello.addList(boardId, 'In Progress')
+          })
+          .then(() => {
+            return trello.addList(boardId, 'On Deck')
+          })
+          .then(() => {
+            return Promise.all([trello.addList(boardId, 'To Do'), drive.getTasksFromFile(credentials)])
+              .spread((listId, tasks) => {
+                return Promise.mapSeries(tasks, (task) => {
+                  var description = task.split(',')[0];
+                  var memberName = task.split(',')[1];
+                  return trello.addCard(listId, description, memberName);
+                });
+              })
           })
       );
-
-      return Promise.all(toDoAfterBoardCreated);
     })
     .then(() => {
         return Promise.resolve({'text': 'Created board on Trello', 'status': 'success'});
@@ -146,7 +147,7 @@ trello.addCard = (listId, description, memberName) => {
 };
 
 trello.getMemberId = (memberName) => {
-  var member = _.find(config.get('trello.team.members'), {'name': memberName });
+  var member = _.find(config.get('trello.team.members'), {'name': memberName});
   if (typeof member !== 'undefined') {
     return member.id;
   } else {
