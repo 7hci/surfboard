@@ -131,7 +131,7 @@ trello.addCard = (listId, description, memberName) => {
     json: true,
     body: {
       'name': description,
-      'idList ': listId,
+      'idList': listId,
       'idMembers': [trello.getMemberId(memberName)]
     }
   })
