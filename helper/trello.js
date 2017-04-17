@@ -1,16 +1,40 @@
 var request = require('request-promise').defaults({simple: false});
 var config = require('config');
 var auth = require('../helper/auth');
+var drive = require('../helper/drive');
 var Promise = require('bluebird');
 
 var trello = exports;
 
 trello.createTrelloBoard = (contractor, credentials) => {
-  return Promise.resolve({'text': 'Created board on Trello', 'status': 'success'});
+  return trello.addBoard(contractor)
+    .then( (boardId) => {
+      var toDoAfterBoardCreated = [];
+      for (var member of config.get('trello.team.members')) {
+        toDoAfterBoardCreated.push(trello.addBoardMember(boardId, member.id));
+      }
+      toDoAfterBoardCreated.push(trello.addList(boardId, 'Done'));
+      toDoAfterBoardCreated.push(trello.addList(boardId, 'In Progress'));
+      toDoAfterBoardCreated.push(trello.addList(boardId, 'On Deck'));
+      toDoAfterBoardCreated.push(
+        trello.addList(boardId, 'To Do')
+          .then()
+      );
+
+      return Promise.all(toDoAfterBoardCreated);
+    })
+    .then( () => {
+      return Promise.resolve({'text': 'Created board on Trello', 'status': 'success'});
+      }
+    )
+    .catch( (err) => {
+      console.log(err);
+      return Promise.resolve({'text': 'Problem creating board on Trello', 'status': 'failure'});
+    });
 };
 
 trello.addBoard = (contractor) => {
-  var trelloUrl = config.get('google.baseUrl') + '/boards';
+  var trelloUrl = config.get('trello.baseUrl') + '/boards';
   var boardName = 'Onboarding: ' + contractor.getFullName();
 
   return request.post({
@@ -28,6 +52,9 @@ trello.addBoard = (contractor) => {
   })
     .then( (response) => {
       var responseData = JSON.parse(JSON.stringify(response));
+      console.log('*****');
+      console.log(response);
+      console.log(responseData);
       if ('id' in responseData) {
         return responseData.id;
       } else {
@@ -37,7 +64,7 @@ trello.addBoard = (contractor) => {
 };
 
 trello.addBoardMember = (boardId, memberId) => {
-  var trelloUrl = config.get('google.baseUrl') + '/boards/'+ boardId +'/members/' + memberId;
+  var trelloUrl = config.get('trello.baseUrl') + '/boards/'+ boardId +'/members/' + memberId;
 
   return request.put({
     url: trelloUrl,
@@ -61,7 +88,7 @@ trello.addBoardMember = (boardId, memberId) => {
 };
 
 trello.addList = (boardId, listName) => {
-  var trelloUrl = config.get('google.baseUrl') + '/lists';
+  var trelloUrl = config.get('trello.baseUrl') + '/lists';
 
   return request.post({
     url: trelloUrl,
@@ -86,7 +113,7 @@ trello.addList = (boardId, listName) => {
 };
 
 trello.addCard = (listId, description, memberId) => {
-  var trelloUrl = config.get('google.baseUrl') + '/cards';
+  var trelloUrl = config.get('trello.baseUrl') + '/cards';
 
   return request.post({
     url: trelloUrl,

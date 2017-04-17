@@ -78,7 +78,6 @@ describe('getTasksFromFile', () => {
 
     drive.getTasksFromFile({})
       .then((result) => {
-        console.log('***' + result);
         expect(result).to.be.instanceof(Array);
       })
       .then(() => {

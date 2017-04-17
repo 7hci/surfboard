@@ -27,7 +27,6 @@ gmail.sendDriveEmail = (contractor, credentials) => {
     })
     .then((response) => {
       var messageData = JSON.parse(JSON.stringify(response));
-      console.log('response: ' + messageData);
       if ('id' in messageData) {
         return {'text': 'Sent required documents instructions', 'status': 'success'};
       } else {
