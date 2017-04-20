@@ -2,13 +2,13 @@ var casper = require('casper').create({
   pageSettings: {
     userAgent: 'Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/52.0)'
   },
-  verbose: true,
-  logLevel: "debug"
 });
 var message = "{'text': 'Problem adding user to ClickTime', 'status': 'failure'}";
 var name = casper.cli.get('name');
 var email = casper.cli.get('email');
 var testing = casper.cli.has('test');
+var user = casper.cli.get('user');
+var password = casper.cli.get('password');
 
 if (testing) {
 
@@ -18,8 +18,8 @@ if (testing) {
 } else {
 
   casper.start('https://login.clicktime.com/', function () {
-    this.sendKeys('#email', 'daniel@7hci.com');
-    this.sendKeys('#password', 'secretsquirrel87');
+    this.sendKeys('#email', user);
+    this.sendKeys('#password', password);
     this.click('#loginbutton');
   });
 

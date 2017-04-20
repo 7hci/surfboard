@@ -6,6 +6,11 @@ module.exports = {
     "scope": "https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/admin.directory.user",
     "baseUrl": "http://127.0.0.1:5000/mock-api"
   },
+  "clicktime": {
+    "user": "",
+    "password": "",
+    "test": " --test"
+  },
   "trello": {
     "key": "",
     "token": "",
