@@ -94,6 +94,10 @@ module.exports = {
       {
         "name": "inviteToSlack",
         "text": "Invite contractor to Slack"
+      },
+      {
+        "name": "addUserToClickTime",
+        "text": "Add user to ClickTime"
       }
     ]
   }

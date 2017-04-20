@@ -3,7 +3,7 @@ var casper = require('casper').create({
     userAgent: 'Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/52.0)'
   },
 });
-var message = "{'text': 'Problem adding user to ClickTime', 'status': 'failure'}";
+var message = '{"text": "Problem adding user to ClickTime", "status": "failure"}';
 var name = casper.cli.get('name');
 var email = casper.cli.get('email');
 var testing = casper.cli.has('test');
@@ -12,7 +12,7 @@ var password = casper.cli.get('password');
 
 if (testing) {
 
-  message = "{'text': 'Added user to ClickTime', 'status': 'success'}";
+  message = '{"text": "Added user to ClickTime", "status": "success"}';
   casper.start('http://www.google.com');
 
 } else {
@@ -47,7 +47,7 @@ if (testing) {
     this.waitForSelector('#unhandledErrorModal > div > div > div.modal-footer > a:nth-child(2)', function () {
       this.click('#MainContentsTR > div > header > div:nth-child(5) > button:nth-child(3)');
       this.wait(10000);
-      message = "{'text': 'Added user to ClickTime', 'status': 'success'}";
+      message = '{"text": "Added user to ClickTime", "status": "success"}';
     });
   });
 

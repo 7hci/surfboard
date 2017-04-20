@@ -1,24 +1,22 @@
-const config = require('config');
-const Promise = require('bluebird');
-const cmd = require('node-cmd');
+let config = require('config');
+let Promise = require('bluebird');
+let cmd = require('node-cmd');
 
-var clicktime = exports;
+let clicktime = exports;
 
 clicktime.addUserToClickTime = (contractor) => {
-  const getAsync = Promise.promisify(cmd.get, {multiArgs: true, context: cmd});
-
-  const command = 'casperjs ' + __root + 'helper/clicktime-casper.js --user=' + config.get('clicktime.user') +
+  let command = 'casperjs helper/clicktime-casper.js --user=' + config.get('clicktime.user') +
     ' --password=' + config.get('clicktime.password') +
     ' --name=' + contractor.getFullName() +
-    ' --email=' + contractor.getEmail() +
+    ' --email=' + contractor.getEmail()
     + config.get('clicktime.test');
 
-  getAsync(command)
-    .then((response) => {
-      return JSON.parse(response);
+  return new Promise( (resolve, reject) => {
+    cmd.get(command, (err, data, stderr) => {
+      if (stderr) reject(stderr);
+      if (err) reject(stderr);
+      console.log(data);
+      resolve(JSON.parse(data));
     })
-    .catch((err) => {
-      console.log(err);
-      return {'text': 'Problem adding user to ClickTime', 'status': 'failure'};
-    })
+  });
 };
