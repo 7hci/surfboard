@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "env NODE_ENV=testing nyc mocha tests"
+    "start": "node bin/www",
+    "test": "env NODE_ENV=testing mocha tests",
+    "coverage": "env NODE_ENV=testing nyc mocha tests"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
@@ -19,11 +20,11 @@
     "googleapis": "^19.0.0",
     "lodash": "latest",
     "morgan": "~1.8.1",
-    "node-cmd": "^3.0.0",
     "nunjucks": "^3.0.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.0",
     "serve-favicon": "~2.4.2",
+    "shelljs": "^0.7.7",
     "string-template": "^1.0.0"
   },
   "devDependencies": {

@@ -22,15 +22,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // configure to store session information in mongoDB
-let store = new MongoDBStore(
-  {
-    uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
-    collection: 'mySessions'
-  });
-store.on('error', function(error) {
-  assert.ifError(error);
-  assert.ok(false);
-});
+// let store = new MongoDBStore(
+//   {
+//     uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
+//     collection: 'mySessions'
+//   });
+// store.on('error', function(error) {
+//   assert.ifError(error);
+//   assert.ok(false);
+// });
+
 app.use(require('express-session')({
   secret: 'This is a secret',
   cookie: {

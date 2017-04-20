@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-process.env.NODE_CONFIG_DIR = '../config';
+process.env.NODE_CONFIG_DIR = './config';
+process.env.NODE_ENV = 'development';
 
 /**
  * Module dependencies.

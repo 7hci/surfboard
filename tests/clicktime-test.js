@@ -11,13 +11,6 @@ describe('addUserToClickTime', () => {
       .then((result) => {
         expect(result.status).to.equal("success");
       })
-      .then(() => {
-          done();
-        }
-      )
-      .catch( (err) => {
-        console.log(err);
-        done();
-      });
+      .then(done, done);
   }).timeout(30000);
 });
