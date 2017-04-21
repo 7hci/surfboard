@@ -2,6 +2,7 @@
  * @fileOverview Takes form input from request and kicks off any onboarding tasks selected by the user
  */
 let _ = require('lodash');
+let logger = require('log4js').getLogger('app');
 let Bluebird = require('bluebird');
 
 let Contractor = require('../model/contractor.js');
@@ -27,6 +28,7 @@ onboard.route = (req, res) => {
       res.render('index.html', {messages: results, contractor: contractor})
     })
     .catch(function (err) {
+      logger.error(err);
       res.render('error.html', {error: err});
     });
 };

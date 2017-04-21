@@ -3,6 +3,7 @@
  */
 let request = require('request-promise').defaults({simple: false});
 let config = require('config');
+let logger = require('log4js').getLogger('app');
 let googleAuth = require('./google-auth');
 let Bluebird = require('bluebird');
 
@@ -35,7 +36,7 @@ drive.addAndShareDriveFolder = (contractor, credentials) => {
       return {'text': 'Created and shared Drive folder', 'status': 'success'};
     })
     .catch( (err) => {
-      console.log(err);
+      logger.error(err);
       return {'text': 'Problem creating and sharing Drive folder', 'status': 'failure'};
     })
 };

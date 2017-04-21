@@ -3,6 +3,7 @@
  */
 let request = require('request-promise').defaults({simple: false});
 let config = require('config');
+let logger = require('log4js').getLogger('app');
 let googleAuth = require('./google-auth');
 
 let domain = exports;
@@ -42,6 +43,7 @@ domain.createContractorEmail = (contractor, credentials) => {
       }
     })
     .catch((err) => {
+      logger.error(err);
       return {'text': 'Problem creating e-mail for contractor', 'status': 'failure'};
     });
 };

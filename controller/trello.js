@@ -3,6 +3,7 @@
  */
 let request = require('request-promise').defaults({simple: false});
 let config = require('config');
+let logger = require('log4js').getLogger('app');
 let Promise = require('bluebird');
 let _ = require('lodash');
 let drive = require('./drive');
@@ -45,7 +46,7 @@ trello.createTrelloBoard = (contractor, credentials) => {
       }
     )
     .catch((err) => {
-      console.log(err);
+      logger.error(err);
       return {'text': 'Problem creating board on Trello', 'status': 'failure'};
     });
 };

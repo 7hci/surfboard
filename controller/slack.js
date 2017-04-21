@@ -3,6 +3,7 @@
  */
 let request = require('request-promise').defaults({simple: false});
 let config = require('config');
+let logger = require('log4js').getLogger('app');
 
 let slack = exports;
 
@@ -34,6 +35,7 @@ slack.inviteToSlack = (contractor) => {
       return {'text': 'Problem inviting to slack', 'status': 'failure'};
     }
   }).catch( (err) => {
+    logger.error(err);
     return {'text': 'Problem inviting to slack', 'status': 'failure'}
   });
 };

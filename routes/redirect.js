@@ -2,6 +2,7 @@
  * @fileOverview Route that handles callback during Google OAuth2 authentication process
  */
 let googleAuth = require('../controller/google-auth.js');
+let logger = require('log4js').getLogger('app');
 let redirect = exports;
 
 /**
@@ -18,7 +19,8 @@ redirect.route = (req, res) => {
       req.session['tokens'] = tokens;
       res.redirect('/');
     })
-    .catch(function (error) {
-      res.render('error.html', {error: error});
+    .catch(function (err) {
+      logger.error(err);
+      res.render('error.html', {error: err});
     });
 };

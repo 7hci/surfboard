@@ -4,6 +4,7 @@
 
 let request = require('request-promise').defaults({simple: false});
 let config = require('config');
+let logger = require('log4js').getLogger('app');
 let googleAuth = require('./google-auth');
 let template = require('string-template');
 let Bluebird = require('bluebird');
@@ -44,7 +45,7 @@ gmail.sendDriveEmail = (contractor, credentials) => {
       }
     })
     .catch((err) => {
-      console.log(err);
+      logger.error(err);
       return {'text': 'Problem sending required documents instructions', 'status': 'failure'};
     });
 };
@@ -75,7 +76,6 @@ gmail.sendLoginEmail = (contractor, credentials) => {
     })
     .then((response) => {
       let messageData = JSON.parse(JSON.stringify(response));
-      console.log('response: ' + messageData);
       if ('id' in messageData) {
         return {'text': 'Sent e-mail with credentials', 'status': 'success'};
       } else {
@@ -83,7 +83,7 @@ gmail.sendLoginEmail = (contractor, credentials) => {
       }
     })
     .catch((err) => {
-      console.log(err);
+      logger.error(err);
       return {'text': 'Problem sending e-mail with credentials', 'status': 'failure'};
     });
 };
