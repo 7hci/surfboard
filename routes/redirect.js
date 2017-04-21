@@ -1,7 +1,7 @@
 /**
  * @fileOverview Route that handles callback during Google OAuth2 authentication process
  */
-let auth = require('../controller/auth.js');
+let googleAuth = require('../controller/google-auth.js');
 let redirect = exports;
 
 /**
@@ -10,7 +10,7 @@ let redirect = exports;
  * @param res
  */
 redirect.route = (req, res) => {
-  let oauth2Client = auth.getOAuthClient();
+  let oauth2Client = googleAuth.getOAuthClient();
   let code = req.query.code;
   oauth2Client.getTokenAsync(code)
     .then(function (tokens) {

@@ -7,7 +7,7 @@ let main = require('./main');
 let onboard = require('./onboard');
 let redirect = require('./redirect');
 let mock = require('./mock-api');
-let auth = require('../controller/auth');
+let googleAuth = require('../controller/google-auth');
 
 // Only enable route for mock api calls if we're testing
 if (process.env.NODE_ENV === 'testing'){
@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'testing'){
 
 router.get('/oauth2callback', redirect.route);
 // Authenticate all routes below using middleware
-router.use( auth.authenticateSession );
+router.use( googleAuth.authenticateSession );
 router.post('/onboard', onboard.route);
 router.get('/', main.route);
 

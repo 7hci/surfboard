@@ -1,6 +1,6 @@
 var request = require('request-promise').defaults({simple: false});
 var config = require('config');
-var auth = require('./auth');
+var googleAuth = require('./google-auth');
 var template = require('string-template');
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
@@ -8,7 +8,7 @@ var fs = Promise.promisifyAll(require('fs'));
 var gmail = exports;
 
 gmail.sendDriveEmail = (contractor, credentials) => {
-  var tokenPromise = auth.getAccessToken(credentials);
+  var tokenPromise = googleAuth.getAccessToken(credentials);
   var messagePromise = gmail.createMessageFromFile(contractor,__root + 'data/required.txt');
 
   return Promise.all([tokenPromise, messagePromise])
@@ -40,7 +40,7 @@ gmail.sendDriveEmail = (contractor, credentials) => {
 };
 
 gmail.sendLoginEmail = (contractor, credentials) => {
-  var tokenPromise = auth.getAccessToken(credentials);
+  var tokenPromise = googleAuth.getAccessToken(credentials);
   var messagePromise = gmail.createMessageFromFile(contractor,__root + 'data/login.txt');
 
   return Promise.all([tokenPromise, messagePromise])

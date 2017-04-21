@@ -1,13 +1,12 @@
-
 var config = require('config');
 var request = require('request-promise');
 var google = require('googleapis');
-var Promise = require('bluebird');
+var Bluebird = require('bluebird');
 
-var auth = exports;
+var googleAuth = exports;
 
-auth.getAuthUrl = () => {
-  var oauth2Client = auth.getOAuthClient();
+googleAuth.getAuthUrl = () => {
+  var oauth2Client = googleAuth.getOAuthClient();
   return oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: config.get('google.scope'),
@@ -15,45 +14,45 @@ auth.getAuthUrl = () => {
   });
 };
 
-auth.getAccessToken = (credentials) => {
-  var oauth2Client = auth.getOAuthClient();
+googleAuth.getAccessToken = (credentials) => {
+  var oauth2Client = googleAuth.getOAuthClient();
   oauth2Client.setCredentials(credentials);
   return oauth2Client.getAccessTokenAsync();
 };
 
-auth.getOAuthClient = () => {
+googleAuth.getOAuthClient = () => {
   var oauth = new google.auth.OAuth2(
     config.get('google.clientId'),
     config.get('google.clientSecret'),
     config.get('google.redirectUri')
   );
-  return Promise.promisifyAll(oauth);
+  return Bluebird.promisifyAll(oauth);
 };
 
-auth.authenticateSession = (req, res, next) => {
+googleAuth.authenticateSession = (req, res, next) => {
   if ('tokens' in req.session) {
-    auth.getAccessToken(req.session.tokens)
+    googleAuth.getAccessToken(req.session.tokens)
       .then(function (token) {
-        return auth.getUserInfo(token)
+        return googleAuth.getUserInfo(token)
       })
       .then(function (info) {
         var user_email = info.emailAddress;
-        if (auth.hasValidDomain(user_email)) {
+        if (googleAuth.hasValidDomain(user_email)) {
           next();
         } else {
           res.render('error.html',{ errorMessage: 'Invalid e-mail domain.' })
         }
       });
   } else {
-    res.redirect(auth.getAuthUrl());
+    res.redirect(googleAuth.getAuthUrl());
   }
 };
 
-auth.getUserInfo = (access_token) => {
+googleAuth.getUserInfo = (access_token) => {
   var profile_url = 'https://www.googleapis.com/gmail/v1/users/me/profile';
   return request.get({url: profile_url, qs: {access_token: access_token}, json: true});
 };
 
-auth.hasValidDomain = (emailAddress) => {
+googleAuth.hasValidDomain = (emailAddress) => {
   return emailAddress.split('@')[1].toLowerCase() === '7hci.com';
 };

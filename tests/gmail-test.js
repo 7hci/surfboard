@@ -1,22 +1,22 @@
-var chai = require('chai');
-var expect = chai.expect;
-var rewire = require('rewire');
-var http = require('http');
+let chai = require('chai');
+let expect = chai.expect;
+let rewire = require('rewire');
+let http = require('http');
 
-var app = require('../app');
-var gmail = rewire('../controller/gmail');
-var Contractor = require('../model/contractor');
-var mock = require('./mocks');
+let app = require('../app');
+let gmail = rewire('../controller/gmail');
+let Contractor = require('../model/contractor');
+let mock = require('./mocks');
 
-gmail.__set__('auth', mock.auth);
+gmail.__set__('googleAuth', mock.auth);
 
 describe('sendDriveEmail', () => {
   it('should return a successful status if a message object is returned by API', (done) => {
     app.set('port', '5000');
-    var server = http.createServer(app);
+    let server = http.createServer(app);
     server.listen('5000');
 
-    var contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
+    let contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
     gmail.sendDriveEmail(contractor, {})
       .then((result) => {
         expect(result.status).to.equal("success");
@@ -29,10 +29,10 @@ describe('sendDriveEmail', () => {
 describe('sendLoginEmail', () => {
   it('should return a successful status if a message object is returned by API', (done) => {
     app.set('port', '5000');
-    var server = http.createServer(app);
+    let server = http.createServer(app);
     server.listen('5000');
 
-    var contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
+    let contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
     gmail.sendLoginEmail(contractor, {})
       .then((result) => {
         expect(result.status).to.equal("success");

@@ -1,13 +1,12 @@
 var request = require('request-promise').defaults({simple: false});
 var config = require('config');
-var auth = require('./auth');
-var Promise = require('bluebird');
+var googleAuth = require('./google-auth');
 
 var domain = exports;
 
 domain.createContractorEmail = (contractor, credentials) => {
   var googleAdminUrl = config.get('google.baseUrl') + '/admin/directory/v1/users';
-  return auth.getAccessToken(credentials)
+  return googleAuth.getAccessToken(credentials)
     .then((token) => {
       return request.post({
         url: googleAdminUrl,

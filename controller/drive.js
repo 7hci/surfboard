@@ -1,6 +1,6 @@
 var request = require('request-promise').defaults({simple: false});
 var config = require('config');
-var auth = require('./auth');
+var googleAuth = require('./google-auth');
 var Promise = require('bluebird');
 
 var drive = exports;
@@ -34,7 +34,7 @@ drive.addAndShareDriveFolder = (contractor, credentials) => {
 drive.createFolder = (contractor, credentials) => {
   var driveUrl = config.get('google.baseUrl') + '/drive/v3/files';
 
-  return auth.getAccessToken(credentials)
+  return googleAuth.getAccessToken(credentials)
     .then((token) => {
       return request.post({
         url: driveUrl,
@@ -60,7 +60,7 @@ drive.createFolder = (contractor, credentials) => {
 drive.shareFolder = (contractor, credentials, folderId) => {
   var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ folderId +'/permissions';
 
-  return auth.getAccessToken(credentials)
+  return googleAuth.getAccessToken(credentials)
     .then((token) => {
       return request.post({
         url: driveUrl,
@@ -88,7 +88,7 @@ drive.shareFolder = (contractor, credentials, folderId) => {
 drive.addFile = (contractor, credentials, file, folderId) => {
   var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ file.id +'/copy';
 
-  return auth.getAccessToken(credentials)
+  return googleAuth.getAccessToken(credentials)
     .then((token) => {
       return request.post({
         url: driveUrl,
@@ -113,7 +113,7 @@ drive.addFile = (contractor, credentials, file, folderId) => {
 drive.getTasksFromFile = (credentials) => {
   var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ config.get('drive.files.task.id') +'/export';
 
-  return auth.getAccessToken(credentials)
+  return googleAuth.getAccessToken(credentials)
     .then((token) => {
       return request.get({
         url: driveUrl,
