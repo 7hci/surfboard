@@ -4,7 +4,7 @@ var rewire = require('rewire');
 var http = require('http');
 
 var app = require('../app');
-var trello = rewire('../helper/trello');
+var trello = rewire('../controller/trello');
 var Contractor = require('../model/contractor');
 var mock = require('./mocks');
 

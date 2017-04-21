@@ -1,6 +1,6 @@
 var request = require('request-promise').defaults({simple: false});
 var config = require('config');
-var auth = require('../helper/auth');
+var auth = require('./auth');
 var template = require('string-template');
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));

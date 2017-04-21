@@ -4,7 +4,7 @@ var rewire = require('rewire');
 var http = require('http');
 
 var app = require('../app');
-var slack = rewire('../helper/slack');
+var slack = rewire('../controller/slack');
 var Contractor = require('../model/contractor');
 var mock = require('./mocks');
 

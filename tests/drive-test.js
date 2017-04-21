@@ -4,7 +4,7 @@ var rewire = require('rewire');
 var http = require('http');
 
 var app = require('../app');
-var drive = rewire('../helper/drive');
+var drive = rewire('../controller/drive');
 var Contractor = require('../model/contractor');
 var mock = require('./mocks');
 

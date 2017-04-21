@@ -2,8 +2,8 @@ var request = require('request-promise').defaults({simple: false});
 var config = require('config');
 var Promise = require('bluebird');
 var _ = require('lodash');
-var auth = require('../helper/auth');
-var drive = require('../helper/drive');
+var auth = require('./auth');
+var drive = require('./drive');
 
 var trello = exports;
 

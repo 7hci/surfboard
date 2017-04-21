@@ -4,7 +4,7 @@ var rewire = require('rewire');
 var http = require('http');
 
 var app = require('../app');
-var gmail = rewire('../helper/gmail');
+var gmail = rewire('../controller/gmail');
 var Contractor = require('../model/contractor');
 var mock = require('./mocks');
 

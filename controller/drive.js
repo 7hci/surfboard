@@ -1,6 +1,6 @@
 var request = require('request-promise').defaults({simple: false});
 var config = require('config');
-var auth = require('../helper/auth');
+var auth = require('./auth');
 var Promise = require('bluebird');
 
 var drive = exports;

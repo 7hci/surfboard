@@ -5,12 +5,12 @@ let _ = require('lodash');
 let Bluebird = require('bluebird');
 
 let Contractor = require('../model/contractor.js');
-let drive = require('../helper/drive');
-let trello = require('../helper/trello');
-let gmail = require('../helper/gmail');
-let slack = require('../helper/slack');
-let domain = require('../helper/domain');
-let clicktime = require('../helper/clicktime');
+let drive = require('../controller/drive');
+let trello = require('../controller/trello');
+let gmail = require('../controller/gmail');
+let slack = require('../controller/slack');
+let domain = require('../controller/domain');
+let clicktime = require('../controller/clicktime');
 
 let onboard = exports;
 

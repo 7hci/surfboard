@@ -7,7 +7,7 @@ let main = require('./main');
 let onboard = require('./onboard');
 let redirect = require('./redirect');
 let mock = require('./mock-api');
-let auth = require('../helper/auth');
+let auth = require('../controller/auth');
 
 // Only enable route for mock api calls if we're testing
 if (process.env.NODE_ENV === 'testing'){

@@ -3,7 +3,7 @@
  * @type {constructor}
  */
 let config = require('config');
-let auth = require('../helper/auth');
+let auth = require('../controller/auth');
 
 let main = exports;
 

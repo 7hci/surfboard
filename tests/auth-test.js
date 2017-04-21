@@ -1,7 +1,6 @@
 var chai = require('chai');
 var expect = chai.expect;
-var Promise = require('bluebird');
-var auth = require('../helper/auth');
+var auth = require('../controller/auth');
 var config = require('config');
 
 describe('getAuthUrl', () => {

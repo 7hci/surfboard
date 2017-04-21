@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-var clicktime = require('../helper/clicktime');
+var clicktime = require('../controller/clicktime');
 var Contractor = require('../model/contractor');
 
 describe('addUserToClickTime', () => {
