@@ -24,7 +24,6 @@ describe('createContractorEmail', () => {
       .then(() => {
           server.close(done);
         }
-      )
-      .catch(done, done);
+      );
   });
 });

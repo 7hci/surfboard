@@ -22,10 +22,7 @@ describe('sendDriveEmail', () => {
         expect(result.status).to.equal("success");
         server.close();
       })
-      .then(() => {
-          done();
-        }
-      )
+      .then(done, done);
   });
 });
 
@@ -41,9 +38,6 @@ describe('sendLoginEmail', () => {
         expect(result.status).to.equal("success");
         server.close();
       })
-      .then(() => {
-          done();
-        }
-      )
+      .then(done, done);
   });
 });

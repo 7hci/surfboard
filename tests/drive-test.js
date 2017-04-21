@@ -83,7 +83,6 @@ describe('getTasksFromFile', () => {
       .then(() => {
           server.close(done);
         }
-      )
-      .catch(done, done);
+      );
   });
 });

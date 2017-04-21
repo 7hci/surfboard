@@ -40,8 +40,7 @@ describe('runCheckedTasks', () => {
       });
       expect(results.length).to.equal(Object.keys(request.body).length);
     })
-      .then(done())
-      .catch(done, done);
+      .then(done, done);
   });
 
   it('should return text and status for every checked task even if createContractorEmail is not checked', (done) => {
@@ -67,7 +66,6 @@ describe('runCheckedTasks', () => {
       });
       expect(results.length).to.equal(Object.keys(request.body).length);
     })
-      .then(done())
-      .catch(done, done);
+      .then(done, done);
   });
 });

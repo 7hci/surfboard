@@ -24,8 +24,7 @@ describe('addBoard', () => {
       .then(() => {
           server.close(done);
         }
-      )
-      .catch(done, done);
+      );
   });
 });
 
@@ -42,8 +41,7 @@ describe('addBoardMember', () => {
       .then(() => {
           server.close(done);
         }
-      )
-      .catch(done, done);
+      );
   });
 });
 
@@ -60,8 +58,7 @@ describe('addList', () => {
       .then(() => {
           server.close(done);
         }
-      )
-      .catch(done, done);
+      );
   });
 });
 
@@ -78,7 +75,6 @@ describe('addCard', () => {
       .then(() => {
           server.close(done);
         }
-      )
-      .catch(done, done);
+      );
   });
 });

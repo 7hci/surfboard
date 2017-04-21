@@ -24,8 +24,7 @@ describe('inviteToSlack', () => {
       .then(() => {
           server.close(done);
         }
-      )
-      .catch(done, done);
+      );
   });
 });
 
@@ -43,7 +42,6 @@ describe('inviteToSlack', () => {
       .then(() => {
           server.close(done);
         }
-      )
-      .catch(done, done);
+      );
   });
 });
