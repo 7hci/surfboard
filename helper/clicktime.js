@@ -12,8 +12,6 @@ clicktime.addUserToClickTime = (contractor) => {
     ' --email=' + contractor.getEmail()
     + config.get('clicktime.test');
 
-  console.log(command);
-
   return new Promise((resolve, reject) => {
     shell.exec(command, (code, stdout, stderr) => {
       if (stderr) {

@@ -25,7 +25,6 @@ if (testing) {
     this.sendKeys('#email', user);
     this.sendKeys('#password', password);
     this.click('#loginbutton');
-    //this.wait(10000);
   });
 
   casper.waitForSelector('#ctl00_PageHeaderContentPlaceHolder_HeaderControl_lnkPeople', function () {

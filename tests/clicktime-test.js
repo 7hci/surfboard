@@ -12,5 +12,5 @@ describe('addUserToClickTime', () => {
         expect(result.status).to.equal("success");
       })
       .then(done, done);
-  }).timeout(30000);
+  }).timeout(15000);
 });
