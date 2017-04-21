@@ -1,7 +1,11 @@
-var config = require('config');
-var auth = require('../helper/auth');
+/**
+ * @fileOverview Route that renders the index page
+ * @type {constructor}
+ */
+let config = require('config');
+let auth = require('../helper/auth');
 
-var main = exports;
+let main = exports;
 
 main.route = (req, res) => {
   res.render('index.html', {tasks: config.get('tasks.formOptions')});

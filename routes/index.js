@@ -1,17 +1,21 @@
-var express = require('express');
-var router = express.Router();
-var main = require('./main');
-var onboard = require('./onboard');
-var redirect = require('./redirect');
-var mock = require('./mock-api');
-var auth = require('../helper/auth');
+/**
+ * @fileOverview Main router that handles all requests
+ */
+let express = require('express');
+let router = express.Router();
+let main = require('./main');
+let onboard = require('./onboard');
+let redirect = require('./redirect');
+let mock = require('./mock-api');
+let auth = require('../helper/auth');
 
+// Only enable route for mock api calls if we're testing
 if (process.env.NODE_ENV === 'testing'){
   router.use('/mock-api/', mock.route);
 }
 
 router.get('/oauth2callback', redirect.route);
-// Authenticate all routes below
+// Authenticate all routes below using middleware
 router.use( auth.authenticateSession );
 router.post('/onboard', onboard.route);
 router.get('/', main.route);

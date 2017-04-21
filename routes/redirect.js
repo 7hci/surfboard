@@ -1,5 +1,5 @@
 /**
- * @fileOverview Handles callback during Google OAuth2 authentication process
+ * @fileOverview Route that handles callback during Google OAuth2 authentication process
  */
 let auth = require('../helper/auth.js');
 let redirect = exports;

@@ -1,5 +1,9 @@
-var express = require('express');;
-var router = express.Router();
+/**
+ * @fileOverview Router for all mock api calls made during testing
+ *
+ */
+let express = require('express');;
+let router = express.Router();
 
 router.post('/admin/directory/v1/users', (req, res, next) => {
   res.send( { id: "testid" } );
