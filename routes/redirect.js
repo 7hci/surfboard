@@ -1,10 +1,17 @@
-var auth = require('../helper/auth.js');
+/**
+ * @fileOverview Handles callback during Google OAuth2 authentication process
+ */
+let auth = require('../helper/auth.js');
+let redirect = exports;
 
-var redirect = exports;
-
+/**
+ * Gets access token info by passing the "code" returned by Google to the OAuthClient and saves it to the user's session
+ * @param req
+ * @param res
+ */
 redirect.route = (req, res) => {
-  var oauth2Client = auth.getOAuthClient();
-  var code = req.query.code;
+  let oauth2Client = auth.getOAuthClient();
+  let code = req.query.code;
   oauth2Client.getTokenAsync(code)
     .then(function (tokens) {
       oauth2Client.setCredentials(tokens);
