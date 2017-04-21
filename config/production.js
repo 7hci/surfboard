@@ -1,68 +1,60 @@
 module.exports = {
   "google": {
-    "clientId": "",
-    "clientSecret": "",
-   },
+    "clientId": "###",
+    "clientSecret": "###"
+  },
   "clicktime": {
-    "user": "",
-    "password": "",
-    "test": ""
+    "user": "###",
+    "password": "###",
   },
   "trello": {
-    "key": "",
-    "token": "",
+    "key": "###",
+    "token": "###",
     "team": {
-      "id": "",
+      "id": "###",
       "members":[
         {
           "name": "Daniel",
-          "id": ""
+          "id": "###"
         },
         {
           "name": "Scott",
-          "id": ""
+          "id": "###"
         },
         {
           "name": "Red",
-          "id": ""
+          "id": "###"
         }
       ]
     }
   },
   "slack": {
-    "token": "",
+    "token": "###",
   },
   "drive": {
     "folders" : {
-      "contractors": "",
-      "forms": ""
+      "contractors": "###",
+      "forms": "###"
     },
     "files" : {
       "task": {
-        "name": "Tasks",
-        "id": ""
+        "id": "###"
       },
       "w9": {
-        "name": "Form W-9",
-        "id": ""
+        "id": "###"
       },
       "w8": {
-        "name": "Form W-8BEN",
-        "id": ""
+        "id": "###"
       },
       "mssa": {
-        "name": "MSSA",
-        "id": ""
+        "id": "###"
       },
       "directDeposit": {
-        "name": "Direct Deposit Form",
-        "id": ""
+        "id": "###"
       },
       "bgCheck": {
-        "name": "Background Check Authorization",
-        "id": ""
+        "id": "###"
       }
     }
   }
 };
-

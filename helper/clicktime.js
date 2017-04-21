@@ -9,8 +9,11 @@ clicktime.addUserToClickTime = (contractor) => {
   let command = 'casperjs clicktime-casper.js --user=' + config.get('clicktime.user') +
     ' --password=' + config.get('clicktime.password') +
     ' --name="' + contractor.getFullName() + '"' +
-    ' --email=' + contractor.getEmail()
-    + config.get('clicktime.test');
+    ' --email=' + contractor.getEmail();
+
+  if (process.env.NODE_ENV === 'testing'){
+    command += ' --test';
+  }
 
   return new Promise((resolve, reject) => {
     shell.exec(command, (code, stdout, stderr) => {
