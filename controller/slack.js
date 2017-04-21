@@ -1,12 +1,20 @@
-var request = require('request-promise').defaults({simple: false});
-var config = require('config');
+/**
+ * Handles all calls to Slack's API
+ */
+let request = require('request-promise').defaults({simple: false});
+let config = require('config');
 
-var slack = exports;
+let slack = exports;
 
+/**
+ * Sends request to generate a Slack invitation for contractor
+ * @param contractor
+ * @returns success/failure status message
+ */
 slack.inviteToSlack = (contractor) => {
 
-  var slackUrl = config.get('slack.baseUrl') + '/users.admin.invite';
-  var token = config.get('slack.token');
+  let slackUrl = config.get('slack.baseUrl') + '/users.admin.invite';
+  let token = config.get('slack.token');
 
   return request.get({
     url: slackUrl,

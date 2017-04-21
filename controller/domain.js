@@ -1,11 +1,20 @@
-var request = require('request-promise').defaults({simple: false});
-var config = require('config');
-var googleAuth = require('./google-auth');
+/**
+ * @fileOverview Handles all calls to Google's Admin SDK API
+ */
+let request = require('request-promise').defaults({simple: false});
+let config = require('config');
+let googleAuth = require('./google-auth');
 
-var domain = exports;
+let domain = exports;
 
+/**
+ * Creates a new e-mail account for the contractor
+ * @param contractor
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @returns success/failure status object
+ */
 domain.createContractorEmail = (contractor, credentials) => {
-  var googleAdminUrl = config.get('google.baseUrl') + '/admin/directory/v1/users';
+  let googleAdminUrl = config.get('google.baseUrl') + '/admin/directory/v1/users';
   return googleAuth.getAccessToken(credentials)
     .then((token) => {
       return request.post({
@@ -24,7 +33,8 @@ domain.createContractorEmail = (contractor, credentials) => {
       });
     })
     .then((response) => {
-      var userData = JSON.parse(JSON.stringify(response));
+      let userData = JSON.parse(JSON.stringify(response));
+      // If the request worked, a user object with an id would be returned by Google
       if ('id' in userData) {
         return {'text': 'Added ' + contractor.getEmail() + ' to domain', 'status': 'success'};
       } else {

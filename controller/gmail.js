@@ -1,19 +1,29 @@
-var request = require('request-promise').defaults({simple: false});
-var config = require('config');
-var googleAuth = require('./google-auth');
-var template = require('string-template');
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
+/**
+ * @fileOverview Handles all calls to Google's Drive API
+ */
 
-var gmail = exports;
+let request = require('request-promise').defaults({simple: false});
+let config = require('config');
+let googleAuth = require('./google-auth');
+let template = require('string-template');
+let Bluebird = require('bluebird');
+let fs = Bluebird.promisifyAll(require('fs'));
 
+let gmail = exports;
+
+/**
+ * Main function to send an e-mail to the contractor with document instructions
+ * @param contractor
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @returns success/failure status object
+ */
 gmail.sendDriveEmail = (contractor, credentials) => {
-  var tokenPromise = googleAuth.getAccessToken(credentials);
-  var messagePromise = gmail.createMessageFromFile(contractor,__root + 'data/required.txt');
+  let tokenBluebird = googleAuth.getAccessToken(credentials);
+  let messageBluebird = gmail.getMessageFromFile(contractor,__root + 'data/required.txt');
 
-  return Promise.all([tokenPromise, messagePromise])
+  return Bluebird.all([tokenBluebird, messageBluebird])
     .spread((token, message) => {
-      var gmailUrl = config.get('google.baseUrl') + '/gmail/v1/users/me/messages/send';
+      let gmailUrl = config.get('google.baseUrl') + '/gmail/v1/users/me/messages/send';
       return request.post({
         url: gmailUrl,
         qs: {
@@ -21,12 +31,12 @@ gmail.sendDriveEmail = (contractor, credentials) => {
           userId: "me"},
         json: true,
         body: {
-          "raw": gmail.getEncodedData(contractor, message, 'Required Documents', false)
+          "raw": gmail.generateEncodedEmail(contractor, message, 'Required Documents', false)
         }
       })
     })
     .then((response) => {
-      var messageData = JSON.parse(JSON.stringify(response));
+      let messageData = JSON.parse(JSON.stringify(response));
       if ('id' in messageData) {
         return {'text': 'Sent required documents instructions', 'status': 'success'};
       } else {
@@ -39,13 +49,19 @@ gmail.sendDriveEmail = (contractor, credentials) => {
     });
 };
 
+/**
+ * Main function to send an e-mail to the contractor with login credentials
+ * @param contractor
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @returns success/failure status object
+ */
 gmail.sendLoginEmail = (contractor, credentials) => {
-  var tokenPromise = googleAuth.getAccessToken(credentials);
-  var messagePromise = gmail.createMessageFromFile(contractor,__root + 'data/login.txt');
+  let tokenBluebird = googleAuth.getAccessToken(credentials);
+  let messageBluebird = gmail.getMessageFromFile(contractor,__root + 'data/login.txt');
 
-  return Promise.all([tokenPromise, messagePromise])
+  return Bluebird.all([tokenBluebird, messageBluebird])
     .spread((token, message) => {
-      var gmailUrl = config.get('google.baseUrl') + '/gmail/v1/users/me/messages/send';
+      let gmailUrl = config.get('google.baseUrl') + '/gmail/v1/users/me/messages/send';
       return request.post({
         url: gmailUrl,
         qs: {
@@ -53,12 +69,12 @@ gmail.sendLoginEmail = (contractor, credentials) => {
           userId: "me"},
         json: true,
         body: {
-          "raw": gmail.getEncodedData(contractor, message, '7HCI E-mail Account Credentials', true)
+          "raw": gmail.generateEncodedEmail(contractor, message, '7HCI E-mail Account Credentials', true)
         }
       })
     })
     .then((response) => {
-      var messageData = JSON.parse(JSON.stringify(response));
+      let messageData = JSON.parse(JSON.stringify(response));
       console.log('response: ' + messageData);
       if ('id' in messageData) {
         return {'text': 'Sent e-mail with credentials', 'status': 'success'};
@@ -72,10 +88,16 @@ gmail.sendLoginEmail = (contractor, credentials) => {
     });
 };
 
-gmail.createMessageFromFile = (contractor, file) => {
+/**
+ * Helper function to retrieve the message template from a text file and fill it using the contractor's info
+ * @param contractor
+ * @param file The location of the text file to use for the template
+ * @returns the completed message
+ */
+gmail.getMessageFromFile = (contractor, file) => {
   return fs.readFileAsync(file,  'utf-8').then( (text) => {
 
-    var form;
+    let form;
     if (contractor.isResident) {
       form = "W-9";
     } else {
@@ -91,14 +113,22 @@ gmail.createMessageFromFile = (contractor, file) => {
   });
 };
 
-gmail.getEncodedData = (contractor, message, subject, usePrivateEmail) => {
-  var recipient;
+/**
+ * Helper function to generate and encode the email to be sent
+ * @param contractor
+ * @param message The body of the email
+ * @param subject The subject of the email
+ * @param usePrivateEmail whether to send the email to the contractor's private address
+ * @returns the encoded e-mail
+ */
+gmail.generateEncodedEmail = (contractor, message, subject, usePrivateEmail) => {
+  let recipient;
   if (usePrivateEmail) {
     recipient = contractor.privateEmail;
   } else {
     recipient = contractor.getEmail();
   }
-  var rawData = [
+  let rawData = [
     "Content-Type: text/plain; charset=\"UTF-8\"\n",
     "MIME-Version: 1.0\n",
     "Content-Transfer-Encoding: 7bit\n",

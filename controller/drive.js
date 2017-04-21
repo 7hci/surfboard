@@ -1,14 +1,23 @@
-var request = require('request-promise').defaults({simple: false});
-var config = require('config');
-var googleAuth = require('./google-auth');
-var Promise = require('bluebird');
+/**
+ * @fileOverview Handles all calls to Google's Drive API
+ */
+let request = require('request-promise').defaults({simple: false});
+let config = require('config');
+let googleAuth = require('./google-auth');
+let Bluebird = require('bluebird');
 
-var drive = exports;
+let drive = exports;
 
+/**
+ * Main function called to create the folder, add the necessary files and share the folder with the contractor
+ * @param contractor
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @returns success/failure status object
+ */
 drive.addAndShareDriveFolder = (contractor, credentials) => {
   return drive.createFolder(contractor, credentials)
     .then( (folderId) => {
-      var toDoAfterFolderCreated = [
+      let toDoAfterFolderCreated = [
         drive.shareFolder(contractor, credentials, folderId),
         drive.addFile(contractor, credentials, config.get('drive.files.directDeposit'), folderId),
         drive.addFile(contractor, credentials, config.get('drive.files.bgCheck'), folderId),
@@ -20,19 +29,26 @@ drive.addAndShareDriveFolder = (contractor, credentials) => {
         toDoAfterFolderCreated.push(
           drive.addFile(contractor, credentials, config.get('drive.files.w8'), folderId));
       }
-        return Promise.all(toDoAfterFolderCreated);
+        return Bluebird.all(toDoAfterFolderCreated);
     })
     .then( () => {
-      return Promise.resolve({'text': 'Created and shared Drive folder', 'status': 'success'});
+      return {'text': 'Created and shared Drive folder', 'status': 'success'};
     })
     .catch( (err) => {
       console.log(err);
-      return Promise.resolve({'text': 'Problem creating and sharing Drive folder', 'status': 'failure'});
+      return {'text': 'Problem creating and sharing Drive folder', 'status': 'failure'};
     })
 };
 
+/**
+ * Helper function to create the folder
+ * @param contractor
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @returns created folder id
+ * @throws error if no folder is created
+ */
 drive.createFolder = (contractor, credentials) => {
-  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files';
+  let driveUrl = config.get('google.baseUrl') + '/drive/v3/files';
 
   return googleAuth.getAccessToken(credentials)
     .then((token) => {
@@ -48,7 +64,7 @@ drive.createFolder = (contractor, credentials) => {
       });
     })
     .then((response) => {
-      var fileData = JSON.parse(JSON.stringify(response));
+      let fileData = JSON.parse(JSON.stringify(response));
       if ('id' in fileData) {
         return fileData.id;
       } else {
@@ -57,8 +73,15 @@ drive.createFolder = (contractor, credentials) => {
     });
 };
 
+/**
+ * Helper function to make the folder available to the contractor
+ * @param contractor
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @returns shared folder id
+ * @throws error if folder is not shared
+ */
 drive.shareFolder = (contractor, credentials, folderId) => {
-  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ folderId +'/permissions';
+  let driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ folderId +'/permissions';
 
   return googleAuth.getAccessToken(credentials)
     .then((token) => {
@@ -76,7 +99,7 @@ drive.shareFolder = (contractor, credentials, folderId) => {
       });
     })
     .then((response) => {
-      var fileData = JSON.parse(JSON.stringify(response));
+      let fileData = JSON.parse(JSON.stringify(response));
       if ('id' in fileData) {
         return fileData.id;
       } else {
@@ -85,8 +108,17 @@ drive.shareFolder = (contractor, credentials, folderId) => {
     });
 };
 
+/**
+ * Helper function to copy a file and then move to the copy to a folder
+ * @param contractor
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @param file An object representing the file to be copied/moved
+ * @param folderId The id of the folder the file is being added to
+ * @returns the id of the file that was added
+ * @throws error if the file was not added
+ */
 drive.addFile = (contractor, credentials, file, folderId) => {
-  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ file.id +'/copy';
+  let driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ file.id +'/copy';
 
   return googleAuth.getAccessToken(credentials)
     .then((token) => {
@@ -101,7 +133,7 @@ drive.addFile = (contractor, credentials, file, folderId) => {
       });
     })
     .then((response) => {
-      var fileData = JSON.parse(JSON.stringify(response));
+      let fileData = JSON.parse(JSON.stringify(response));
       if ('id' in fileData) {
         return fileData.id;
       } else {
@@ -110,8 +142,14 @@ drive.addFile = (contractor, credentials, file, folderId) => {
     });
 };
 
+/**
+ * Helper function to retrieve a list of tasks from a spreadsheet on the Drive
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @returns an array of CSV strings representing the tasks
+ * @throws error if the tasks could not be retrieved
+ */
 drive.getTasksFromFile = (credentials) => {
-  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ config.get('drive.files.task.id') +'/export';
+  let driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ config.get('drive.files.task.id') +'/export';
 
   return googleAuth.getAccessToken(credentials)
     .then((token) => {
@@ -125,7 +163,7 @@ drive.getTasksFromFile = (credentials) => {
       });
     })
     .then((response) => {
-      var fileData = String(response);
+      let fileData = String(response);
       if (fileData.indexOf(',') > -1) {
         return fileData.match(/[^\r\n]+/g);
       } else {
