@@ -1,4 +1,7 @@
-var crypto = require('crypto');
+/**
+ * @fileOverview Class representing all relevant information about the contractor being onboarded
+ */
+let crypto = require('crypto');
 
 module.exports =
   class Contractor {
@@ -14,19 +17,25 @@ module.exports =
       return this.firstName + ' ' + this.lastName;
     }
 
+    /**
+     * If a local-part override was provided, uses that otherwise generates a sanitized local-part
+     * @returns {string} The complete generated e-mail address
+     */
     getEmail() {
-
       if (this.override) {
        return this.override.replace(" ", "") + '@7hci.com';
       } else {
-        var pattern = /[^a-zA-Z]/g;
-        var sanitizedFirst = this.firstName.replace(pattern, '').toLowerCase();
-        var sanitizedLast = this.lastName.replace(pattern, '').toLowerCase();
+        let pattern = /[^a-zA-Z]/g;
+        let sanitizedFirst = this.firstName.replace(pattern, '').toLowerCase();
+        let sanitizedLast = this.lastName.replace(pattern, '').toLowerCase();
 
         return sanitizedFirst + '.' + sanitizedLast + '@7hci.com';
       }
     }
 
+    /**
+     * @returns {string} A password for the contractor's new e-mail account
+     */
     getPassword() {
       return crypto.createHash('md5').update(this.getFullName()).digest('hex');
     }
