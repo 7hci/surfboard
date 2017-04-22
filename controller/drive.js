@@ -65,7 +65,7 @@ drive.createFolder = (contractor, credentials) => {
       });
     })
     .then((response) => {
-      let fileData = JSON.parse(JSON.stringify(response));
+      let fileData = response;
       if ('id' in fileData) {
         return fileData.id;
       } else {
@@ -100,7 +100,7 @@ drive.shareFolder = (contractor, credentials, folderId) => {
       });
     })
     .then((response) => {
-      let fileData = JSON.parse(JSON.stringify(response));
+      let fileData = response;
       if ('id' in fileData) {
         return fileData.id;
       } else {
@@ -134,7 +134,7 @@ drive.addFile = (contractor, credentials, file, folderId) => {
       });
     })
     .then((response) => {
-      let fileData = JSON.parse(JSON.stringify(response));
+      let fileData = response;
       if ('id' in fileData) {
         return fileData.id;
       } else {

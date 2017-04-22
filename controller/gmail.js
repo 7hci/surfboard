@@ -37,7 +37,7 @@ gmail.sendDriveEmail = (contractor, credentials) => {
       })
     })
     .then((response) => {
-      let messageData = JSON.parse(JSON.stringify(response));
+      let messageData = response;
       if ('id' in messageData) {
         return {'text': 'Sent required documents instructions', 'status': 'success'};
       } else {
@@ -75,7 +75,7 @@ gmail.sendLoginEmail = (contractor, credentials) => {
       })
     })
     .then((response) => {
-      let messageData = JSON.parse(JSON.stringify(response));
+      let messageData = response;
       if ('id' in messageData) {
         return {'text': 'Sent e-mail with credentials', 'status': 'success'};
       } else {

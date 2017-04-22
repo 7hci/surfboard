@@ -34,7 +34,8 @@ domain.createContractorEmail = (contractor, credentials) => {
       });
     })
     .then((response) => {
-      let userData = JSON.parse(JSON.stringify(response));
+      let userData = response;
+
       // If the request worked, a user object with an id would be returned by Google
       if ('id' in userData) {
         return {'text': 'Added ' + contractor.getEmail() + ' to domain', 'status': 'success'};
