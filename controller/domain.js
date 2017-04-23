@@ -38,6 +38,7 @@ domain.createContractorEmail = (contractor, credentials) => {
 
       // If the request worked, a user object with an id would be returned by Google
       if ('id' in userData) {
+        logger.info('Added ' + contractor.getEmail() + ' to domain');
         return {'text': 'Added ' + contractor.getEmail() + ' to domain', 'status': 'success'};
       } else {
         return {'text': 'Problem creating e-mail for contractor', 'status': 'failure'};

@@ -19,9 +19,6 @@ describe('runCheckedTasks', () => {
     let request = {
       body : {
         createContractorEmail: 'on',
-        createTrelloBoard: 'on',
-        sendLoginEmail: 'on',
-        addAndShareDriveFolder: 'on',
         sendDriveEmail: 'on',
         inviteToSlack: 'on',
         addUserToClickTime: 'on'

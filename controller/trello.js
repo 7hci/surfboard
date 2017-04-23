@@ -42,6 +42,7 @@ trello.createTrelloBoard = (contractor, credentials) => {
       );
     })
     .then(() => {
+        logger.info('Created board on Trello');
         return {'text': 'Created board on Trello', 'status': 'success'};
       }
     )

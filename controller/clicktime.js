@@ -32,6 +32,7 @@ clicktime.addUserToClickTime = (contractor) => {
         resolve({'text': 'Problem adding user to ClickTime', 'status': 'failure'});
       }
       else {
+        logger.info('Added user to ClickTime');
         resolve(JSON.parse(stdout));
       }
     })

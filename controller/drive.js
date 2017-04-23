@@ -33,6 +33,7 @@ drive.addAndShareDriveFolder = (contractor, credentials) => {
         return Bluebird.all(toDoAfterFolderCreated);
     })
     .then( () => {
+      logger.info('Created and shared Drive folder');
       return {'text': 'Created and shared Drive folder', 'status': 'success'};
     })
     .catch( (err) => {

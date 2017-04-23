@@ -60,20 +60,20 @@ onboard.runCheckedTasks = (request, contractor) => {
   let credentials = request.session.tokens;
   // Map identifying any functions that should only be ran **after** the "create Email" task is complete
   let taskMap = {
-    'sendLoginEmail': gmail.sendLoginEmail(contractor, credentials),
-    'sendDriveEmail': gmail.sendDriveEmail(contractor, credentials),
-    'addAndShareDriveFolder': drive.addAndShareDriveFolder(contractor, credentials),
-    'inviteToSlack': slack.inviteToSlack(contractor),
-    'addUserToClickTime': clicktime.addUserToClickTime(contractor)
+    'sendLoginEmail': gmail.sendLoginEmail,
+    'sendDriveEmail': gmail.sendDriveEmail,
+    'addAndShareDriveFolder': drive.addAndShareDriveFolder,
+    'inviteToSlack': slack.inviteToSlack,
+    'addUserToClickTime': clicktime.addUserToClickTime
   };
   let tasksAfterEmailCreation =
     _.reduce(checkedTasks, (result, value, key) => {
       if (taskMap[key]) {
-        result.push(taskMap[key]);
+        var task = taskMap[key].call(task,contractor,credentials);
+        result.push(task);
       }
       return result;
     }, []);
-
   let tasksToRun = [];
   if ('createContractorEmail' in checkedTasks) {
     tasksToRun.push(domain.createContractorEmail(contractor, credentials)

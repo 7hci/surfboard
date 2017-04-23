@@ -25,6 +25,7 @@ slack.inviteToSlack = (contractor) => {
     },
   }).then((response) => {
     if ('ok' in response && response.ok === true) {
+      logger.info('Invited to Slack');
       return {'text': 'Invited to Slack', 'status': 'success'};
     } else {
       return {'text': 'Problem inviting to slack', 'status': 'failure'};

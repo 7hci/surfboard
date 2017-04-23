@@ -39,6 +39,7 @@ gmail.sendDriveEmail = (contractor, credentials) => {
     .then((response) => {
       let messageData = response;
       if ('id' in messageData) {
+        logger.info('Sent required documents instructions');
         return {'text': 'Sent required documents instructions', 'status': 'success'};
       } else {
         return {'text': 'Problem sending required documents instructions', 'status': 'failure'};
@@ -77,6 +78,7 @@ gmail.sendLoginEmail = (contractor, credentials) => {
     .then((response) => {
       let messageData = response;
       if ('id' in messageData) {
+        logger.info('Sent e-mail with credentials');
         return {'text': 'Sent e-mail with credentials', 'status': 'success'};
       } else {
         return {'text': 'Problem sending e-mail with credentials', 'status': 'failure'};

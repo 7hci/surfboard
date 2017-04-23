@@ -2,7 +2,7 @@ module.exports = {
   "google": {
     "clientId": "",
     "clientSecret": "",
-    "redirectUri": "http://surfboard.reardenapps.com:5000/oauth2callback",
+    "redirectUri": "http://surfboard.reardenapps.com/oauth2callback",
     "scope": "https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/admin.directory.user",
     "baseUrl": "https://www.googleapis.com"
   },
