@@ -10,10 +10,9 @@ let slack = exports;
 /**
  * Sends request to generate a Slack invitation for contractor
  * @param contractor
- * @returns success/failure status message
+ * @returns {Promise} success/failure status message
  */
 slack.inviteToSlack = (contractor) => {
-
   let slackUrl = config.get('slack.baseUrl') + '/users.admin.invite';
   let token = config.get('slack.token');
 
@@ -24,18 +23,14 @@ slack.inviteToSlack = (contractor) => {
       token: token,
       email: contractor.getEmail()
     },
-  }).then( (response) => {
-    if ('ok' in response) {
-      if (response.ok === true) {
-        return {'text': 'Invited to Slack', 'status': 'success'};
-      } else {
-        return {'text': 'Already invited ' + contractor.getEmail(), 'status': 'failure'};
-      }
+  }).then((response) => {
+    if ('ok' in response && response.ok === true) {
+      return {'text': 'Invited to Slack', 'status': 'success'};
     } else {
       return {'text': 'Problem inviting to slack', 'status': 'failure'};
     }
-  }).catch( (err) => {
-    logger.error(err);
+  }).catch((err) => {
+    logger.info('Problem inviting to slack: ' + err);
     return {'text': 'Problem inviting to slack', 'status': 'failure'}
   });
 };

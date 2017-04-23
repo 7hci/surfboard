@@ -9,6 +9,17 @@ router.post('/admin/directory/v1/users', (req, res, next) => {
   res.send( { id: "testid" } );
 });
 
+router.get('/admin/directory/v1/users', (req, res, next) => {
+  res.send( {
+    users: [
+      {
+        id: "testid",
+        lastLoginTime: "2017-01-01T00:00:00.000Z"
+      }
+    ]
+  } );
+});
+
 router.post('/gmail/v1/users/me/messages/send', (req, res, next) => {
   res.send( { id: "testid" } );
 });

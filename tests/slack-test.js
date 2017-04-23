@@ -4,7 +4,7 @@ let rewire = require('rewire');
 let http = require('http');
 
 let app = require('../app');
-let slack = require('../controller/slack');
+let slack = rewire('../controller/slack');
 let Contractor = require('../model/contractor');
 
 describe('inviteToSlack', () => {
@@ -23,9 +23,7 @@ describe('inviteToSlack', () => {
         }
       );
   });
-});
 
-describe('inviteToSlack', () => {
   it('should return a failure status if the API response is ok: false (already invited contractor)', (done) => {
     app.set('port', '5000');
     let server = http.createServer(app);
