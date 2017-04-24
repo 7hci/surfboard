@@ -7,12 +7,15 @@
 
     <title>SurfBOARD</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/00fb325d47.js"></script>
 </head>
 <body>
@@ -57,16 +60,25 @@
             <span class="glyphicon form-control-feedback"></span>
             <div class="help-block with-errors"></div>
         </div>
+        <label class="control-label" for="override"><span>Override Generated Local-Part:</span></label>
+        <div class="input-group">
+            <input type="text" name="override" id="override" class="form-control"
+                    {% if contractor %}
+                   placeholder="{{ contractor.override }}" disabled
+                    {% endif %} >
+            <span class="input-group-addon">@7hci.com</span>
+        </div>
+        <br>
         <div class="checkbox">
             <label> <input type="checkbox" name="resident"
-                {% if contractor %}
-                    disabled
-                    {%  if contractor.isResident %}
-                        checked
-                    {% endif %}
-                {% else %}
-                    checked
-                {% endif %}> <b>U.S. Resident</b> </label>
+                    {% if contractor %}
+                           disabled
+                        {% if contractor.isResident %}
+                           checked
+                        {% endif %}
+                    {% else %}
+                           checked
+                    {% endif %}> <b>U.S. Resident</b> </label>
         </div>
 
         <div class="modal fade" id="tasks_modal" tabindex="-1" role="dialog">
@@ -78,11 +90,11 @@
                     <div class="modal-body">
                         {% if tasks %}
                             {% for task in tasks %}
-                            <div class="checkbox task">
-                                <label for="{{ task.name }}"><input type="checkbox" checked id="{{ task.name }}"
-                                                                    name="{{ task.name }}"> {{ task.text }}
-                                </label>
-                            </div>
+                                <div class="checkbox task">
+                                    <label for="{{ task.name }}"><input type="checkbox" checked id="{{ task.name }}"
+                                                                        name="{{ task.name }}"> {{ task.text }}
+                                    </label>
+                                </div>
                             {% endfor %}
                         {% endif %}
                     </div>
@@ -94,37 +106,37 @@
         </div>
 
         {% if not messages %}
-        <div class="form-group">
-            <a href="#tasks_modal" role="button" data-toggle="modal">Customize onboarding tasks</a><br><br><br>
-            <button class="btn btn-primary" id="submitButton" type="submit">Onboard!</button>
-        </div>
+            <div class="form-group">
+                <a href="#tasks_modal" role="button" data-toggle="modal">Customize onboarding tasks</a><br><br><br>
+                <button class="btn btn-primary" id="submitButton" type="submit">Onboard!</button>
+            </div>
         {% endif %}
         <br>
-            {% if messages %}
+        {% if messages %}
             {% for message in messages %}
-            <p class="{{ message.status }}">
-                {{ message.text }}
-                {% if message.status == "success" %}
-                    <i class="fa fa-check-circle"></i>
-                {% else %}
-                    <i class="fa fa-exclamation-circle"></i>
-                {% endif %}
-            </p>
+                <p class="{{ message.status }}">
+                    {{ message.text }}
+                    {% if message.status == "success" %}
+                        <i class="fa fa-check-circle"></i>
+                    {% else %}
+                        <i class="fa fa-exclamation-circle"></i>
+                    {% endif %}
+                </p>
             {% endfor %}
-            {% endif %}
+        {% endif %}
     </form>
 </div>
 
 <script>
-    $('input[name=createContractorEmail]').change(function (){
-        if ($(this).is(":checked")) {
-            $('input[name=sendLoginEmail]').prop('disabled', false);
-        } else {
-            $('input[name=sendLoginEmail]')
-              .prop('disabled', true)
-              .prop('checked', false);
-        }
-    });
+  $('input[name=createContractorEmail]').change(function () {
+    if ($(this).is(":checked")) {
+      $('input[name=sendLoginEmail]').prop('disabled', false);
+    } else {
+      $('input[name=sendLoginEmail]')
+        .prop('disabled', true)
+        .prop('checked', false);
+    }
+  });
 </script>
 
 </body>
