@@ -23,7 +23,8 @@ describe('runCheckedTasks', () => {
         sendLoginEmail: 'on',
         addAndShareDriveFolder: 'on',
         sendDriveEmail: 'on',
-        inviteToSlack: 'on'
+        inviteToSlack: 'on',
+        addUserToClickTime: 'on'
       },
       session: {
         tokens: {

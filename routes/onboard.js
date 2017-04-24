@@ -6,6 +6,7 @@ var trello = require('../helper/trello');
 var gmail = require('../helper/gmail');
 var slack = require('../helper/slack');
 var domain = require('../helper/domain');
+var clicktime = require('../helper/clicktime');
 
 var onboard = exports;
 
@@ -27,6 +28,7 @@ onboard.runCheckedTasks = (request, contractor) => {
     'sendDriveEmail': gmail.sendDriveEmail,
     'addAndShareDriveFolder': drive.addAndShareDriveFolder,
     'inviteToSlack': slack.inviteToSlack,
+    'addUserToClickTime': clicktime.addUserToClickTime
   };
   var tasksAfterEmailCreation =
     _.reduce(checkedTasks, (result, value, key) => {

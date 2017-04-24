@@ -19,7 +19,7 @@ domain.createContractorEmail = (contractor, credentials) => {
             "givenName": contractor.firstName,
             "familyName": contractor.lastName
           },
-          "password": "051f1c27593d515e0dcfe0c3b2529da4",
+          "password": contractor.getPassword(),
           "changePasswordAtNextLogin": true
         }
       });
