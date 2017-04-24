@@ -22,7 +22,8 @@
     "nunjucks": "^3.0.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.0",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "string-template": "^1.0.0"
   },
   "devDependencies": {
     "chai": "latest",

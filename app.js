@@ -12,6 +12,8 @@ let app = express();
 
 nunjucks.configure(path.join(__dirname, 'views'), { express : app, autoescape: true });
 
+global.__root = __dirname + '/';
+
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));

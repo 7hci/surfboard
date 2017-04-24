@@ -1,19 +1,20 @@
-var mock = exports;
+var express = require('express');;
+var router = express.Router();
 
-mock.route = (req, res, next) => {
-  var mockResponse;
+router.post('/admin/directory/v1/users', (req, res, next) => {
+  res.send( { id: "testid" } );
+});
 
-  switch(req.path) {
-    case '/mock-api/admin/directory/v1/users':
-      mockResponse = { id: "testid" };
-      break;
-    case '/mock-api/users.admin.invite':
+router.post('/gmail/v1/users/me/messages/send', (req, res, next) => {
+  res.send( { id: "testid" } );
+});
+
+router.get('/users.admin.invite', (req, res, next) => {
       if(req.query.email === 'already.invited@7hci.com') {
-        mockResponse = { ok: false };
+        res.send( { ok: false } );
       } else {
-        mockResponse = { ok: true };
+        res.send( { ok: true } );
       }
-      break;
-  }
-  res.send( mockResponse );
-};
+});
+
+module.exports.route = router;

@@ -61,8 +61,6 @@ onboard.runCheckedTasks = (request, contractor) => {
 onboard.route = (req, res) => {
   var contractor = onboard.captureContractorInfo(req.body);
 
-  console.log('called onboard');
-
   onboard.runCheckedTasks(req, contractor)
     .then(function (results) {
       res.render('index.html', {messages: results, contractor: contractor})
