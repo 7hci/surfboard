@@ -4,14 +4,6 @@ var Promise = require('bluebird');
 var auth = require('../helper/auth');
 var config = require('config');
 
-describe('getAccessToken', () => {
-  // will throw unhandled rejection error since we haven't an access token
-  it('should return a Promise', () => {
-    var credentials = {};
-    expect(auth.getAccessToken(credentials)).to.be.an.instanceof(Promise);
-  });
-});
-
 describe('getAuthUrl', () => {
   // will throw unhandled rejection error since we haven't an access token
   it('should return the correct google authorization url', () => {

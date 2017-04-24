@@ -18,7 +18,9 @@ onboard.captureContractorInfo = (formData) => {
   return new Contractor(firstName, lastName, isResident, privateEmail);
 };
 
-onboard.runCheckedTasks = (checkedTasks, contractor) => {
+onboard.runCheckedTasks = (request, contractor) => {
+  var checkedTasks = request.body;
+  var credentials = request.session.tokens;
   var taskMap = {
     'sendLoginEmail': gmail.sendLoginEmail,
     'sendDriveEmail': gmail.sendDriveEmail,
@@ -29,18 +31,18 @@ onboard.runCheckedTasks = (checkedTasks, contractor) => {
     _.reduce(checkedTasks, (result, value, key) => {
       if (taskMap[key]) {
         var curried = _.curry(taskMap[key]);
-        result.push(curried(contractor));
+        result.push(curried(contractor, credentials));
       }
       return result;
     }, []);
   var tasksToRun = [];
   if ('createContractorEmail' in checkedTasks) {
-    tasksToRun.push(domain.createContractorEmail(contractor)
+    tasksToRun.push(domain.createContractorEmail(contractor, credentials)
       .then(function (addedEmail) {
         return Promise.all(tasksAfterEmailCreation)
-          .then(function (selectedTasksCompvared) {
-            selectedTasksCompvared.push(addedEmail);
-            return selectedTasksCompvared;
+          .then(function (selectedTasksCompleted) {
+            selectedTasksCompleted.push(addedEmail);
+            return selectedTasksCompleted;
           })
       }))
   } else {
@@ -61,7 +63,7 @@ onboard.route = (req, res) => {
 
   console.log('called onboard');
 
-  onboard.runCheckedTasks(req.body, contractor)
+  onboard.runCheckedTasks(req, contractor)
     .then(function (results) {
       res.render('index.html', {messages: results, contractor: contractor})
     })
