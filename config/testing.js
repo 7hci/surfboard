@@ -37,12 +37,30 @@ module.exports = {
       "forms": ""
     },
     "files" : {
-      "tasks": "",
-      "w9": "",
-      "w8": "",
-      "mssa": "",
-      "directDeposit": "",
-      "bgCheck": ""
+      "task": {
+        "name": "Tasks",
+        "id": ""
+      },
+      "w9": {
+        "name": "Form W-9",
+        "id": ""
+      },
+      "w8": {
+        "name": "Form W-8BEN",
+        "id": ""
+      },
+      "mssa": {
+        "name": "MSSA",
+        "id": ""
+      },
+      "directDeposit": {
+        "name": "Direct Deposit Form",
+        "id": ""
+      },
+      "bgCheck": {
+        "name": "Background Check Authorization",
+        "id": ""
+      }
     }
   },
   "tasks": {
