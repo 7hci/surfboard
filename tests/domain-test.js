@@ -17,7 +17,7 @@ describe('createContractorEmail', () => {
     server.listen('5000');
 
     var contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
-    domain.createContractorEmail(contractor)
+    domain.createContractorEmail(contractor, {})
       .then((result) => {
         expect(result.status).to.equal("success");
       })

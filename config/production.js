@@ -28,7 +28,8 @@ module.exports = {
     }
   },
   "slack": {
-    "token": ""
+    "token": "",
+    "baseUrl": "https://slack.com/api"
   },
   "drive": {
     "folders" : {
