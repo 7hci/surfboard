@@ -4,22 +4,22 @@ var rewire = require('rewire');
 var http = require('http');
 
 var app = require('../app');
-var drive = rewire('../helper/drive');
+var trello = rewire('../helper/trello');
 var Contractor = require('../model/contractor');
 var mock = require('./mocks');
 
-drive.__set__('auth', mock.auth);
+trello.__set__('auth', mock.auth);
 
-describe('createFolder', () => {
-  it('should return an id for the created folder in Drive', (done) => {
+describe('addBoard', () => {
+  it('should return an id for the created board', (done) => {
     app.set('port', '5000');
     var server = http.createServer(app);
     server.listen('5000');
 
     var contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-    drive.createFolder(contractor, {})
+    trello.addBoard(contractor)
       .then((result) => {
-        expect(result).to.equal('testid_folder'); // see mock-api.js for value returned by mock API
+        expect(result).to.equal('testid_board'); // see mock-api.js for value returned by mock API
       })
       .then(() => {
           server.close(done);
@@ -29,19 +29,15 @@ describe('createFolder', () => {
   });
 });
 
-describe('addFile', () => {
-  it('should return an id for the file we have copied and moved', (done) => {
+describe('addBoardMember', () => {
+  it('should return an id for the created membership in the board', (done) => {
     app.set('port', '5000');
     var server = http.createServer(app);
     server.listen('5000');
 
-    var contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-    drive.addFile(contractor, {}, {
-      'name': 'mock_file',
-      'id': 'mock_folder_id'
-    }, 'mock_file_id')
+    trello.addBoardMember('mock_board_id', 'mock_member_id')
       .then((result) => {
-        expect(result).to.equal('testid_file'); // see mock-api.js for value returned by mock API
+        expect(result).to.equal('testid_member'); // see mock-api.js for value returned by mock API
       })
       .then(() => {
           server.close(done);
@@ -51,16 +47,15 @@ describe('addFile', () => {
   });
 });
 
-describe('shareFolder', () => {
-  it('should return an id for the permission resource created', (done) => {
+describe('addList', () => {
+  it('should return an id for the created list', (done) => {
     app.set('port', '5000');
     var server = http.createServer(app);
     server.listen('5000');
 
-    var contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-    drive.shareFolder(contractor, {}, 'mock_folder_id')
+    trello.addList('mock_board_id', 'mock_list')
       .then((result) => {
-        expect(result).to.equal('testid_shared'); // see mock-api.js for value returned by mock API
+        expect(result).to.equal('testid_list'); // see mock-api.js for value returned by mock API
       })
       .then(() => {
           server.close(done);
@@ -70,15 +65,15 @@ describe('shareFolder', () => {
   });
 });
 
-describe('getTasksFromFile', () => {
-  it('should return an array of comma delimited values', (done) => {
+describe('addCard', () => {
+  it('should return an id for the created card', (done) => {
     app.set('port', '5000');
     var server = http.createServer(app);
     server.listen('5000');
 
-    drive.getTasksFromFile({})
+    trello.addCard('mock_list_id', 'description', 'mock_member_id')
       .then((result) => {
-        expect(result).to.be.instanceof(Array);
+        expect(result).to.equal('testid_card'); // see mock-api.js for value returned by mock API
       })
       .then(() => {
           server.close(done);

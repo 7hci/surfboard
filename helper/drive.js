@@ -69,9 +69,9 @@ drive.shareFolder = (contractor, credentials, folderId) => {
           sendNotificationEmail: true},
         json: true,
         body: {
-          "type": "user",
-          "role": "writer",
-          "emailAddress": contractor.getEmail(),
+          'type': 'user',
+          'role': 'writer',
+          'emailAddress': contractor.getEmail(),
         }
       });
     })
@@ -109,3 +109,28 @@ drive.addFile = (contractor, credentials, file, folderId) => {
       }
     });
 };
+
+drive.getTasksFromFile = (credentials) => {
+  var driveUrl = config.get('google.baseUrl') + '/drive/v3/files/'+ config.get('drive.files.task.id') +'/export';
+
+  return auth.getAccessToken(credentials)
+    .then((token) => {
+      return request.get({
+        url: driveUrl,
+        qs: {
+          access_token: token,
+          mimeType: 'text/csv'
+        },
+        json: true
+      });
+    })
+    .then((response) => {
+      var fileData = String(response);
+      if (fileData.indexOf(',') > -1) {
+        return fileData.match(/[^\r\n]+/g);
+      } else {
+        throw new Error('Did not return CSV: ' + fileData);
+      }
+    });
+}
+

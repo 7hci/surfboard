@@ -9,6 +9,7 @@ module.exports = {
   "trello": {
     "key": "",
     "token": "",
+    "baseUrl": "http://127.0.0.1:5000/mock-api",
     "team": {
       "id": "",
       "members":[
@@ -39,7 +40,7 @@ module.exports = {
     "files" : {
       "task": {
         "name": "Tasks",
-        "id": ""
+        "id": "test"
       },
       "w9": {
         "name": "Form W-9",

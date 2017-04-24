@@ -49,7 +49,7 @@ onboard.runCheckedTasks = (request, contractor) => {
     tasksToRun.push(Promise.all(tasksAfterEmailCreation))
   }
   if ('createTrelloBoard' in checkedTasks) {
-    tasksToRun.push(trello.createTrelloBoard(contractor));
+    tasksToRun.push(trello.createTrelloBoard(contractor, credentials));
   }
 
   return Promise.all(tasksToRun)
