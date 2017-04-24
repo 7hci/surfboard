@@ -1,3 +1,5 @@
+var crypto = require('crypto');
+
 module.exports =
   class Contractor {
   constructor(firstName, lastName, isResident, privateEmail) {
@@ -17,5 +19,9 @@ module.exports =
     var sanitizedLast = this.lastName.replace(pattern, '').toLowerCase();
 
     return sanitizedFirst + '.' + sanitizedLast + '@7hci.com';
+  }
+
+  getPassword() {
+    return crypto.createHash('md5').update(this.getFullName()).digest('hex');
   }
 };

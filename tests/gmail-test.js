@@ -28,3 +28,22 @@ describe('sendDriveEmail', () => {
       )
   });
 });
+
+describe('sendLoginEmail', () => {
+  it('should return a successful status if a message object is returned by API', (done) => {
+    app.set('port', '5000');
+    var server = http.createServer(app);
+    server.listen('5000');
+
+    var contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
+    gmail.sendLoginEmail(contractor, {})
+      .then((result) => {
+        expect(result.status).to.equal("success");
+        server.close();
+      })
+      .then(() => {
+          done();
+        }
+      )
+  });
+});

@@ -21,7 +21,7 @@ gmail.sendDriveEmail = (contractor, credentials) => {
           userId: "me"},
         json: true,
         body: {
-          "raw": gmail.getEncodedData(contractor, message)
+          "raw": gmail.getEncodedData(contractor, message, 'Required Documents', false)
         }
       })
     })
@@ -41,7 +41,36 @@ gmail.sendDriveEmail = (contractor, credentials) => {
 };
 
 gmail.sendLoginEmail = (contractor, credentials) => {
-  return Promise.resolve({'text': 'Sent document instructions to contractor', 'status': 'success'});
+  var tokenPromise = auth.getAccessToken(credentials);
+  var messagePromise = gmail.createMessageFromFile(contractor,__root + 'data/login.txt');
+
+  return Promise.all([tokenPromise, messagePromise])
+    .spread((token, message) => {
+      var gmailUrl = config.get('google.baseUrl') + '/gmail/v1/users/me/messages/send';
+      return request.post({
+        url: gmailUrl,
+        qs: {
+          access_token: token,
+          userId: "me"},
+        json: true,
+        body: {
+          "raw": gmail.getEncodedData(contractor, message, '7HCI E-mail Account Credentials', true)
+        }
+      })
+    })
+    .then((response) => {
+      var messageData = JSON.parse(JSON.stringify(response));
+      console.log('response: ' + messageData);
+      if ('id' in messageData) {
+        return {'text': 'Sent e-mail with credentials', 'status': 'success'};
+      } else {
+        return {'text': 'Problem sending e-mail with credentials', 'status': 'failure'};
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return {'text': 'Problem sending e-mail with credentials', 'status': 'failure'};
+    });
 };
 
 gmail.createMessageFromFile = (contractor, file) => {
@@ -56,18 +85,25 @@ gmail.createMessageFromFile = (contractor, file) => {
 
     return template(text, {
       name: contractor.firstName,
+      address: contractor.getEmail(),
+      password: contractor.getPassword(),
       form: form
     })
   });
 };
 
-gmail.getEncodedData = (contractor, message) => {
-  var subject = "Required Documents";
+gmail.getEncodedData = (contractor, message, subject, usePrivateEmail) => {
+  var recipient;
+  if (usePrivateEmail) {
+    recipient = contractor.privateEmail;
+  } else {
+    recipient = contractor.getEmail();
+  }
   var rawData = [
     "Content-Type: text/plain; charset=\"UTF-8\"\n",
     "MIME-Version: 1.0\n",
     "Content-Transfer-Encoding: 7bit\n",
-    "to: ", contractor.getEmail(), "\n",
+    "to: ", recipient, "\n",
     "subject: ", subject, "\n\n",
     message
   ].join('');
