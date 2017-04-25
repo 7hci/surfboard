@@ -1,16 +1,16 @@
-var chai = require('chai');
-var expect = chai.expect;
+let chai = require('chai');
+let expect = chai.expect;
 
-var clicktime = require('../helper/clicktime');
-var Contractor = require('../model/contractor');
+let clicktime = require('../controller/clicktime');
+let Contractor = require('../model/contractor');
 
 describe('addUserToClickTime', () => {
   it('should return a successful status if a response object is returned', (done) => {
-    var contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
+    let contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
     clicktime.addUserToClickTime(contractor)
       .then((result) => {
         expect(result.status).to.equal("success");
       })
       .then(done, done);
-  }).timeout(30000);
+  }).timeout(15000);
 });

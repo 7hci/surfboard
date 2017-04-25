@@ -1,12 +1,20 @@
-var request = require('request-promise').defaults({simple: false});
-var config = require('config');
-var Promise = require('bluebird');
-var _ = require('lodash');
-var auth = require('../helper/auth');
-var drive = require('../helper/drive');
+/**
+ * Handles all calls to Trello's API
+ */
+let request = require('request-promise').defaults({simple: false});
+let config = require('config');
+let logger = require('log4js').getLogger('app');
+let Promise = require('bluebird');
+let _ = require('lodash');
+let drive = require('./drive');
 
-var trello = exports;
+let trello = exports;
 
+/**
+ * Main function for creating and populating the onboarding Trello board
+ * @param contractor
+ * @returns success/failure status message
+ */
 trello.createTrelloBoard = (contractor, credentials) => {
   return trello.addBoard(contractor)
     .then((boardId) => {
@@ -25,8 +33,8 @@ trello.createTrelloBoard = (contractor, credentials) => {
             return Promise.all([trello.addList(boardId, 'To Do'), drive.getTasksFromFile(credentials)])
               .spread((listId, tasks) => {
                 return Promise.mapSeries(tasks, (task) => {
-                  var description = task.split(',')[0];
-                  var memberName = task.split(',')[1];
+                  let description = task.split(',')[0];
+                  let memberName = task.split(',')[1];
                   return trello.addCard(listId, description, memberName);
                 });
               })
@@ -34,18 +42,25 @@ trello.createTrelloBoard = (contractor, credentials) => {
       );
     })
     .then(() => {
-        return Promise.resolve({'text': 'Created board on Trello', 'status': 'success'});
+        logger.info('Created board on Trello');
+        return {'text': 'Created board on Trello', 'status': 'success'};
       }
     )
     .catch((err) => {
-      console.log(err);
-      return Promise.resolve({'text': 'Problem creating board on Trello', 'status': 'failure'});
+      logger.error(err);
+      return {'text': 'Problem creating board on Trello', 'status': 'failure'};
     });
 };
 
+/**
+ * Helper function to make a request to add a new Trello board
+ * @param contractor
+ * @returns the board id
+ * @throws error if no board was created
+ */
 trello.addBoard = (contractor) => {
-  var trelloUrl = config.get('trello.baseUrl') + '/boards';
-  var boardName = 'Onboarding: ' + contractor.getFullName();
+  let trelloUrl = config.get('trello.baseUrl') + '/boards';
+  let boardName = 'Onboarding: ' + contractor.getFullName();
 
   return request.post({
     url: trelloUrl,
@@ -62,7 +77,7 @@ trello.addBoard = (contractor) => {
     }
   })
     .then((response) => {
-      var responseData = JSON.parse(JSON.stringify(response));
+      let responseData = JSON.parse(JSON.stringify(response));
       if ('id' in responseData) {
         return responseData.id;
       } else {
@@ -71,8 +86,15 @@ trello.addBoard = (contractor) => {
     });
 };
 
+/**
+ * Helper function to make a request to add a member to a Trello board
+ * @param boardId the id of the board
+ * @param memberId the id of the member being added
+ * @returns the member id
+ * @throws error if the member couldn't be added
+ */
 trello.addBoardMember = (boardId, memberId) => {
-  var trelloUrl = config.get('trello.baseUrl') + '/boards/' + boardId + '/members/' + memberId;
+  let trelloUrl = config.get('trello.baseUrl') + '/boards/' + boardId + '/members/' + memberId;
 
   return request.put({
     url: trelloUrl,
@@ -86,7 +108,7 @@ trello.addBoardMember = (boardId, memberId) => {
     }
   })
     .then((response) => {
-      var responseData = JSON.parse(JSON.stringify(response));
+      let responseData = JSON.parse(JSON.stringify(response));
       if ('id' in responseData) {
         return responseData.id;
       } else {
@@ -95,8 +117,15 @@ trello.addBoardMember = (boardId, memberId) => {
     });
 };
 
+/**
+ * Helper function to make a request to add a new list to an existing Trello board
+ * @param boardId the id of the board
+ * @param listName the name of the list being added
+ * @returns the list id
+ * @throws error if no list was created
+ */
 trello.addList = (boardId, listName) => {
-  var trelloUrl = config.get('trello.baseUrl') + '/lists';
+  let trelloUrl = config.get('trello.baseUrl') + '/lists';
 
   return request.post({
     url: trelloUrl,
@@ -111,7 +140,7 @@ trello.addList = (boardId, listName) => {
     }
   })
     .then((response) => {
-      var responseData = JSON.parse(JSON.stringify(response));
+      let responseData = JSON.parse(JSON.stringify(response));
       if ('id' in responseData) {
         return responseData.id;
       } else {
@@ -120,8 +149,16 @@ trello.addList = (boardId, listName) => {
     });
 };
 
+/**
+ * Helper function to make a request to add a card to a list
+ * @param listId the id of the list the card is being added to
+ * @param description what will appear on the card
+ * @param memberName the name (**not** id) of the member this card is assigned to
+ * @returns the card id
+ * @throws error if no card was created
+ */
 trello.addCard = (listId, description, memberName) => {
-  var trelloUrl = config.get('trello.baseUrl') + '/cards';
+  let trelloUrl = config.get('trello.baseUrl') + '/cards';
 
   return request.post({
     url: trelloUrl,
@@ -137,7 +174,7 @@ trello.addCard = (listId, description, memberName) => {
     }
   })
     .then((response) => {
-      var responseData = JSON.parse(JSON.stringify(response));
+      let responseData = JSON.parse(JSON.stringify(response));
       if ('id' in responseData) {
         return responseData.id;
       } else {
@@ -146,8 +183,13 @@ trello.addCard = (listId, description, memberName) => {
     });
 };
 
+/**
+ * Helper function to get a member's id
+ * @param memberName the member's name as listed in the config
+ * @returns the member id
+ */
 trello.getMemberId = (memberName) => {
-  var member = _.find(config.get('trello.team.members'), {'name': memberName});
+  let member = _.find(config.get('trello.team.members'), {'name': memberName});
   if (typeof member !== 'undefined') {
     return member.id;
   } else {

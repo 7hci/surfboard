@@ -1,13 +1,22 @@
-var request = require('request-promise').defaults({simple: false});
-var config = require('config');
-var auth = require('../helper/auth');
-var Promise = require('bluebird');
+/**
+ * @fileOverview Handles all calls to Google's Admin SDK API
+ */
+let request = require('request-promise').defaults({simple: false});
+let config = require('config');
+let logger = require('log4js').getLogger('app');
+let googleAuth = require('./google-auth');
 
-var domain = exports;
+let domain = exports;
 
+/**
+ * Creates a new e-mail account for the contractor
+ * @param contractor
+ * @param credentials Google auth credentials stored in the user's sessions
+ * @returns success/failure status object
+ */
 domain.createContractorEmail = (contractor, credentials) => {
-  var googleAdminUrl = config.get('google.baseUrl') + '/admin/directory/v1/users';
-  return auth.getAccessToken(credentials)
+  let googleAdminUrl = config.get('google.baseUrl') + '/admin/directory/v1/users';
+  return googleAuth.getAccessToken(credentials)
     .then((token) => {
       return request.post({
         url: googleAdminUrl,
@@ -25,14 +34,18 @@ domain.createContractorEmail = (contractor, credentials) => {
       });
     })
     .then((response) => {
-      var userData = JSON.parse(JSON.stringify(response));
+      let userData = response;
+
+      // If the request worked, a user object with an id would be returned by Google
       if ('id' in userData) {
+        logger.info('Added ' + contractor.getEmail() + ' to domain');
         return {'text': 'Added ' + contractor.getEmail() + ' to domain', 'status': 'success'};
       } else {
         return {'text': 'Problem creating e-mail for contractor', 'status': 'failure'};
       }
     })
     .catch((err) => {
+      logger.error(err);
       return {'text': 'Problem creating e-mail for contractor', 'status': 'failure'};
     });
 };

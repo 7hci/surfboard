@@ -1,105 +1,60 @@
 module.exports = {
   "google": {
-    "clientId": "",
-    "clientSecret": "",
-    "redirectUri": "http://localhost:5000/oauth2callback",
-    "scope": "https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/admin.directory.user",
-    "baseUrl": "https://www.googleapis.com"
+    "clientId": "###",
+    "clientSecret": "###"
   },
   "clicktime": {
-    "user": "",
-    "password": "",
-    "test": ""
+    "user": "###",
+    "password": "###",
   },
   "trello": {
-    "key": "",
-    "token": "",
-    "baseUrl": "https://api.trello.com/1",
+    "key": "###",
+    "token": "###",
     "team": {
-      "id": "",
+      "id": "###",
       "members":[
         {
           "name": "Daniel",
-          "id": ""
+          "id": "###"
         },
         {
           "name": "Scott",
-          "id": ""
+          "id": "###"
         },
         {
           "name": "Red",
-          "id": ""
+          "id": "###"
         }
       ]
     }
   },
   "slack": {
-    "token": "",
-    "baseUrl": "https://slack.com/api"
+    "token": "###",
   },
   "drive": {
     "folders" : {
-      "contractors": "",
-      "forms": ""
+      "contractors": "###",
+      "forms": "###"
     },
     "files" : {
       "task": {
-        "name": "Tasks",
-        "id": ""
+        "id": "###"
       },
       "w9": {
-        "name": "Form W-9",
-        "id": ""
+        "id": "###"
       },
       "w8": {
-        "name": "Form W-8BEN",
-        "id": ""
+        "id": "###"
       },
       "mssa": {
-        "name": "MSSA",
-        "id": ""
+        "id": "###"
       },
       "directDeposit": {
-        "name": "Direct Deposit Form",
-        "id": ""
+        "id": "###"
       },
       "bgCheck": {
-        "name": "Background Check Authorization",
-        "id": ""
+        "id": "###"
       }
     }
-  },
-  "tasks": {
-    "formOptions": [
-      {
-        "name": "createContractorEmail",
-        "text": "Add contractor to 7hci domain"
-      },
-      {
-        "name": "sendLoginEmail",
-        "text": "E-mail credentials to contractor"
-      },
-      {
-        "name": "addAndShareDriveFolder",
-        "text": "Create HR folder for contractor"
-      },
-      {
-        "name": "sendDriveEmail",
-        "text": "Send document instructions to contractor"
-      },
-      {
-        "name": "createTrelloBoard",
-        "text": "Create Trello board for onboarding tasks"
-      },
-      {
-        "name": "inviteToSlack",
-        "text": "Invite contractor to Slack"
-      },
-      {
-        "name": "addUserToClickTime",
-        "text": "Add user to ClickTime"
-      }
-    ]
   }
 };
-
