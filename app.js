@@ -6,7 +6,6 @@ let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let session = require('express-session');
 let nunjucks = require('nunjucks');
-let assert = require('assert');
 let app = express();
 
 global.__root = __dirname + '/';

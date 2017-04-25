@@ -1,5 +1,5 @@
 /**
- * @fileOverview Takes form input from request and kicks off any onboarding tasks selected by the user
+ * @fileOverview Kicks off any onboarding tasks selected by the user
  */
 let _ = require('lodash');
 let logger = require('log4js').getLogger('app');
@@ -13,6 +13,7 @@ let slack = require('../controller/slack');
 let domain = require('../controller/domain');
 let clicktime = require('../controller/clicktime');
 
+// eslint-disable-next-line prefer-const
 let onboard = exports;
 
 /**
@@ -25,7 +26,7 @@ onboard.route = (req, res) => {
 
   onboard.runCheckedTasks(req, contractor)
     .then(function (results) {
-      res.render('index.html', {messages: results, contractor: contractor})
+      res.render('index.html', {messages: results, contractor: contractor});
     })
     .catch(function (err) {
       logger.error(err);
