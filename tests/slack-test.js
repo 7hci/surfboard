@@ -1,42 +1,41 @@
-let chai = require('chai');
-let expect = chai.expect;
-let rewire = require('rewire');
-let http = require('http');
+const chai = require('chai');
+const http = require('http');
+const app = require('../app');
+const slack = require('../controller/slack');
+const Contractor = require('../model/contractor');
 
-let app = require('../app');
-let slack = rewire('../controller/slack');
-let Contractor = require('../model/contractor');
+const expect = chai.expect;
 
 describe('inviteToSlack', () => {
   it('should return a successful status if a response object is returned', (done) => {
     app.set('port', '5000');
-    let server = http.createServer(app);
+    const server = http.createServer(app);
     server.listen('5000');
 
-    let contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
+    const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
     slack.inviteToSlack(contractor)
       .then((result) => {
-        expect(result.status).to.equal("success");
+        expect(result.status).to.equal('success');
       })
       .then(() => {
-          server.close(done);
-        }
+        server.close(done);
+      }
       );
   });
 
   it('should return a failure status if the API response is ok: false (already invited contractor)', (done) => {
     app.set('port', '5000');
-    let server = http.createServer(app);
+    const server = http.createServer(app);
     server.listen('5000');
 
-    let contractor = new Contractor("already", "invited", true, "");
+    const contractor = new Contractor('already', 'invited', true, '');
     slack.inviteToSlack(contractor)
       .then((result) => {
-        expect(result.status).to.equal("failure");
+        expect(result.status).to.equal('failure');
       })
       .then(() => {
-          server.close(done);
-        }
+        server.close(done);
+      }
       );
   });
 });

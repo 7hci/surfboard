@@ -1,23 +1,23 @@
-let chai = require('chai');
-let expect = chai.expect;
+const chai = require('chai');
+const Contractor = require('../model/contractor');
 
-let Contractor = require('../model/contractor');
+const expect = chai.expect;
 
 describe('Contractor', () => {
   it('should return the full name separated by a space', () => {
-    let contractor = new Contractor('Jon','Snow', true, 'jonsnow@gmail.com');
+    const contractor = new Contractor('Jon', 'Snow', true, 'jonsnow@gmail.com');
 
     expect(contractor.getFullName()).to.equal('Jon Snow');
   });
 
   it('should return a sanitized, lowercase e-mail address', () => {
-    let contractor = new Contractor(' J 6.$;~&*on', 'SNO40"\'\'?w ', true, '');
+    const contractor = new Contractor(' J 6.$;~&*on', 'SNO40"\'\'?w ', true, '');
 
     expect(contractor.getEmail()).to.equal('jon.snow@7hci.com');
   });
 
   it('should use override if one is given through the constructor', () => {
-    let contractor = new Contractor('Jonathan', 'Stark', true, '', 'jonsnow');
+    const contractor = new Contractor('Jonathan', 'Stark', true, '', 'jonsnow');
 
     expect(contractor.getEmail()).to.equal('jonsnow@7hci.com');
   });

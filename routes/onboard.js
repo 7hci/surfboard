@@ -1,20 +1,19 @@
 /**
  * @fileOverview Kicks off any onboarding tasks selected by the user
  */
-let _ = require('lodash');
-let logger = require('log4js').getLogger('app');
-let Bluebird = require('bluebird');
+const _ = require('lodash');
+const logger = require('log4js').getLogger('app');
+const Bluebird = require('bluebird');
 
-let Contractor = require('../model/contractor.js');
-let drive = require('../controller/drive');
-let trello = require('../controller/trello');
-let gmail = require('../controller/gmail');
-let slack = require('../controller/slack');
-let domain = require('../controller/domain');
-let clicktime = require('../controller/clicktime');
+const Contractor = require('../model/contractor.js');
+const drive = require('../controller/drive');
+const trello = require('../controller/trello');
+const gmail = require('../controller/gmail');
+const slack = require('../controller/slack');
+const domain = require('../controller/domain');
+const clicktime = require('../controller/clicktime');
 
-// eslint-disable-next-line prefer-const
-let onboard = exports;
+const onboard = exports;
 
 /**
  * Renders results of completed onboarding tasks
@@ -22,29 +21,29 @@ let onboard = exports;
  * @param res
  */
 onboard.route = (req, res) => {
-  let contractor = onboard.captureContractorInfo(req.body);
+  const contractor = onboard.captureContractorInfo(req.body);
 
   onboard.runCheckedTasks(req, contractor)
-    .then(function (results) {
-      res.render('index.html', {messages: results, contractor: contractor});
+    .then((results) => {
+      res.render('index.html', { messages: results, contractor });
     })
-    .catch(function (err) {
+    .catch((err) => {
       logger.error(err);
-      res.render('error.html', {error: err});
+      res.render('error.html', { error: err });
     });
 };
 
 /**
  * Constructs new Contractor instance based on form data in the request
  * @param formData The body of the routed request
- * @returns {Contractor} Contractor instance representing all relevant information about the person being onboarded
+ * @returns {Contractor} Contractor instance representing all info about the person being onboarded
  */
 onboard.captureContractorInfo = (formData) => {
-  let firstName = formData.firstName;
-  let lastName = formData.lastName;
-  let isResident = 'resident' in formData;
-  let privateEmail = formData.email;
-  let override = formData.override;
+  const firstName = formData.firstName;
+  const lastName = formData.lastName;
+  const isResident = 'resident' in formData;
+  const privateEmail = formData.email;
+  const override = formData.override;
 
   return new Contractor(firstName, lastName, isResident, privateEmail, override);
 };
@@ -53,47 +52,45 @@ onboard.captureContractorInfo = (formData) => {
  * Checks which tasks need to be ran based on the form data and queues them up appropriately
  * @param request
  * @param contractor
- * @returns {Promise} Resolved with an array of objects representing the success/failure status of each checked task
+ * @returns {Promise} Resolved with an array of objects
+ * representing the success/failure status of each checked task
  */
 onboard.runCheckedTasks = (request, contractor) => {
-  let checkedTasks = request.body;
+  const checkedTasks = request.body;
   // Google credentials we stored in our session that we pass to our task-specific functions
-  let credentials = request.session.tokens;
-  // Map identifying any functions that should only be ran **after** the "create Email" task is complete
-  let taskMap = {
-    'sendLoginEmail': gmail.sendLoginEmail,
-    'sendDriveEmail': gmail.sendDriveEmail,
-    'addAndShareDriveFolder': drive.addAndShareDriveFolder,
-    'inviteToSlack': slack.inviteToSlack,
-    'addUserToClickTime': clicktime.addUserToClickTime
+  const credentials = request.session.tokens;
+  // Map identifying any functions that should only be ran *after* the createEmail task is complete
+  const taskMap = {
+    sendLoginEmail: gmail.sendLoginEmail,
+    sendDriveEmail: gmail.sendDriveEmail,
+    addAndShareDriveFolder: drive.addAndShareDriveFolder,
+    inviteToSlack: slack.inviteToSlack,
+    addUserToClickTime: clicktime.addUserToClickTime
   };
-  let tasksAfterEmailCreation =
+  const tasksAfterEmailCreation =
     _.reduce(checkedTasks, (result, value, key) => {
       if (taskMap[key]) {
-        var task = taskMap[key].call(task,contractor,credentials);
+        // eslint-disable-next-line
+        let task = taskMap[key].call(task, contractor, credentials);
         result.push(task);
       }
       return result;
     }, []);
-  let tasksToRun = [];
+  const tasksToRun = [];
   if ('createContractorEmail' in checkedTasks) {
     tasksToRun.push(domain.createContractorEmail(contractor, credentials)
-      .then(function (addedEmail) {
-        return Bluebird.all(tasksAfterEmailCreation)
-          .then(function (selectedTasksCompleted) {
+      .then(addedEmail => Bluebird.all(tasksAfterEmailCreation)
+          .then((selectedTasksCompleted) => {
             selectedTasksCompleted.push(addedEmail);
             return selectedTasksCompleted;
-          })
-      }))
+          })));
   } else {
-    tasksToRun.push(Bluebird.all(tasksAfterEmailCreation))
+    tasksToRun.push(Bluebird.all(tasksAfterEmailCreation));
   }
   if ('createTrelloBoard' in checkedTasks) {
     tasksToRun.push(trello.createTrelloBoard(contractor, credentials));
   }
 
   return Bluebird.all(tasksToRun)
-    .then(function (results) {
-      return _.flattenDeep(results);
-    })
+    .then(results => _.flattenDeep(results));
 };

@@ -1,59 +1,59 @@
 module.exports = {
-  "google": {
-    "clientId": "###",
-    "clientSecret": "###"
+  google: {
+    clientId: '###',
+    clientSecret: '###'
   },
-  "clicktime": {
-    "user": "###",
-    "password": "###",
+  clicktime: {
+    user: '###',
+    password: '###'
   },
-  "trello": {
-    "key": "###",
-    "token": "###",
-    "team": {
-      "id": "###",
-      "members":[
+  trello: {
+    key: '###',
+    token: '###',
+    team: {
+      id: '###',
+      members: [
         {
-          "name": "Daniel",
-          "id": "###"
+          name: 'Daniel',
+          id: '###'
         },
         {
-          "name": "Scott",
-          "id": "###"
+          name: 'Scott',
+          id: '###'
         },
         {
-          "name": "Red",
-          "id": "###"
+          name: 'Red',
+          id: '###'
         }
       ]
     }
   },
-  "slack": {
-    "token": "###",
+  slack: {
+    token: '###'
   },
-  "drive": {
-    "folders" : {
-      "contractors": "###",
-      "forms": "###"
+  drive: {
+    folders: {
+      contractors: '###',
+      forms: '###'
     },
-    "files" : {
-      "task": {
-        "id": "###"
+    files: {
+      task: {
+        id: '###'
       },
-      "w9": {
-        "id": "###"
+      w9: {
+        id: '###'
       },
-      "w8": {
-        "id": "###"
+      w8: {
+        id: '###'
       },
-      "mssa": {
-        "id": "###"
+      mssa: {
+        id: '###'
       },
-      "directDeposit": {
-        "id": "###"
+      directDeposit: {
+        id: '###'
       },
-      "bgCheck": {
-        "id": "###"
+      bgCheck: {
+        id: '###'
       }
     }
   }

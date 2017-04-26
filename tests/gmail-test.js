@@ -1,25 +1,24 @@
-let chai = require('chai');
-let expect = chai.expect;
-let rewire = require('rewire');
-let http = require('http');
+const chai = require('chai');
+const proxyquire = require('proxyquire');
+const http = require('http');
+const app = require('../app');
+const Contractor = require('../model/contractor');
+const mock = require('./mocks');
 
-let app = require('../app');
-let gmail = rewire('../controller/gmail');
-let Contractor = require('../model/contractor');
-let mock = require('./mocks');
+const gmail = proxyquire('../controller/gmail', { './google-auth': mock.auth });
 
-gmail.__set__('googleAuth', mock.auth);
+const expect = chai.expect;
 
 describe('sendDriveEmail', () => {
   it('should return a successful status if a message object is returned by API', (done) => {
     app.set('port', '5000');
-    let server = http.createServer(app);
+    const server = http.createServer(app);
     server.listen('5000');
 
-    let contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
+    const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
     gmail.sendDriveEmail(contractor, {})
       .then((result) => {
-        expect(result.status).to.equal("success");
+        expect(result.status).to.equal('success');
         server.close();
       })
       .then(done, done);
@@ -29,13 +28,13 @@ describe('sendDriveEmail', () => {
 describe('sendLoginEmail', () => {
   it('should return a successful status if a message object is returned by API', (done) => {
     app.set('port', '5000');
-    let server = http.createServer(app);
+    const server = http.createServer(app);
     server.listen('5000');
 
-    let contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
+    const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
     gmail.sendLoginEmail(contractor, {})
       .then((result) => {
-        expect(result.status).to.equal("success");
+        expect(result.status).to.equal('success');
         server.close();
       })
       .then(done, done);
