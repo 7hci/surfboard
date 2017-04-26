@@ -11,8 +11,6 @@ const app = express();
 
 global.__root = `${__dirname}/`;
 
-process.env.NODE_ENV = 'development';
-
 nunjucks.configure(path.join(__dirname, 'views'), { express: app, autoescape: true });
 
 log4js.configure({

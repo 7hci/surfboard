@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app",
-    "test": "env NODE_ENV=testing mocha tests",
+    "start": "env NODE_ENV=development node app",
+    "test": "testing mocha tests",
     "coverage": "env NODE_ENV=testing nyc mocha tests"
   },
   "dependencies": {
