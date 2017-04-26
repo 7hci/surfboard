@@ -1,6 +1,3 @@
-process.env.NODE_CONFIG_DIR = './config';
-process.env.NODE_ENV = 'development';
-
 const app = require('../app');
 const debug = require('debug')('surfboard:server');
 const http = require('http');

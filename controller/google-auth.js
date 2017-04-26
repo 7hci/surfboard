@@ -76,8 +76,8 @@ googleAuth.authenticateSession = (req, res, next) => {
  * @returns a user object for the authenticated user
  */
 googleAuth.getUserInfo = (accessToken) => {
-  const profileUrl = 'https://www.js.googleapis.com/gmail/v1/users/me/profile';
-  return request.get({ url: profileUrl, qs: { accessToken }, json: true });
+  const profileUrl = 'https://www.googleapis.com/gmail/v1/users/me/profile';
+  return request.get({ url: profileUrl, qs: { access_token: accessToken }, json: true });
 };
 
 /**

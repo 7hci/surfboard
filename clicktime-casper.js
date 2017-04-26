@@ -19,7 +19,7 @@ var password = casper.cli.get('password');
 
 if (testing) {
   message = '{"text": "Added user to ClickTime", "status": "success"}';
-  casper.start('http://www.js.google.com');
+  casper.start('http://www.google.com');
 } else {
   casper.start('https://login.clicktime.com/', function () {
     this.sendKeys('#email', user);
