@@ -1,0 +1,29 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "mocha": true
+  },
+  "plugins": [
+    "import",
+    "mocha",
+    "json",
+    "chai-expect",
+    "chai-friendly"
+  ],
+  "rules": {
+    "linebreak-style": [
+      "error",
+      "windows"
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
+    "no-console": "off",
+    "mocha/no-exclusive-tests": "error",
+    "chai-expect/missing-assertion": 2,
+    "chai-expect/terminating-properties": 1,
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 2
+  }
+}
