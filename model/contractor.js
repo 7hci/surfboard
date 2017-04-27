@@ -1,7 +1,7 @@
 /**
  * @fileOverview Class representing all relevant information about the contractor being onboarded
  */
-let crypto = require('crypto');
+const crypto = require('crypto');
 
 module.exports =
   class Contractor {
@@ -14,7 +14,7 @@ module.exports =
     }
 
     getFullName() {
-      return this.firstName + ' ' + this.lastName;
+      return `${this.firstName} ${this.lastName}`;
     }
 
     /**
@@ -23,14 +23,13 @@ module.exports =
      */
     getEmail() {
       if (this.override) {
-       return this.override.replace(" ", "") + '@7hci.com';
-      } else {
-        let pattern = /[^a-zA-Z]/g;
-        let sanitizedFirst = this.firstName.replace(pattern, '').toLowerCase();
-        let sanitizedLast = this.lastName.replace(pattern, '').toLowerCase();
-
-        return sanitizedFirst + '.' + sanitizedLast + '@7hci.com';
+        return `${this.override.replace(' ', '')}@7hci.com`;
       }
+      const pattern = /[^a-zA-Z]/g;
+      const sanitizedFirst = this.firstName.replace(pattern, '').toLowerCase();
+      const sanitizedLast = this.lastName.replace(pattern, '').toLowerCase();
+
+      return `${sanitizedFirst}.${sanitizedLast}@7hci.com`;
     }
 
     /**

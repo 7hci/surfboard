@@ -1,56 +1,45 @@
 /**
  * Handles all calls to Trello's API
  */
-let request = require('request-promise').defaults({simple: false});
-let config = require('config');
-let logger = require('log4js').getLogger('app');
-let Promise = require('bluebird');
-let _ = require('lodash');
-let drive = require('./drive');
+const request = require('request-promise').defaults({ simple: false });
+const config = require('config');
+const logger = require('log4js').getLogger('app');
+const Promise = require('bluebird');
+const _ = require('lodash');
+const drive = require('./drive');
 
-let trello = exports;
+const trello = exports;
 
 /**
  * Main function for creating and populating the onboarding Trello board
  * @param contractor
+ * @param credentials The Google credentials stored in the user's session
  * @returns success/failure status message
  */
-trello.createTrelloBoard = (contractor, credentials) => {
-  return trello.addBoard(contractor)
-    .then((boardId) => {
-      return Promise.all(
+trello.createTrelloBoard = (contractor, credentials) => trello.addBoard(contractor)
+    .then(boardId => Promise.all(
         Promise.map(config.get('trello.team.members'), (member) => {
           trello.addBoardMember(boardId, member.id);
         }),
         trello.addList(boardId, 'Done')
-          .then(() => {
-            return trello.addList(boardId, 'In Progress')
-          })
-          .then(() => {
-            return trello.addList(boardId, 'On Deck')
-          })
-          .then(() => {
-            return Promise.all([trello.addList(boardId, 'To Do'), drive.getTasksFromFile(credentials)])
-              .spread((listId, tasks) => {
-                return Promise.mapSeries(tasks, (task) => {
-                  let description = task.split(',')[0];
-                  let memberName = task.split(',')[1];
-                  return trello.addCard(listId, description, memberName);
-                });
-              })
-          })
-      );
-    })
+          .then(() => trello.addList(boardId, 'In Progress'))
+          .then(() => trello.addList(boardId, 'On Deck'))
+          .then(() => Promise.all([trello.addList(boardId, 'To Do'), drive.getTasksFromFile(credentials)])
+              .spread((listId, tasks) => Promise.mapSeries(tasks, (task) => {
+                const description = task.split(',')[0];
+                const memberName = task.split(',')[1];
+                return trello.addCard(listId, description, memberName);
+              })))
+      ))
     .then(() => {
-        logger.info('Created board on Trello');
-        return {'text': 'Created board on Trello', 'status': 'success'};
-      }
+      logger.info('Created board on Trello');
+      return { text: 'Created board on Trello', status: 'success' };
+    }
     )
     .catch((err) => {
       logger.error(err);
-      return {'text': 'Problem creating board on Trello', 'status': 'failure'};
+      return { text: 'Problem creating board on Trello', status: 'failure' };
     });
-};
 
 /**
  * Helper function to make a request to add a new Trello board
@@ -59,8 +48,8 @@ trello.createTrelloBoard = (contractor, credentials) => {
  * @throws error if no board was created
  */
 trello.addBoard = (contractor) => {
-  let trelloUrl = config.get('trello.baseUrl') + '/boards';
-  let boardName = 'Onboarding: ' + contractor.getFullName();
+  const trelloUrl = `${config.get('trello.baseUrl')}/boards`;
+  const boardName = `Onboarding: ${contractor.getFullName()}`;
 
   return request.post({
     url: trelloUrl,
@@ -70,19 +59,18 @@ trello.addBoard = (contractor) => {
     },
     json: true,
     body: {
-      'name': boardName,
-      'defaultLists': false,
-      'idOrganization': config.get('trello.team.id'),
-      'prefs_permissionLevel': 'org'
+      name: boardName,
+      defaultLists: false,
+      idOrganization: config.get('trello.team.id'),
+      prefs_permissionLevel: 'org'
     }
   })
     .then((response) => {
-      let responseData = JSON.parse(JSON.stringify(response));
+      const responseData = JSON.parse(JSON.stringify(response));
       if ('id' in responseData) {
         return responseData.id;
-      } else {
-        throw new Error('No id in create board response: ' + responseData);
       }
+      throw new Error(`No id in create board response: ${responseData}`);
     });
 };
 
@@ -94,7 +82,7 @@ trello.addBoard = (contractor) => {
  * @throws error if the member couldn't be added
  */
 trello.addBoardMember = (boardId, memberId) => {
-  let trelloUrl = config.get('trello.baseUrl') + '/boards/' + boardId + '/members/' + memberId;
+  const trelloUrl = `${config.get('trello.baseUrl')}/boards/${boardId}/members/${memberId}`;
 
   return request.put({
     url: trelloUrl,
@@ -104,16 +92,15 @@ trello.addBoardMember = (boardId, memberId) => {
     },
     json: true,
     body: {
-      'type': 'admin',
+      type: 'admin'
     }
   })
     .then((response) => {
-      let responseData = JSON.parse(JSON.stringify(response));
+      const responseData = JSON.parse(JSON.stringify(response));
       if ('id' in responseData) {
         return responseData.id;
-      } else {
-        throw new Error('No id in add member response: ' + responseData);
       }
+      throw new Error(`No id in add member response: ${responseData}`);
     });
 };
 
@@ -125,7 +112,7 @@ trello.addBoardMember = (boardId, memberId) => {
  * @throws error if no list was created
  */
 trello.addList = (boardId, listName) => {
-  let trelloUrl = config.get('trello.baseUrl') + '/lists';
+  const trelloUrl = `${config.get('trello.baseUrl')}/lists`;
 
   return request.post({
     url: trelloUrl,
@@ -135,17 +122,16 @@ trello.addList = (boardId, listName) => {
     },
     json: true,
     body: {
-      'name': listName,
-      'idBoard': boardId
+      name: listName,
+      idBoard: boardId
     }
   })
     .then((response) => {
-      let responseData = JSON.parse(JSON.stringify(response));
+      const responseData = JSON.parse(JSON.stringify(response));
       if ('id' in responseData) {
         return responseData.id;
-      } else {
-        throw new Error('No id in create list response: ' + responseData);
       }
+      throw new Error(`No id in create list response: ${responseData}`);
     });
 };
 
@@ -158,7 +144,7 @@ trello.addList = (boardId, listName) => {
  * @throws error if no card was created
  */
 trello.addCard = (listId, description, memberName) => {
-  let trelloUrl = config.get('trello.baseUrl') + '/cards';
+  const trelloUrl = `${config.get('trello.baseUrl')}/cards`;
 
   return request.post({
     url: trelloUrl,
@@ -168,18 +154,17 @@ trello.addCard = (listId, description, memberName) => {
     },
     json: true,
     body: {
-      'name': description,
-      'idList': listId,
-      'idMembers': [trello.getMemberId(memberName)]
+      name: description,
+      idList: listId,
+      idMembers: [trello.getMemberId(memberName)]
     }
   })
     .then((response) => {
-      let responseData = JSON.parse(JSON.stringify(response));
+      const responseData = JSON.parse(JSON.stringify(response));
       if ('id' in responseData) {
         return responseData.id;
-      } else {
-        throw new Error('No id in create card response: ' + responseData);
       }
+      throw new Error(`No id in create card response: ${responseData}`);
     });
 };
 
@@ -189,10 +174,9 @@ trello.addCard = (listId, description, memberName) => {
  * @returns the member id
  */
 trello.getMemberId = (memberName) => {
-  let member = _.find(config.get('trello.team.members'), {'name': memberName});
+  const member = _.find(config.get('trello.team.members'), { name: memberName });
   if (typeof member !== 'undefined') {
     return member.id;
-  } else {
-    return "";
   }
+  return '';
 };

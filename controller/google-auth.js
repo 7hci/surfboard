@@ -1,19 +1,19 @@
 /**
  * @fileOverview All functions related to authenticating with Google
  */
-let config = require('config');
-let request = require('request-promise');
-let google = require('googleapis');
-let Bluebird = require('bluebird');
+const config = require('config');
+const request = require('request-promise');
+const google = require('googleapis');
+const Bluebird = require('bluebird');
 
-let googleAuth = exports;
+const googleAuth = exports;
 
 /**
  * Have the OAuth Client make an authentication url we can direct the user to
  * @returns {string} the authentication url
  */
 googleAuth.getAuthUrl = () => {
-  let oauth2Client = googleAuth.getOAuthClient();
+  const oauth2Client = googleAuth.getOAuthClient();
   return oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: config.get('google.scope'),
@@ -22,12 +22,13 @@ googleAuth.getAuthUrl = () => {
 };
 
 /**
- * Gives the credentials stored in the session to the OAuth client and retrieves an access token from it
+ * Gives the credentials stored in the session to the OAuth client
+ * and retrieves an access token from it
  * @param credentials The Google credentials stored in the user's session
  * @returns the access token information based on the credentials
  */
 googleAuth.getAccessToken = (credentials) => {
-  let oauth2Client = googleAuth.getOAuthClient();
+  const oauth2Client = googleAuth.getOAuthClient();
   oauth2Client.setCredentials(credentials);
   return oauth2Client.getAccessTokenAsync();
 };
@@ -37,7 +38,7 @@ googleAuth.getAccessToken = (credentials) => {
  * @returns the client
  */
 googleAuth.getOAuthClient = () => {
-  let oauth = new google.auth.OAuth2(
+  const oauth = new google.auth.OAuth2(
     config.get('google.clientId'),
     config.get('google.clientSecret'),
     config.get('google.redirectUri')
@@ -46,7 +47,8 @@ googleAuth.getOAuthClient = () => {
 };
 
 /**
- * Express middleware to verify user has authenticated prior to displaying page. If not, kick off OAuth process.
+ * Express middleware to verify user has authenticated prior to displaying page.
+ * If not, kick off OAuth process.
  * @param req
  * @param res
  * @param next
@@ -54,15 +56,13 @@ googleAuth.getOAuthClient = () => {
 googleAuth.authenticateSession = (req, res, next) => {
   if ('tokens' in req.session) {
     googleAuth.getAccessToken(req.session.tokens)
-      .then(function (token) {
-        return googleAuth.getUserInfo(token)
-      })
-      .then(function (info) {
-        let user_email = info.emailAddress;
-        if (googleAuth.hasValidDomain(user_email)) {
+      .then(token => googleAuth.getUserInfo(token))
+      .then((info) => {
+        const userEmail = info.emailAddress;
+        if (googleAuth.hasValidDomain(userEmail)) {
           next();
         } else {
-          res.render('error.html',{ errorMessage: 'Invalid e-mail domain.' })
+          res.render('error.html', { errorMessage: 'Invalid e-mail domain.' });
         }
       });
   } else {
@@ -72,12 +72,12 @@ googleAuth.authenticateSession = (req, res, next) => {
 
 /**
  * Helper function to get the authenticated user's information
- * @param access_token
+ * @param accessToken
  * @returns a user object for the authenticated user
  */
-googleAuth.getUserInfo = (access_token) => {
-  let profile_url = 'https://www.googleapis.com/gmail/v1/users/me/profile';
-  return request.get({url: profile_url, qs: {access_token: access_token}, json: true});
+googleAuth.getUserInfo = (accessToken) => {
+  const profileUrl = 'https://www.googleapis.com/gmail/v1/users/me/profile';
+  return request.get({ url: profileUrl, qs: { access_token: accessToken }, json: true });
 };
 
 /**
@@ -85,6 +85,4 @@ googleAuth.getUserInfo = (access_token) => {
  * @param emailAddress
  * @returns true if the domain is 7hci.com
  */
-googleAuth.hasValidDomain = (emailAddress) => {
-  return emailAddress.split('@')[1].toLowerCase() === '7hci.com';
-};
+googleAuth.hasValidDomain = emailAddress => emailAddress.split('@')[1].toLowerCase() === '7hci.com';

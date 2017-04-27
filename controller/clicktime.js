@@ -1,13 +1,14 @@
 /**
- * @fileOverview Simulates adding the contractor through ClickTime's site using PhantomJS and CasperJS
+ * @fileOverview Adds the contractor to ClickTime by simulating the login process on the
+ * site using PhantomJS and CasperJS
  */
 
-let config = require('config');
-let Promise = require('bluebird');
-let shell = require('shelljs');
-let logger = require('log4js').getLogger('app');
+const config = require('config');
+const Promise = require('bluebird');
+const shell = require('shelljs');
+const logger = require('log4js').getLogger('app');
 
-let clicktime = exports;
+const clicktime = exports;
 
 /**
  * Runs CasperJS through the command line
@@ -15,27 +16,24 @@ let clicktime = exports;
  * @returns command line output after command is done running (success/failure status message)
  */
 clicktime.addUserToClickTime = (contractor) => {
+  let command = `casperjs clicktime-casper.js --user=${config.get('clicktime.user')
+    } --password=${config.get('clicktime.password')
+    } --name="${contractor.getFullName()}"` +
+    ` --email=${contractor.getEmail()}`;
 
-  let command = 'casperjs clicktime-casper.js --user=' + config.get('clicktime.user') +
-    ' --password=' + config.get('clicktime.password') +
-    ' --name="' + contractor.getFullName() + '"' +
-    ' --email=' + contractor.getEmail();
-
-  if (process.env.NODE_ENV === 'testing'){
+  if (process.env.NODE_ENV === 'testing') {
     command += ' --test';
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     shell.exec(command, (code, stdout, stderr) => {
       if (stderr) {
         logger.error(stderr);
-        resolve({'text': 'Problem adding user to ClickTime', 'status': 'failure'});
-      }
-      else {
+        resolve({ text: 'Problem adding user to ClickTime', status: 'failure' });
+      } else {
         logger.info('Added user to ClickTime');
         resolve(JSON.parse(stdout));
       }
-    })
+    });
   });
-
 };

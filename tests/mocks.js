@@ -1,38 +1,38 @@
-let Bluebird = require('bluebird');
+const Bluebird = require('bluebird');
 
-let mock = exports;
+const mock = exports;
 
 mock.domain = {
-  createContractorEmail(contractor) {
-    return Bluebird.resolve({text: "mock text", status: "mock status"});
+  createContractorEmail() {
+    return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   }
 };
 mock.drive = {
-  addAndShareDriveFolder(contractor) {
-    return Bluebird.resolve({text: "mock text", status: "mock status"});
+  addAndShareDriveFolder() {
+    return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   }
 };
 mock.gmail = {
-  sendLoginEmail(contractor) {
-    return Bluebird.resolve({text: "mock text", status: "mock status"});
+  sendLoginEmail() {
+    return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   },
-  sendDriveEmail(contractor) {
-    return Bluebird.resolve({text: "mock text", status: "mock status"});
+  sendDriveEmail() {
+    return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   }
 };
 mock.slack = {
-  inviteToSlack(contractor) {
-    return Bluebird.resolve({text: "mock text", status: "mock status"});
+  inviteToSlack() {
+    return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   }
 };
 mock.trello = {
-  createTrelloBoard(contractor) {
-    return Bluebird.resolve({text: "mock text", status: "mock status"});
+  createTrelloBoard() {
+    return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   }
 };
 
 mock.auth = {
-  getAccessToken(credentials) {
-    return Bluebird.resolve("mock_token");
+  getAccessToken() {
+    return Bluebird.resolve('mock_token');
   }
 };

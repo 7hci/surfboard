@@ -1,29 +1,34 @@
-let chai = require('chai');
-let expect = chai.expect;
-let rewire = require('rewire');
-let http = require('http');
+const chai = require('chai');
+const proxyquire = require('proxyquire');
+const Contractor = require('../model/contractor');
+const mock = require('./mocks');
+const nock = require('nock');
+const config = require('config');
 
-let app = require('../app');
-let domain = rewire('../controller/domain');
-let Contractor = require('../model/contractor');
-let mock = require('./mocks');
+const expect = chai.expect;
+const domain = proxyquire('../controller/domain', { './google-auth': mock.auth });
 
-domain.__set__('googleAuth', mock.auth);
-
-describe('createContractorEmail', () => {
-  it('should return a successful status if a user object is returned', (done) => {
-    app.set('port', '5000');
-    let server = http.createServer(app);
-    server.listen('5000');
-
-    let contractor = new Contractor("Jon", "Snow", true, "danielrearden@google.com");
-    domain.createContractorEmail(contractor, {})
-      .then((result) => {
-        expect(result.status).to.equal("success");
-      })
-      .then(() => {
-          server.close(done);
+describe('domain', () => {
+  describe('createContractorEmail', () => {
+    before((done) => {
+      const mockResponse = { id: 'testid' };
+      nock(config.get('google.baseUrl'))
+        .post('/admin/directory/v1/users')
+        .query(true)
+        .reply(200, mockResponse);
+      done();
+    });
+    it('should return a successful status if a user object is returned', (done) => {
+      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
+      domain.createContractorEmail(contractor, {})
+        .then((result) => {
+          expect(result.status).to.equal('success');
+        })
+        .then(() => {
+          done();
         }
-      );
+        );
+    }).timeout(10000);
   });
 });
+

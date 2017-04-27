@@ -1,17 +1,14 @@
-let express = require('express');
-let path = require('path');
-let favicon = require('serve-favicon');
-let log4js = require('log4js');
-let cookieParser = require('cookie-parser');
-let bodyParser = require('body-parser');
-let session = require('express-session');
-let nunjucks = require('nunjucks');
-let assert = require('assert');
-let app = express();
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const log4js = require('log4js');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const nunjucks = require('nunjucks');
 
-global.__root = __dirname + '/';
+const app = express();
 
-nunjucks.configure(path.join(__dirname, 'views'), {express: app, autoescape: true});
+nunjucks.configure(path.join(__dirname, 'views'), { express: app, autoescape: true });
 
 log4js.configure({
   appenders: [
@@ -21,14 +18,14 @@ log4js.configure({
       category: 'app',
       layout: {
         type: 'pattern',
-        pattern: "[%r] %p - %m"
+        pattern: '[%r] %p - %m'
       }
     }
-    ]
+  ]
 });
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -45,13 +42,13 @@ app.use(require('express-session')({
 
 app.use(require('./routes'));
 
-app.use(function (req, res, next) {
-  let err = new Error('Not Found');
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-app.use(function (err, req, res, next) {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

@@ -1,26 +1,28 @@
 /**
  * @fileOverview Route that handles callback during Google OAuth2 authentication process
  */
-let googleAuth = require('../controller/google-auth.js');
-let logger = require('log4js').getLogger('app');
-let redirect = exports;
+const googleAuth = require('../controller/google-auth.js');
+const logger = require('log4js').getLogger('app');
+
+const redirect = exports;
 
 /**
- * Gets access token info by passing the "code" returned by Google to the OAuthClient and saves it to the user's session
+ * Gets access token info by passing the "code" returned by Google to the OAuthClient
+ * and saves it to the user's session
  * @param req
  * @param res
  */
 redirect.route = (req, res) => {
-  let oauth2Client = googleAuth.getOAuthClient();
-  let code = req.query.code;
+  const oauth2Client = googleAuth.getOAuthClient();
+  const code = req.query.code;
   oauth2Client.getTokenAsync(code)
-    .then(function (tokens) {
+    .then((tokens) => {
       oauth2Client.setCredentials(tokens);
-      req.session['tokens'] = tokens;
+      req.session.tokens = tokens;
       res.redirect('/');
     })
-    .catch(function (err) {
+    .catch((err) => {
       logger.error(err);
-      res.render('error.html', {error: err});
+      res.render('error.html', { error: err });
     });
 };
