@@ -70,8 +70,7 @@ onboard.runCheckedTasks = (request, contractor) => {
   const tasksAfterEmailCreation =
     _.reduce(checkedTasks, (result, value, key) => {
       if (taskMap[key]) {
-        // eslint-disable-next-line
-        let task = taskMap[key].call(task, contractor, credentials);
+        const task = taskMap[key].call(taskMap[key], contractor, credentials);
         result.push(task);
       }
       return result;

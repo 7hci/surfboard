@@ -1,5 +1,4 @@
 const express = require('express');
-const debug = require('debug')('surfboard:server');
 const path = require('path');
 const favicon = require('serve-favicon');
 const log4js = require('log4js');
@@ -8,8 +7,6 @@ const bodyParser = require('body-parser');
 const nunjucks = require('nunjucks');
 
 const app = express();
-
-global.__root = `${__dirname}/`;
 
 nunjucks.configure(path.join(__dirname, 'views'), { express: app, autoescape: true });
 
@@ -58,11 +55,6 @@ app.use((err, req, res) => {
 
   res.status(err.status || 500);
   res.render('error.html');
-});
-
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  debug(`Listening on ${port}`);
 });
 
 module.exports = app;

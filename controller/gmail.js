@@ -5,6 +5,7 @@
 const request = require('request-promise').defaults({ simple: false });
 const config = require('config');
 const logger = require('log4js').getLogger('app');
+const path = require('path');
 const googleAuth = require('./google-auth');
 const template = require('string-template');
 const Bluebird = require('bluebird');
@@ -20,7 +21,7 @@ const gmail = exports;
  */
 gmail.sendDriveEmail = (contractor, credentials) => {
   const tokenBluebird = googleAuth.getAccessToken(credentials);
-  const messageBluebird = gmail.getMessageFromFile(contractor, `${__root}data/required.txt`);
+  const messageBluebird = gmail.getMessageFromFile(contractor, `${path.join(__dirname, '..', 'data', 'required.txt')}`);
 
   return Bluebird.all([tokenBluebird, messageBluebird])
     .spread((token, message) => {
@@ -57,7 +58,7 @@ gmail.sendDriveEmail = (contractor, credentials) => {
  */
 gmail.sendLoginEmail = (contractor, credentials) => {
   const tokenBluebird = googleAuth.getAccessToken(credentials);
-  const messageBluebird = gmail.getMessageFromFile(contractor, `${__root}data/login.txt`);
+  const messageBluebird = gmail.getMessageFromFile(contractor, `${path.join(__dirname, '..', 'data', 'login.txt')}`);
 
   return Bluebird.all([tokenBluebird, messageBluebird])
     .spread((token, message) => {

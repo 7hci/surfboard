@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "env NODE_ENV=development node app",
-    "test": "testing mocha tests",
+    "start": "env NODE_ENV=development node bin/www",
+    "test": "env NODE_ENV=testing mocha tests",
     "coverage": "env NODE_ENV=testing nyc mocha tests"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-mocha": "^4.9.0",
+    "nock": "^9.0.13",
     "nyc": "^10.2.0",
     "proxyquire": "^1.7.11",
     "rewire": "latest"
