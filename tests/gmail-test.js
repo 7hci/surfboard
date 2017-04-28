@@ -1,59 +1,47 @@
 const chai = require('chai');
+const chaiPromise = require('chai-as-promised');
 const proxyquire = require('proxyquire');
 const Contractor = require('../model/contractor');
 const nock = require('nock');
 const mock = require('./mocks');
-const path = require('path');
 const config = require('config');
+const testTemplate = require('../views/email/test-template');
 
-const gmail = proxyquire('../controller/gmail', { './google-auth': mock.auth });
+chai.use(chaiPromise);
 const expect = chai.expect;
+const gmail = proxyquire('../lib/gmail', { './google-auth': mock.auth });
 
 describe('gmail', () => {
-  describe('sendDriveEmail', () => {
-    before((done) => {
+  describe('sendWelcomeEmail', () => {
+    before(() => {
       const mockResponse = { id: 'testid' };
       nock(config.get('google.baseUrl'))
         .post('/gmail/v1/users/me/messages/send')
         .query(true)
         .reply(200, mockResponse);
-      done();
     });
-    it('should return a successful status if a message object is returned by API', (done) => {
+    it('should return a successful status if a message object is returned by API', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      gmail.sendDriveEmail(contractor, {})
-        .then((result) => {
-          expect(result.status).to.equal('success');
-        })
-        .then(done, done);
+      return expect(gmail.sendWelcomeEmail(contractor, {})).to.eventually.have.property('status', 'success');
     });
   });
   describe('sendLoginEmail', () => {
-    before((done) => {
+    before(() => {
       const mockResponse = { id: 'testid' };
       nock(config.get('google.baseUrl'))
         .post('/gmail/v1/users/me/messages/send')
         .query(true)
         .reply(200, mockResponse);
-      done();
     });
-    it('should return a successful status if a message object is returned by API', (done) => {
+    it('should return a successful status if a message object is returned by API', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      gmail.sendLoginEmail(contractor, {})
-        .then((result) => {
-          expect(result.status).to.equal('success');
-        })
-        .then(done, done);
+      return expect(gmail.sendLoginEmail(contractor, {})).to.eventually.have.property('status', 'success');
     });
   });
   describe('getMessageFromFile', () => {
-    it('should return the retrieved text file with the contractor name inserted', (done) => {
+    it('should return the retrieved text file with the contractor name inserted', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      gmail.getMessageFromFile(contractor, path.join(__dirname, '..', 'data', 'test.txt'))
-        .then((result) => {
-          expect(result).to.equal('Hello Jon!');
-        })
-        .then(done, done);
+      expect(gmail.getMessageFromFile(contractor, testTemplate)).to.equal('Hello Jon!');
     });
   });
 });

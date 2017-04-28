@@ -6,12 +6,12 @@ const logger = require('log4js').getLogger('app');
 const Bluebird = require('bluebird');
 
 const Contractor = require('../model/contractor.js');
-const drive = require('../controller/drive');
-const trello = require('../controller/trello');
-const gmail = require('../controller/gmail');
-const slack = require('../controller/slack');
-const domain = require('../controller/domain');
-const clicktime = require('../controller/clicktime');
+const drive = require('../lib/drive');
+const trello = require('../lib/trello');
+const gmail = require('../lib/gmail');
+const slack = require('../lib/slack');
+const domain = require('../lib/domain');
+const clicktime = require('../lib/clicktime');
 
 const onboard = exports;
 
@@ -62,7 +62,7 @@ onboard.runCheckedTasks = (request, contractor) => {
   // Map identifying any functions that should only be ran *after* the createEmail task is complete
   const taskMap = {
     sendLoginEmail: gmail.sendLoginEmail,
-    sendDriveEmail: gmail.sendDriveEmail,
+    sendWelcomeEmail: gmail.sendWelcomeEmail,
     addAndShareDriveFolder: drive.addAndShareDriveFolder,
     inviteToSlack: slack.inviteToSlack,
     addUserToClickTime: clicktime.addUserToClickTime

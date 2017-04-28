@@ -16,7 +16,7 @@ mock.gmail = {
   sendLoginEmail() {
     return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   },
-  sendDriveEmail() {
+  sendWelcomeEmail() {
     return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   }
 };
@@ -30,7 +30,11 @@ mock.trello = {
     return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
   }
 };
-
+mock.clicktime = {
+  addUserToClickTime() {
+    return Bluebird.resolve({ text: 'mock text', status: 'mock status' });
+  }
+};
 mock.auth = {
   getAccessToken() {
     return Bluebird.resolve('mock_token');

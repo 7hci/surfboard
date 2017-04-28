@@ -83,8 +83,8 @@ module.exports = {
         text: 'Create HR folder for contractor'
       },
       {
-        name: 'sendDriveEmail',
-        text: 'Send document instructions to contractor'
+        name: 'sendWelcomeEmail',
+        text: 'Send welcome e-mail to contractor'
       },
       {
         name: 'createTrelloBoard',

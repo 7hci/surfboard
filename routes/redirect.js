@@ -1,7 +1,7 @@
 /**
  * @fileOverview Route that handles callback during Google OAuth2 authentication process
  */
-const googleAuth = require('../controller/google-auth.js');
+const googleAuth = require('../lib/google-auth.js');
 const logger = require('log4js').getLogger('app');
 
 const redirect = exports;

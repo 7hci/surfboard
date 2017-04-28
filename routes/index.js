@@ -5,7 +5,7 @@ const express = require('express');
 const main = require('./main');
 const onboard = require('./onboard');
 const redirect = require('./redirect');
-const googleAuth = require('../controller/google-auth');
+const googleAuth = require('../lib/google-auth');
 
 const router = express.Router();
 

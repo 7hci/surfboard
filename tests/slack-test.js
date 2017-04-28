@@ -1,50 +1,36 @@
 const chai = require('chai');
+const chaiPromise = require('chai-as-promised');
 const nock = require('nock');
 const config = require('config');
-const slack = require('../controller/slack');
+const slack = require('../lib/slack');
 const Contractor = require('../model/contractor');
 
+chai.use(chaiPromise);
 const expect = chai.expect;
 
 describe('slack', () => {
   describe('inviteToSlack', () => {
-    before((done) => {
+    before(() => {
       const mockResponse = { ok: true };
       nock(config.get('slack.baseUrl'))
         .get('/users.admin.invite')
         .query(true)
         .reply(200, mockResponse);
-      done();
     });
-    it('should return a successful status if a response object is returned', (done) => {
+    it('should return a successful status if a response object is returned', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      slack.inviteToSlack(contractor)
-        .then((result) => {
-          expect(result.status).to.equal('success');
-        })
-        .then(() => {
-          done();
-        }
-        );
+      return expect(slack.inviteToSlack(contractor)).to.eventually.have.property('status', 'success');
     });
-    before((done) => {
+    before(() => {
       const mockResponse = { ok: false };
       nock(config.get('slack.baseUrl'))
         .get('/users.admin.invite')
         .query(true)
         .reply(200, mockResponse);
-      done();
     });
-    it('should return a failure status if the API response is ok: false (already invited contractor)', (done) => {
+    it('should return a failure status if the API response is ok: false (already invited contractor)', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      slack.inviteToSlack(contractor)
-        .then((result) => {
-          expect(result.status).to.equal('failure');
-        })
-        .then(() => {
-          done();
-        }
-        );
+      return expect(slack.inviteToSlack(contractor)).to.eventually.have.property('status', 'failure');
     });
   });
 });
