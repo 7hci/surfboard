@@ -1,5 +1,5 @@
 const chai = require('chai');
-const auth = require('../controller/google-auth');
+const auth = require('../lib/google-auth');
 const config = require('config');
 
 const expect = chai.expect;

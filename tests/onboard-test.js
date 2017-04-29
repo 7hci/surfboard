@@ -1,23 +1,26 @@
 const chai = require('chai');
+const chaiPromise = require('chai-as-promised');
 const proxyquire = require('proxyquire');
 const Contractor = require('../model/contractor');
 const mock = require('./mocks');
 
+chai.use(chaiPromise);
 const expect = chai.expect;
 const onboard = proxyquire('../routes/onboard', {
-  '../controller/domain': mock.domain,
-  '../controller/drive': mock.drive,
-  '../controller/gmail': mock.gmail,
-  '../controller/slack': mock.slack,
-  '../controller/trello': mock.trello
+  '../lib/domain': mock.domain,
+  '../lib/drive': mock.drive,
+  '../lib/gmail': mock.gmail,
+  '../lib/slack': mock.slack,
+  '../lib/trello': mock.trello,
+  '../lib/clicktime': mock.clicktime
 });
 describe('onboard', () => {
   describe('runCheckedTasks', () => {
-    it('should return text and status for every checked task', (done) => {
+    it('should return text and status for every checked task', () => {
       const request = {
         body: {
           createContractorEmail: 'on',
-          sendDriveEmail: 'on',
+          sendWelcomeEmail: 'on',
           inviteToSlack: 'on',
           addUserToClickTime: 'on'
         },
@@ -27,24 +30,18 @@ describe('onboard', () => {
           }
         }
       };
-      const contractor = new Contractor('Jon', 'Snow', true, 'jonsnow@gmail.com');
-      onboard.runCheckedTasks(request, contractor)
-        .then((results) => {
-          results.forEach((result) => {
-            expect(result).to.include.keys('text', 'status');
-          });
-          expect(results.length).to.equal(Object.keys(request.body).length);
-        })
-        .then(done, done);
+      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@gmail.com');
+      return expect(onboard.runCheckedTasks(request, contractor))
+        .to.eventually.have.lengthOf(Object.keys(request.body).length);
     });
 
-    it('should return text and status for every checked task even if createContractorEmail is not checked', (done) => {
+    it('should return text and status for every checked task even if createContractorEmail is not checked', () => {
       const request = {
         body: {
           createTrelloBoard: 'on',
           sendLoginEmail: 'on',
           addAndShareDriveFolder: 'on',
-          sendDriveEmail: 'on',
+          sendWelcomeEmail: 'on',
           inviteToSlack: 'on'
         },
         session: {
@@ -53,15 +50,9 @@ describe('onboard', () => {
           }
         }
       };
-      const contractor = new Contractor('Jon', 'Snow', true, 'jonsnow@gmail.com');
-      onboard.runCheckedTasks(request, contractor)
-        .then((results) => {
-          results.forEach((result) => {
-            expect(result).to.include.keys('text', 'status');
-          });
-          expect(results.length).to.equal(Object.keys(request.body).length);
-        })
-        .then(done, done);
+      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@gmail.com');
+      return expect(onboard.runCheckedTasks(request, contractor))
+        .to.eventually.have.lengthOf(Object.keys(request.body).length);
     });
   });
 });
