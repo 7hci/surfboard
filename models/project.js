@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) =>
     name: {
       type: DataTypes.TEXT,
       allowNull: false,
-      primaryKey: true,
-      field: 'project_name'
+      field: 'name'
     }
   });

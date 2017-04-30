@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiPromise = require('chai-as-promised');
 const proxyquire = require('proxyquire');
-const Contractor = require('../model/contractor');
+const Contractor = require('../classes/contractor');
 const mock = require('./mocks');
 
 chai.use(chaiPromise);

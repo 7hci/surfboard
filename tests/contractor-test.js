@@ -1,5 +1,5 @@
 const chai = require('chai');
-const Contractor = require('../model/contractor');
+const Contractor = require('../classes/contractor');
 
 const expect = chai.expect;
 

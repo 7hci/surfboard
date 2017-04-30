@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiPromise = require('chai-as-promised');
 const clicktime = require('../lib/clicktime');
-const Contractor = require('../model/contractor');
+const Contractor = require('../classes/contractor');
 
 chai.use(chaiPromise);
 const expect = chai.expect;

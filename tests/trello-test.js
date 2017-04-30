@@ -3,7 +3,7 @@ const chaiPromise = require('chai-as-promised');
 const nock = require('nock');
 const config = require('config');
 const trello = require('../lib/trello');
-const Contractor = require('../model/contractor');
+const Contractor = require('../classes/contractor');
 
 chai.use(chaiPromise);
 const expect = chai.expect;
