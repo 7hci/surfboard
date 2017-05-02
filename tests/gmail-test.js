@@ -22,7 +22,25 @@ describe('gmail', () => {
     });
     it('should return a successful status if a message object is returned by API', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      return expect(gmail.sendWelcomeEmail(contractor, {})).to.eventually.have.property('status', 'success');
+      const socket = new mock.Socket();
+      return gmail.sendWelcomeEmail(contractor, socket, {})
+        .then(() => {
+          expect(socket.emitted[0]).to.have.property('status', 'success');
+        });
+    });
+    before(() => {
+      nock(config.get('google.baseUrl'))
+        .post('/gmail/v1/users/me/messages/send')
+        .query(true)
+        .reply(404);
+    });
+    it('should return a failure status if the HTTP request is not successful)', () => {
+      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
+      const socket = new mock.Socket();
+      return gmail.sendWelcomeEmail(contractor, socket, {})
+        .then(() => {
+          expect(socket.emitted[0]).to.have.property('status', 'failure');
+        });
     });
   });
   describe('sendLoginEmail', () => {
@@ -35,7 +53,25 @@ describe('gmail', () => {
     });
     it('should return a successful status if a message object is returned by API', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      return expect(gmail.sendLoginEmail(contractor, {})).to.eventually.have.property('status', 'success');
+      const socket = new mock.Socket();
+      return gmail.sendLoginEmail(contractor, socket, {})
+        .then(() => {
+          expect(socket.emitted[0]).to.have.property('status', 'success');
+        });
+    });
+    before(() => {
+      nock(config.get('google.baseUrl'))
+        .post('/gmail/v1/users/me/messages/send')
+        .query(true)
+        .reply(404);
+    });
+    it('should return a failure status if the HTTP request is not successful)', () => {
+      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
+      const socket = new mock.Socket();
+      return gmail.sendLoginEmail(contractor, socket, {})
+        .then(() => {
+          expect(socket.emitted[0]).to.have.property('status', 'failure');
+        });
     });
   });
   describe('getMessageFromFile', () => {

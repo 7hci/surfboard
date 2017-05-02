@@ -49,7 +49,11 @@ label {
     padding-top: 3rem;
 }
 
-
+#spinner {
+    text-align: center;
+    color: #14558D;
+    width: 100%;
+}
 
 @media (min-width: 48em) {
     .container {
