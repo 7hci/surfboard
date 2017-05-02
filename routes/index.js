@@ -3,7 +3,6 @@
  */
 const express = require('express');
 const main = require('./main');
-const onboard = require('./onboard');
 const redirect = require('./redirect');
 const api = require('./api');
 const googleAuth = require('../lib/google-auth');
@@ -14,7 +13,6 @@ router.get('/oauth2callback', redirect.route);
 router.use('/api', api);
 // Authenticate all routes with Google OAuth below using middleware
 router.use(googleAuth.authenticateSession);
-router.post('/onboard', onboard.route);
 router.get('/', main.route);
 
 router.use((req, res, next) => {
