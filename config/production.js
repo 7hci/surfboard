@@ -2,6 +2,10 @@ module.exports = {
   api: {
     key: ''
   },
+  db: {
+    username: '',
+    password: ''
+  },
   google: {
     clientId: '###',
     clientSecret: '###'

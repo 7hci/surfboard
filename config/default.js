@@ -2,6 +2,11 @@ module.exports = {
   api: {
     key: '4aee61a16a20a131033d5a2e86d1ba8b'
   },
+  db: {
+    database: 'surfboard',
+    host: '127.0.0.1',
+    dialect: 'postgres'
+  },
   google: {
     clientId: '',
     clientSecret: '',
