@@ -23,9 +23,6 @@ fs
     db[model.name] = model;
   });
 
-db.Project.belongsToMany(db.TimesheetReportJob, { as: 'includedIn', through: 'TimesheetReportProject' });
-db.TimesheetReportJob.belongsToMany(db.Project, { as: 'projectsToInclude', through: 'TimesheetReportProject' });
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

@@ -3,8 +3,7 @@
  */
 const express = require('express');
 const config = require('config');
-const projects = require('./projects');
-const timesheets = require('./timesheets');
+const settings = require('./settings');
 
 const router = express.Router();
 
@@ -17,7 +16,6 @@ router.use((req, res, next) => {
   }
 });
 
-router.use('/timesheets', timesheets);
-router.use('/projects', projects);
+router.use('/settings', settings);
 
 module.exports = router;
