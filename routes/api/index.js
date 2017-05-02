@@ -8,8 +8,8 @@ const settings = require('./settings');
 const router = express.Router();
 
 router.use((req, res, next) => {
-  const key = req.query.key;
-  if (key === config.get('api.key').toString()) {
+  const key = req.get('X-Api-Key');
+  if (key === config.get('api.key')) {
     next();
   } else {
     res.send('Error: invalid key');

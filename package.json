@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "env NODE_ENV=development node bin/www",
+    "start": "env NODE_ENV=development node index",
     "test": "env NODE_ENV=testing mocha tests",
     "coverage": "env NODE_ENV=testing nyc mocha tests"
   },
