@@ -35,7 +35,6 @@ npm-debug.log
 
 # Local configuration
 config/development.js
-config/db.json
 
 # Istanbul coverage tests folder
 .nyc_output
