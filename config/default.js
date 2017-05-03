@@ -1,4 +1,7 @@
 module.exports = {
+  api: {
+    key: '4aee61a16a20a131033d5a2e86d1ba8b'
+  },
   google: {
     clientId: '',
     clientSecret: '',

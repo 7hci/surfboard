@@ -5,7 +5,7 @@ const _ = require('lodash');
 const logger = require('log4js').getLogger('app');
 const Bluebird = require('bluebird');
 
-const Contractor = require('../model/contractor.js');
+const Contractor = require('../classes/contractor');
 const drive = require('../lib/drive');
 const trello = require('../lib/trello');
 const gmail = require('../lib/gmail');

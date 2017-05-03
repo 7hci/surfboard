@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "env NODE_ENV=development node bin/www",
+    "start": "env NODE_ENV=development node index",
     "test": "env NODE_ENV=testing mocha tests",
     "coverage": "env NODE_ENV=testing nyc mocha tests"
   },
@@ -21,8 +21,11 @@
     "lodash": "latest",
     "log4js": "^1.1.1",
     "nunjucks": "^3.0.0",
+    "pg": "^6.1.5",
+    "pg-hstore": "^2.3.2",
     "phantomjs": "^2.1.7",
     "request-promise": "^4.2.0",
+    "sequelize": "^3.30.4",
     "serve-favicon": "~2.4.2",
     "shelljs": "^0.7.7"
   },

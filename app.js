@@ -40,6 +40,8 @@ app.use(require('express-session')({
   saveUninitialized: true
 }));
 
+app.set('models', require('./models'));
+
 app.use(require('./routes'));
 
 app.use((req, res, next) => {
