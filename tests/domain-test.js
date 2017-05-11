@@ -13,10 +13,11 @@ const domain = proxyquire('../lib/domain', { './google-auth': mock.auth });
 describe('domain', () => {
   describe('createContractorEmail', () => {
     before(() => {
-      const mockResponse = { id: 'testid' };
+      const mockResponse = {id: 'testid'};
       nock(config.get('google.baseUrl'))
         .post('/admin/directory/v1/users')
         .query(true)
+        .once()
         .reply(200, mockResponse);
     });
     it('should return a successful status if a user object is returned', () => {
@@ -31,6 +32,7 @@ describe('domain', () => {
       nock(config.get('google.baseUrl'))
         .post('/admin/directory/v1/users')
         .query(true)
+        .once()
         .reply(404);
     });
     it('should return a failed status if the HTTP request is not successful', () => {
