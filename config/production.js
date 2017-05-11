@@ -61,6 +61,9 @@ module.exports = {
       },
       bgCheck: {
         id: '###'
+      },
+      contractScript: {
+        id: '###'
       }
     }
   }

@@ -3,7 +3,7 @@ const chaiPromise = require('chai-as-promised');
 const nock = require('nock');
 const config = require('config');
 const trello = require('../lib/trello');
-const Contractor = require('../classes/contractor');
+const mock = require('./mocks');
 
 chai.use(chaiPromise);
 const expect = chai.expect;
@@ -18,8 +18,7 @@ describe('trello', () => {
         .reply(200, mockResponse);
     });
     it('should return an id for the created board', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      return expect(trello.addBoard(contractor)).to.eventually.equal('testid_board');
+      return expect(trello.addBoard(mock.contractor)).to.eventually.equal('testid_board');
     });
   });
 

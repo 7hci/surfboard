@@ -1,4 +1,5 @@
 const Bluebird = require('bluebird');
+const Contractor = require('../classes/contractor');
 
 const mock = exports;
 
@@ -46,3 +47,12 @@ mock.Socket = function socket() {
     this.emitted.push(msg);
   };
 };
+mock.contractor = new Contractor({
+  firstName: 'Jon',
+  lastName: 'Snow',
+  isResident: true,
+  email: 'danielrearden@gmail.com',
+  override: '',
+  contractId: 'testid_contract',
+  folderId: 'testid_folder'
+});

@@ -1,7 +1,6 @@
 const chai = require('chai');
 const chaiPromise = require('chai-as-promised');
 const proxyquire = require('proxyquire');
-const Contractor = require('../classes/contractor');
 const nock = require('nock');
 const mock = require('./mocks');
 const config = require('config');
@@ -21,9 +20,8 @@ describe('gmail', () => {
         .reply(200, mockResponse);
     });
     it('should return a successful status if a message object is returned by API', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
       const socket = new mock.Socket();
-      return gmail.sendWelcomeEmail(contractor, socket, {})
+      return gmail.sendWelcomeEmail(mock.contractor, socket, {})
         .then(() => {
           expect(socket.emitted[0]).to.have.property('status', 'success');
         });
@@ -35,9 +33,8 @@ describe('gmail', () => {
         .reply(404);
     });
     it('should return a failure status if the HTTP request is not successful)', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
       const socket = new mock.Socket();
-      return gmail.sendWelcomeEmail(contractor, socket, {})
+      return gmail.sendWelcomeEmail(mock.contractor, socket, {})
         .then(() => {
           expect(socket.emitted[0]).to.have.property('status', 'failure');
         });
@@ -52,9 +49,8 @@ describe('gmail', () => {
         .reply(200, mockResponse);
     });
     it('should return a successful status if a message object is returned by API', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
       const socket = new mock.Socket();
-      return gmail.sendLoginEmail(contractor, socket, {})
+      return gmail.sendLoginEmail(mock.contractor, socket, {})
         .then(() => {
           expect(socket.emitted[0]).to.have.property('status', 'success');
         });
@@ -66,9 +62,8 @@ describe('gmail', () => {
         .reply(404);
     });
     it('should return a failure status if the HTTP request is not successful)', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
       const socket = new mock.Socket();
-      return gmail.sendLoginEmail(contractor, socket, {})
+      return gmail.sendLoginEmail(mock.contractor, socket, {})
         .then(() => {
           expect(socket.emitted[0]).to.have.property('status', 'failure');
         });
@@ -76,8 +71,7 @@ describe('gmail', () => {
   });
   describe('getMessageFromFile', () => {
     it('should return the retrieved text file with the contractor name inserted', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      expect(gmail.getMessageFromFile(contractor, testTemplate)).to.equal('Hello Jon!');
+      expect(gmail.getMessageFromFile(mock.contractor, testTemplate)).to.equal('Hello Jon!');
     });
   });
 });
