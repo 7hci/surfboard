@@ -16,7 +16,5 @@ models.sequelize.sync().then(() => {
     socket.on('onboard', (formData, credentials) => {
       onboard.run(socket, formData, credentials);
     });
-
-    app.set('socketio', socket);
   });
 });
