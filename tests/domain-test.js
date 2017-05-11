@@ -21,7 +21,11 @@ describe('domain', () => {
     });
     it('should return a successful status if a user object is returned', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      return expect(domain.createContractorEmail(contractor, {})).to.eventually.have.property('status', 'success');
+      const socket = new mock.Socket();
+      return domain.createContractorEmail(contractor, socket, {})
+        .then(() => {
+          expect(socket.emitted[0]).to.have.property('status', 'success');
+        });
     });
     before(() => {
       nock(config.get('google.baseUrl'))
@@ -31,8 +35,11 @@ describe('domain', () => {
     });
     it('should return a failed status if the HTTP request is not successful', () => {
       const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      return expect(domain.createContractorEmail(contractor, {})).to.eventually.have.property('status', 'failure');
+      const socket = new mock.Socket();
+      return domain.createContractorEmail(contractor, socket, {})
+        .then(() => {
+          expect(socket.emitted[0]).to.have.property('status', 'failure');
+        });
     });
   });
 });
-

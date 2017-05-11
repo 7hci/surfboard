@@ -7,8 +7,10 @@
 
     <title>SurfBOARD</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -27,11 +29,7 @@
         <div class="form-group">
             <label class="control-label">
                 <span>First Name</span>
-                <input type="text" name="firstName" class="form-control" required
-                        {% if contractor %}
-                       placeholder="{{ contractor.firstName }}" disabled
-                        {% endif %}
-                >
+                <input type="text" name="firstName" id="firstName" class="form-control" required>
             </label>
             <span class="glyphicon form-control-feedback"></span>
             <div class="help-block with-errors"></div>
@@ -39,11 +37,7 @@
         <div class="form-group">
             <label class="control-label">
                 <span>Last Name</span>
-                <input type="text" name="lastName" class="form-control" required
-                        {% if contractor %}
-                       placeholder="{{ contractor.lastName }}" disabled
-                        {% endif %}
-                >
+                <input type="text" name="lastName" id="lastName" class="form-control" required>
             </label>
             <span class="glyphicon form-control-feedback"></span>
             <div class="help-block with-errors"></div>
@@ -51,34 +45,22 @@
         <div class="form-group">
             <label class="control-label">
                 <span>E-mail</span>
-                <input type="email" name="email" class="form-control"
-                        {% if contractor %}
-                       placeholder="{{ contractor.privateEmail }}" disabled
-                        {% endif %}
+                <input type="email" name="email" id="email" class="form-control"
                        data-error="E-mail is not valid." required>
             </label>
             <span class="glyphicon form-control-feedback"></span>
             <div class="help-block with-errors"></div>
         </div>
-        <label class="control-label" for="override"><span>Override Generated Local-Part:</span></label>
+        <label class="control-label"
+               for="override"><span>Override Generated Local-Part:</span></label>
         <div class="input-group">
-            <input type="text" name="override" id="override" class="form-control"
-                    {% if contractor %}
-                   placeholder="{{ contractor.override }}" disabled
-                    {% endif %} >
+            <input type="text" name="override" id="override" class="form-control">
             <span class="input-group-addon">@7hci.com</span>
         </div>
         <br>
         <div class="checkbox">
-            <label> <input type="checkbox" name="resident"
-                    {% if contractor %}
-                           disabled
-                        {% if contractor.isResident %}
-                           checked
-                        {% endif %}
-                    {% else %}
-                           checked
-                    {% endif %}> <b>U.S. Resident</b> </label>
+            <label> <input type="checkbox" name="resident" id="resident" checked> <b>U.S.
+                Resident</b> </label>
         </div>
 
         <div class="modal fade" id="tasks_modal" tabindex="-1" role="dialog">
@@ -91,7 +73,8 @@
                         {% if tasks %}
                             {% for task in tasks %}
                                 <div class="checkbox task">
-                                    <label for="{{ task.name }}"><input type="checkbox" checked id="{{ task.name }}"
+                                    <label for="{{ task.name }}"><input type="checkbox" checked
+                                                                        id="{{ task.name }}"
                                                                         name="{{ task.name }}"> {{ task.text }}
                                     </label>
                                 </div>
@@ -99,35 +82,60 @@
                         {% endif %}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-
-        {% if not messages %}
-            <div class="form-group">
-                <a href="#tasks_modal" role="button" data-toggle="modal">Customize onboarding tasks</a><br><br><br>
-                <button class="btn btn-primary" id="submitButton" type="submit">Onboard!</button>
-            </div>
-        {% endif %}
+        <div class="form-group" id="deleteMe">
+            <a href="#tasks_modal" role="button" data-toggle="modal" id="customize">Customize
+                onboarding tasks</a><br><br><br>
+            <button class="btn btn-primary" id="submitButton" type="submit">Onboard!</button>
+        </div>
+        <div id="updates"></div>
+        <div id="spinner" hidden><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i></div>
         <br>
-        {% if messages %}
-            {% for message in messages %}
-                <p class="{{ message.status }}">
-                    {{ message.text }}
-                    {% if message.status == "success" %}
-                        <i class="fa fa-check-circle"></i>
-                    {% else %}
-                        <i class="fa fa-exclamation-circle"></i>
-                    {% endif %}
-                </p>
-            {% endfor %}
-        {% endif %}
     </form>
 </div>
 
+<script src="/socket.io/socket.io.js"></script>
 <script>
+  var socket = io();
+
+  socket.on('update', function (msg) {
+    var status = msg.status;
+    var text = msg.text;
+    var icon;
+    if (status === 'success') {
+      icon = '&nbsp;<i class="fa fa-check-circle"></i>';
+    } else {
+      icon = '&nbsp;<i class="fa fa-exclamation-circle"></i>'
+    }
+    var content = '<p class="' + status + '">' + text + icon + '</p>';
+    $('#updates').append($(content));
+  });
+
+  socket.on('finish', function (msg) {
+    $('#spinner').fadeOut('fast');
+  });
+
+  $('#onboardingForm').submit(function (event) {
+    event.preventDefault();
+
+    var credentials = {{ credentials | safe }};
+    socket.emit('onboard', $(this).serializeArray(), credentials);
+
+    $('#spinner').fadeIn('slow');
+
+    $('#firstName').prop('disabled', true);
+    $('#lastName').prop('disabled', true);
+    $('#email').prop('disabled', true);
+    $('#override').prop('disabled', true);
+    $('#resident').prop('disabled', true);
+    $('#deleteMe').remove();
+  });
+
   $('input[name=createContractorEmail]').change(function () {
     if ($(this).is(":checked")) {
       $('input[name=sendLoginEmail]').prop('disabled', false);
