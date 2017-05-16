@@ -3,14 +3,15 @@ module.exports = {
     key: '4aee61a16a20a131033d5a2e86d1ba8b'
   },
   db: {
+    username: 'surfboard',
     database: 'surfboard',
-    host: '127.0.0.1',
+    host: 'db',
     dialect: 'postgres'
   },
   google: {
     clientId: '',
     clientSecret: '',
-    redirectUri: 'http://surfboard.reardenapps.com/oauth2callback',
+    redirectUri: 'http://surfboard.7hci.com/oauth2callback',
     scope: 'https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/script.send_mail https://www.googleapis.com/auth/script.external_request',
     baseUrl: 'https://www.googleapis.com'
   },
