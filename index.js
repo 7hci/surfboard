@@ -27,6 +27,7 @@ models.sequelize.sync().then(() => {
       },
       overwrite: true
     });
+
     uploader.on('error', (err) => {
       logger.error(err);
     });
