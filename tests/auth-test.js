@@ -9,7 +9,7 @@ describe('google-auth', () => {
     // will throw unhandled rejection error since we don't have an access token
     it('should return the correct google authorization url', () => {
       const expectedUrl = `https://accounts.google.com/o/oauth2/auth?access_type=offline&scope=${encodeURIComponent(config.get('google.scope'))
-        }&hd=7hci.com&response_type=code&client_id=${encodeURIComponent(config.get('google.clientId'))
+        }&approval_prompt=force&hd=7hci.com&response_type=code&client_id=${encodeURIComponent(config.get('google.clientId'))
         }&redirect_uri=${encodeURIComponent(config.get('google.redirectUri'))}`;
       expect(auth.getAuthUrl()).to.equal(expectedUrl);
     });

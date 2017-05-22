@@ -11,7 +11,7 @@ module.exports = {
     clientId: '',
     clientSecret: '',
     redirectUri: 'http://surfboard.reardenapps.com/oauth2callback',
-    scope: 'https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/admin.directory.user',
+    scope: 'https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/script.send_mail https://www.googleapis.com/auth/script.external_request',
     baseUrl: 'https://www.googleapis.com'
   },
   clicktime: {
@@ -88,7 +88,7 @@ module.exports = {
       },
       {
         name: 'addAndShareDriveFolder',
-        text: 'Create HR folder for contractor'
+        text: 'Add onboarding documents to contractor folder'
       },
       {
         name: 'sendWelcomeEmail',
@@ -107,5 +107,8 @@ module.exports = {
         text: 'Add user to ClickTime'
       }
     ]
+  },
+  defaults: {
+    mssa: 'Please click the link below to complete and sign the Master Subcontractor Service Agreement. If you have any questions or concerns, please let me know.'
   }
 };

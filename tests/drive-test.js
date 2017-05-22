@@ -1,7 +1,6 @@
 const chai = require('chai');
 const chaiPromise = require('chai-as-promised');
 const proxyquire = require('proxyquire');
-const Contractor = require('../classes/contractor');
 const mock = require('./mocks');
 const nock = require('nock');
 const config = require('config');
@@ -20,8 +19,7 @@ describe('drive', () => {
         .reply(200, mockResponse);
     });
     it('should return an id for the created folder in Drive', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      return expect(drive.createFolder(contractor, {})).to.eventually.equal('testid_folder');
+      return expect(drive.createFolder(mock.contractor, {})).to.eventually.equal('testid_folder');
     });
   });
   describe('addFile', () => {
@@ -33,9 +31,8 @@ describe('drive', () => {
         .reply(200, mockResponse);
     });
     it('should return an id for the file we have copied and moved', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
       const fileObj = { name: 'mock_file', id: 'mock_folder_id' };
-      return expect(drive.addFile(contractor, {}, fileObj, 'mock_file_id')).to.eventually.equal('testid_file');
+      return expect(drive.addFile(mock.contractor, {}, fileObj, 'mock_file_id')).to.eventually.equal('testid_file');
     });
   });
   describe('shareFolder', () => {
@@ -47,8 +44,7 @@ describe('drive', () => {
         .reply(200, mockResponse);
     });
     it('should return an id for the permission resource created', () => {
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@google.com');
-      return expect(drive.shareFolder(contractor, {}, 'mock_folder_id')).to.eventually.equal('testid_shared');
+      return expect(drive.shareFolder(mock.contractor, {}, 'mock_folder_id')).to.eventually.equal('testid_shared');
     });
   });
   describe('getTasksFromFile', () => {

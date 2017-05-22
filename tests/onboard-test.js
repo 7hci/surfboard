@@ -1,7 +1,6 @@
 const chai = require('chai');
 const chaiPromise = require('chai-as-promised');
 const proxyquire = require('proxyquire');
-const Contractor = require('../classes/contractor');
 const mock = require('./mocks');
 
 chai.use(chaiPromise);
@@ -23,9 +22,8 @@ describe('onboard', () => {
         inviteToSlack: 'on',
         addUserToClickTime: 'on'
       };
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@gmail.com');
       const socket = new mock.Socket();
-      return onboard.runCheckedTasks(socket, tasks, {}, contractor)
+      return onboard.runCheckedTasks(socket, tasks, {}, mock.contractor)
         .then(() => {
           expect(socket.emitted).to.have.lengthOf(Object.keys(tasks).length);
         });
@@ -39,9 +37,8 @@ describe('onboard', () => {
         sendWelcomeEmail: 'on',
         inviteToSlack: 'on'
       };
-      const contractor = new Contractor('Jon', 'Snow', true, 'danielrearden@gmail.com');
       const socket = new mock.Socket();
-      return onboard.runCheckedTasks(socket, tasks, {}, contractor)
+      return onboard.runCheckedTasks(socket, tasks, {}, mock.contractor)
         .then(() => {
           expect(socket.emitted).to.have.lengthOf(Object.keys(tasks).length);
         });

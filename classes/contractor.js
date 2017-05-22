@@ -5,12 +5,14 @@ const crypto = require('crypto');
 
 module.exports =
   class Contractor {
-    constructor(firstName, lastName, isResident, privateEmail, override) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.isResident = isResident;
-      this.privateEmail = privateEmail;
-      this.override = override;
+    constructor(newHire) {
+      this.firstName = newHire.firstName;
+      this.lastName = newHire.lastName;
+      this.isResident = newHire.isResident;
+      this.privateEmail = newHire.email;
+      this.override = newHire.override;
+      this.contractId = newHire.contractId;
+      this.folderId = newHire.folderId;
     }
 
     getFullName() {
