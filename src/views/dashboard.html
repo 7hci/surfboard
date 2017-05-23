@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>SurfBOARD</title>
+    <!-- inject:css -->
+    <!-- endinject -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="https://use.fontawesome.com/00fb325d47.js"></script>
+</head>
+<body id="dashboard">
+<div id="step0" class="container">
+    <div class="row justify-content-center align-items-center fill-height">
+        <div class="col-lg-5 col-md-7 col-sm-9 col-xs-11">
+            <div class="card">
+                <div class="card-header card-success">Onboarding in Progress</div>
+                <ul id="inProgress" class="list-group list-group-flush"></ul>
+                <div class="d-flex justify-content-end card-block">
+                    <button class="btn btn-success" id="newTalentButton" type="button" data-continue-to="1">New Talent
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="step1" class="container hide">
+    <div class="row justify-content-center align-items-center fill-height">
+        <form id="infoForm" role="form" data-toggle="validator"
+              class="col-lg-5 col-md-7 col-sm-9 col-xs-10">
+            <div class="card">
+                <div class="card-header card-success">General Information</div>
+                <div class="card-block">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <span>First Name</span>
+                            <input type="text" name="firstName" id="firstName" class="form-control"
+                                   required>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            <span>Last Name</span>
+                            <input type="text" name="lastName" id="lastName" class="form-control"
+                                   required>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            <span>E-mail</span>
+                            <input type="email" name="email" id="email" class="form-control"
+                                   required>
+                        </label>
+                    </div>
+                    <label class="control-label"
+                           for="override"><span>Override Generated Local-Part:</span></label>
+                    <div class="input-group">
+                        <input type="text" name="override" id="override" class="form-control">
+                        <span class="input-group-addon">@7hci.com</span>
+                    </div>
+                    <br>
+                    <div class="checkbox">
+                        <label> <input type="checkbox" name="resident" id="resident" checked> <b>U.S.
+                            Resident</b> </label>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end card-block">
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="step2" class="container hide">
+    <div class="row justify-content-center align-items-center fill-height">
+        <form id="contractForm" role="form" data-toggle="validator"
+              class="col-lg-5 col-md-7 col-sm-9 col-xs-10">
+            <div class="card">
+                <div class="card-header card-success">Send Contract</div>
+                <div class="card-block">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <span>Custom Message</span>
+                            <textarea name="message" id="message" class="form-control" rows="7"
+                                      required>{{ message }}</textarea>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            <span>CC</span> <i>Optional</i>
+                            <input type="text" name="cc" id="cc" class="form-control">
+                        </label>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end card-block">
+                    <button class="btn btn-secondary" type="button" data-skip-to="5">Skip</button>&nbsp;
+                    <button class="btn btn-success" type="submit">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="step3" class="container hide">
+    <div class="row justify-content-center align-items-center fill-height">
+        <div class="col-lg-5 col-md-7 col-sm-9 col-xs-10">
+            <div class="card">
+                <div class="card-header card-success">Send Contract</div>
+                <div class="card-block">
+                    <p>
+                    An e-mail has been sent to the new hire with instructions on how to complete the
+                    and sign the contract. Onboarding will resume once this step is completed.
+                    </p>
+                </div>
+                <div class="d-flex justify-content-end card-block">
+                    <button class="btn btn-secondary" type="button" data-skip-to="5">Skip</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="step4" class="hide">
+    <div id="pdfPreview" class="my-content fixed-top">
+    </div>
+    <div id="pdfFooter" class="my-footer fixed-bottom">
+        <button class="btn btn-danger" type="button" data-skip-to="2">Reject</button> &nbsp;
+        <button class="btn btn-success" id="step4SubmitButton" type="button">Sign</button>
+    </div>
+</div>
+<div id="step5" class="container hide">
+    <div class="row justify-content-center align-items-center fill-height">
+        <form id="onboardForm" role="form" data-toggle="validator"
+              class="col-lg-5 col-md-7 col-sm-9 col-xs-10">
+            <div class="card">
+                <div class="card-header card-success">Onboarding Tasks</div>
+                <div class="card-block">
+
+                        {% if tasks %}
+                            {% for task in tasks %}
+                                <div class="form-check task">
+                                    <label for="{{ task.name }}" class="form-check-label"><input
+                                            type="checkbox" checked
+                                            class="form-check-input"
+                                            id="{{ task.name }}"
+                                            name="{{ task.name }}"> {{ task.text }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                </div>
+                <div class="d-flex justify-content-end card-block">
+                    <button class="btn btn-secondary" type="button" data-skip-to="6">Skip</button> &nbsp;
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="step5Progress" class="container hide">
+    <div class="row justify-content-center align-items-center fill-height">
+        <div class="col-lg-5 col-md-7 col-sm-9 col-xs-10">
+            <div class="card">
+                <div class="card-header card-success">Onboarding Tasks</div>
+                <div id="updates" class="card-block">
+                </div>
+                <div id="continueStep5" class="d-flex justify-content-end card-block hide">
+                    <button class="btn btn-success" type="button" data-continue-to="6">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="step6" class="container hide">
+    <div class="row justify-content-center align-items-center fill-height">
+        <div class="col-lg-5 col-md-7 col-sm-9 col-xs-10">
+            <div class="card">
+                <div class="card-header card-success">Revisit Previous Steps</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item new-hire" data-skip-to="2">Send Contract</li>
+                    <li class="list-group-item new-hire" data-skip-to="4">Review Contract</li>
+                    <li class="list-group-item new-hire" data-skip-to="5">Onboarding Tasks</li>
+                </ul>
+                <div class="d-flex justify-content-end card-block hide">
+                    <button class="btn btn-success" id="step6CompleteButton" type="button">Complete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="spinner"><img src="/img/loading.gif"></div>
+<script>var credentials = {{ credentials | safe }};</script>
+<!-- inject:js -->
+<!-- endinject -->
+</body>
+</html>

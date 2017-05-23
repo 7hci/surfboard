@@ -11,10 +11,7 @@
     "chai-friendly"
   ],
   "rules": {
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
+    "linebreak-style": "off",
     "comma-dangle": [
       "error",
       "never"

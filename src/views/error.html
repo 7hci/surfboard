@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Error</title>
+
+</head>
+<body>
+<div class="main-content">
+    <form id="onboardingForm" class="form-labels-on-top" method="POST" action="/onboard">
+        {% if error %}
+            <h2>{{ error.status }}</h2>
+            <div class="form-row">
+                <p>{{ error.stack }}</p>
+            </div>
+        {% else %}
+        <div class="form-row">
+            <p>Error: {{ errorMessage }}</p>
+        </div>
+        {% endif %}
+    </form>
+
+</div>
+</body>
+</html>
