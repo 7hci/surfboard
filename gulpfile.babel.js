@@ -14,6 +14,7 @@ import clean from 'gulp-clean';
 import sequence from 'run-sequence';
 import uglify from 'gulp-uglify';
 import sourcemaps from 'gulp-sourcemaps';
+import changed from 'gulp-changed';
 
 gulp.task('clean-build', (callback) => {
   sequence(
@@ -44,18 +45,16 @@ gulp.task('inject', () => {
     }
     return `<script src="${path}"></script>`;
   };
-  const sources = gulp.src(['./dist/public/js/*.js', './dist/public/css/*.css'], { read: false });
+  const sources = gulp.src(['./dist/server/public/js/*.js', './dist/server/public/css/*.css'], { read: false });
 
-  return gulp.src('./dist/views/*.html')
+  return gulp.src('./dist/server/views/*.html')
     .pipe(inject(sources, { transform }))
-    .pipe(gulp.dest('./dist/views'));
+    .pipe(gulp.dest('./dist/server/views'));
 });
 
 gulp.task('build-server', () => gulp
-  .src([
-    './src/**',
-    '!./src/assets{,/**}'],
-    { base: './src/' })
+  .src(['./src/server/**/*'], { base: './src/' })
+  .pipe(changed('./dist/'))
   .pipe(gulp.dest('./dist/')));
 
 gulp.task('build-styles', () => {
@@ -64,26 +63,26 @@ gulp.task('build-styles', () => {
     flexbugs(),
     cssnano()
   ];
-  return sass(['./src/assets/scss/*.scss', './src/assets/scss/bootstrap/bootstrap.scss'])
+  return sass(['./src/client/styles/app.scss'])
     .on('error', sass.logError)
     .pipe(postcss(plugins))
-    .pipe(gulp.dest('./dist/public/css'));
+    .pipe(gulp.dest('./dist/server/public/css'));
 });
 
 gulp.task('build-scripts', () => {
-  const files = glob.sync('./src/assets/js/*.js');
+  const files = glob.sync('./src/client/*.js*');
   return browserify({ entries: files })
-    .transform(babelify, { presets: ['es2015', 'es2016'] })
+    .transform(babelify, { presets: ['es2015', 'es2016', 'react'] })
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(uglify())
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./dist/public/js'));
+    .pipe(gulp.dest('./dist/server/public/js'));
 });
 
 gulp.task('build-static', () => gulp
-  .src([
-    './src/assets/img/*'])
-  .pipe(gulp.dest('./dist/public/img')));
+  .src(['./src/client/assets/**/*'], { base: './src/client/assets' })
+  .pipe(changed('./dist/server/public'))
+  .pipe(gulp.dest('./dist/server/public')));

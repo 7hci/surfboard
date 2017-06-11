@@ -11,9 +11,9 @@ module.exports = {
   google: {
     clientId: '',
     clientSecret: '',
-    redirectUri: 'http://surfboard.7hci.com/oauth2callback',
     scope: 'https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/script.send_mail https://www.googleapis.com/auth/script.external_request',
-    baseUrl: 'https://www.googleapis.com'
+    baseUrl: 'https://www.googleapis.com',
+    redirectUri: 'http://surfboard.7hci.com/oauth2callback'
   },
   clicktime: {
     user: '',
