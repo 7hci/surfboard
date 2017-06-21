@@ -1,5 +1,5 @@
 /* eslint-disable */
-const Contractor = require('../dist/server/classes/contractor');
+const Contractor = require('../server/classes/contractor');
 
 describe('Contractor', () => {
   it('should return the full name separated by a space', () => {

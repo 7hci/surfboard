@@ -1,14 +1,14 @@
 /* eslint-disable */
 
 jest.mock('log4js', () => require('./mocks/log4js'));
-jest.mock('../dist/server/lib/clicktime', () => require('./mocks/clicktime'));
-jest.mock('../dist/server/lib/domain', () => require('./mocks/domain'));
-jest.mock('../dist/server/lib/drive', () => require('./mocks/drive'));
-jest.mock('../dist/server/lib/gmail', () => require('./mocks/gmail'));
-jest.mock('../dist/server/lib/slack', () => require('./mocks/slack'));
-jest.mock('../dist/server/lib/trello', () => require('./mocks/trello'));
+jest.mock('../server/lib/clicktime', () => require('./mocks/clicktime'));
+jest.mock('../server/lib/domain', () => require('./mocks/domain'));
+jest.mock('../server/lib/drive', () => require('./mocks/drive'));
+jest.mock('../server/lib/gmail', () => require('./mocks/gmail'));
+jest.mock('../server/lib/slack', () => require('./mocks/slack'));
+jest.mock('../server/lib/trello', () => require('./mocks/trello'));
 
-const onboard = require('../dist/server/lib/onboard');
+const onboard = require('../server/lib/onboard');
 const Contractor = require('./mocks/contractor');
 const Socket = require('./mocks/socket');
 

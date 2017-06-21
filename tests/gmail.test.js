@@ -1,12 +1,12 @@
 /* eslint-disable */
 
 jest.mock('log4js', () => require('./mocks/log4js'));
-jest.mock('../dist/server/lib/google-auth', () => require('./mocks/google-auth'));
+jest.mock('../server/lib/google-auth', () => require('./mocks/google-auth'));
 
 const nock = require('nock');
 const config = require('config');
-const gmail = require('../dist/server/lib/gmail');
-const testTemplate = require('../dist/server/views/email/test-template');
+const gmail = require('../server/lib/gmail');
+const testTemplate = require('../server/views/email/test-template');
 const Contractor = require('./mocks/contractor');
 const Socket = require('./mocks/socket');
 

@@ -1,5 +1,5 @@
 /* eslint-disable */
-const auth = require('../dist/server/lib/google-auth');
+const auth = require('../server/lib/google-auth');
 const config = require('config');
 
 describe('google-auth', () => {

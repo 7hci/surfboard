@@ -4,7 +4,7 @@ jest.mock('log4js', () => require('./mocks/log4js'));
 
 const nock = require('nock');
 const config = require('config');
-const slack = require('../dist/server/lib/slack');
+const slack = require('../server/lib/slack');
 const Contractor = require('./mocks/contractor');
 const Socket = require('./mocks/socket');
 
