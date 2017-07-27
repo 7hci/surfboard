@@ -1,5 +1,7 @@
-module.exports = (sequelize, DataTypes) =>
-  sequelize.define('Setting', {
+const { reduce } = require('lodash');
+
+module.exports = (sequelize, DataTypes) => {
+  const Setting = sequelize.define('Setting', {
     key: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -12,3 +14,10 @@ module.exports = (sequelize, DataTypes) =>
       field: 'value'
     }
   });
+
+  Setting.getAll = () => Setting.findAll()
+    .then(settings => reduce(settings, (accumulator, { key, value }) =>
+      Object.assign({ [key]: value }, accumulator), {}));
+
+  return Setting;
+};

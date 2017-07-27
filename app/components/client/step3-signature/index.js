@@ -1,14 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
 import actions from '../../../redux/actions';
+import selectors from '../../../redux/selectors';
+import mutations from '../../../graphql/mutations';
 import Step3Signature from './view';
 
 const Container = props => <Step3Signature {...props} />;
-const mapStateToProps = ({ signature: { clear, data }, currentHire: { id } }) => ({ clear, data, id });
-const mergeProps = (stateProps, { dispatch }, ownProps) => Object.assign({ dispatch }, stateProps, ownProps, {
-  handleDrawn: (data) => { dispatch(actions.setSignatureData(data)); },
-  handleClickClear: () => { dispatch(actions.clearSignature()); },
-  handleClickUpload: () => { dispatch(actions.uploadDrawnSignature(stateProps.data, stateProps.id)); }
+const { selectId, selectSignatureData, selectSignatureClear } = selectors;
+const mapStateToProps = state =>
+  ({ clear: selectSignatureClear(state), data: selectSignatureData(state), id: selectId(state) });
+const mapDataToProps = ({ ownProps: { id, data, dispatch }, mutate: uploadSignature }) => ({
+  handleClickUpload: () => {
+    const file = new File([data], 'drawn.png');
+    return uploadSignature({ variables: { file, id } })
+      .then(() => {
+        dispatch(actions.setUploadImageUrl(`/upload/${id}.bmp?${Date.now()}`));
+        dispatch(actions.replace(`/talent?id=${id}`));
+      });
+  },
+  handleDrawn: (points) => { dispatch(actions.setSignatureData(points)); },
+  handleClickClear: () => { dispatch(actions.clearSignature()); }
 });
 
-export default connect(mapStateToProps, null, mergeProps)(Container);
+export default compose(
+  connect(mapStateToProps),
+  graphql(mutations.uploadSignature, { props: mapDataToProps })
+)(Container);

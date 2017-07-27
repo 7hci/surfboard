@@ -6,6 +6,7 @@ const autoprefixer = require('autoprefixer');
 const flexbugs = require('postcss-flexbugs-fixes');
 const browserify = require('browserify');
 const babelify = require('babelify');
+const globify = require('require-globify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const glob = require('glob');
@@ -50,6 +51,7 @@ gulp.task('build-scripts', () => {
   const files = glob.sync('./app/*.js*');
   return browserify({ entries: files })
     .transform(babelify, { presets: ['es2015', 'es2016', 'react'], plugins: ['transform-object-rest-spread'] })
+    .transform(globify)
     .transform(envify({
       NODE_ENV: 'production'
     }))

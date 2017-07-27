@@ -3,7 +3,7 @@
  */
 const express = require('express');
 const Bluebird = require('bluebird');
-const models = require('../../db/models');
+const models = require('../../db/index');
 const domain = require('../../lib/domain');
 const _ = require('lodash');
 

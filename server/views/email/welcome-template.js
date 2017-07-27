@@ -5,7 +5,7 @@ module.exports = blanks =>
 
 Welcome to the team! You can access your Google Drive folder at:
 
-${blanks.folder || 'https://drive.google.com/drive/u/0/shared-with-me'} 
+https://drive.google.com/drive/u/0/${blanks.folder ? `folders/${blanks.folder}` : 'shared-with-me'} 
 
 Inside, you will find three documents to fill out:
 

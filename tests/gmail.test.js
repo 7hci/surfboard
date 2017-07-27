@@ -7,8 +7,18 @@ const nock = require('nock');
 const config = require('config');
 const gmail = require('../server/lib/gmail');
 const testTemplate = require('../server/views/email/test-template');
-const Contractor = require('./mocks/contractor');
+const NewHire = require('./mocks/newhire');
 const Socket = require('./mocks/socket');
+
+const newHire = new NewHire({
+  firstName: 'Jon',
+  lastName: 'Snow',
+  privateEmail: 'jonsnow@thenorth.com',
+  override: '',
+  isResident: true,
+  contractId: 'testid_contract',
+  folderId: 'testid_folder'
+});
 
 describe('gmail', () => {
   describe('sendWelcomeEmail', () => {
@@ -19,7 +29,7 @@ describe('gmail', () => {
         .query(true)
         .reply(200, mockResponse);
       const socket = new Socket();
-      return gmail.sendWelcomeEmail(new Contractor(), socket, {})
+      return gmail.sendWelcomeEmail(newHire, socket, {})
         .then(() => {
           expect(socket.emitted[0].status).toBe('success');
         });
@@ -30,7 +40,7 @@ describe('gmail', () => {
         .query(true)
         .reply(404);
       const socket = new Socket();
-      return gmail.sendWelcomeEmail(new Contractor(), socket, {})
+      return gmail.sendWelcomeEmail(newHire, socket, {})
         .then(() => {
           expect(socket.emitted[0].status).toBe('failure');
         });
@@ -44,7 +54,7 @@ describe('gmail', () => {
         .query(true)
         .reply(200, mockResponse);
       const socket = new Socket();
-      return gmail.sendLoginEmail(new Contractor(), socket, {})
+      return gmail.sendLoginEmail(newHire, socket, {})
         .then(() => {
           expect(socket.emitted[0].status).toBe('success');
         });
@@ -55,7 +65,7 @@ describe('gmail', () => {
         .query(true)
         .reply(404);
       const socket = new Socket();
-      return gmail.sendLoginEmail(new Contractor(), socket, {})
+      return gmail.sendLoginEmail(newHire, socket, {})
         .then(() => {
           expect(socket.emitted[0].status).toBe('failure');
         });
@@ -63,7 +73,7 @@ describe('gmail', () => {
   });
   describe('getMessageFromFile', () => {
     it('should return the retrieved text file with the contractor name inserted', () => {
-      expect(gmail.getMessageFromFile(new Contractor(), testTemplate)).toBe('Hello Jon!');
+      expect(gmail.getMessageFromFile(newHire, testTemplate)).toBe('Hello Jon!');
     });
   });
 });

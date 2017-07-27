@@ -5,8 +5,18 @@ jest.mock('log4js', () => require('./mocks/log4js'));
 const nock = require('nock');
 const config = require('config');
 const slack = require('../server/lib/slack');
-const Contractor = require('./mocks/contractor');
+const NewHire = require('./mocks/newhire');
 const Socket = require('./mocks/socket');
+
+const newHire = new NewHire({
+  firstName: 'Jon',
+  lastName: 'Snow',
+  privateEmail: 'jonsnow@thenorth.com',
+  override: '',
+  isResident: true,
+  contractId: 'testid_contract',
+  folderId: 'testid_folder'
+});
 
 describe('slack', () => {
   describe('inviteToSlack', () => {
@@ -17,7 +27,7 @@ describe('slack', () => {
         .query(true)
         .reply(200, mockResponse);
       const socket = new Socket();
-      return slack.inviteToSlack(new Contractor(), socket)
+      return slack.inviteToSlack(newHire, socket)
         .then(() => {
           expect(socket.emitted[0].status).toBe('success');
         });
@@ -29,7 +39,7 @@ describe('slack', () => {
         .query(true)
         .reply(200, mockResponse);
       const socket = new Socket();
-      return slack.inviteToSlack(new Contractor(), socket)
+      return slack.inviteToSlack(newHire, socket)
         .then(() => {
           expect(socket.emitted[0].status).toBe('failure');
         });
@@ -40,7 +50,7 @@ describe('slack', () => {
         .query(true)
         .reply(404);
       const socket = new Socket();
-      return slack.inviteToSlack(new Contractor(), socket)
+      return slack.inviteToSlack(newHire, socket)
         .then(() => {
           expect(socket.emitted[0].status).toBe('failure');
         });

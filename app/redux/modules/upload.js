@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 import { createAction } from 'redux-actions';
 
 const SET_UPLOAD_MESSAGE = 'SET_UPLOAD_MESSAGE';
-const SET_IMG_SRC = 'SET_IMG_SRC';
+const SET_IMG_URL = 'SET_IMG_URL';
 
 // ACTIONS
 export const setUploadMessage = createAction(SET_UPLOAD_MESSAGE);
-export const setUploadImageSource = createAction(SET_IMG_SRC);
+export const setUploadImageUrl = createAction(SET_IMG_URL);
 
 // REDUCERS
 const messageReducer = (state = 0, action) => {
@@ -15,11 +15,14 @@ const messageReducer = (state = 0, action) => {
     default: return state;
   }
 };
-const srcReducer = (state = 'img/placeholder.png', action) => {
+const urlReducer = (state = 'img/placeholder.png', action) => {
   switch (action.type) {
-    case SET_IMG_SRC: return action.payload;
+    case SET_IMG_URL: return action.payload;
     default: return state;
   }
 };
-export default combineReducers({ message: messageReducer, src: srcReducer });
+export default combineReducers({ message: messageReducer, url: urlReducer });
 
+// SELECTORS
+export const selectUploadMessage = state => state.upload.message;
+export const selectUploadUrl = state => state.upload.url;

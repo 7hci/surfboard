@@ -7,11 +7,15 @@ const UPDATE_CURRENT_HIRE = 'UPDATE_CURRENT_HIRE';
 export const setCurrentHire = createAction(SET_CURRENT_HIRE);
 export const updateCurrentHire = createAction(UPDATE_CURRENT_HIRE);
 
-// REDUCER
+// REDUCERS
 export default (state = {}, action) => {
   switch (action.type) {
     case SET_CURRENT_HIRE: return action.payload;
-    case UPDATE_CURRENT_HIRE: return Object.assign(state, action.payload);
+    case UPDATE_CURRENT_HIRE: return Object.assign({}, state, action.payload);
     default: return state;
   }
 };
+
+// SELECTORS
+export const selectCurrentHire = state => state.currentHire;
+export const selectId = state => state.currentHire.id;

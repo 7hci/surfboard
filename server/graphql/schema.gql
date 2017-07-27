@@ -1,0 +1,159 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+scalar JSON
+
+type Query {
+    # Get all new hires being onboarded
+    newHires: [NewHire]
+
+    # Get a single new hire by id
+    newHire (id: ID!): NewHire
+
+    # Get settings
+    settings: Settings
+}
+
+type Mutation {
+    # Add a new hire
+    newHire (formData: JSON!): NewHire
+
+    # Send contract to new hire
+    sendContract (formData: JSON!, id: ID!): Boolean
+
+    # Accept contract signed by new hire
+    acceptContract (id: ID!): Boolean
+
+    # Fills out contract for previewing
+    previewContract (formData: JSON!, id: ID!): NewHire
+
+    # Signs the contract and submits to 7HCI for approval
+    submitContract (id: ID!): Boolean
+
+    # Uploads image file of signature
+    uploadSignature (file: Upload!, id: ID!): Boolean
+
+    # Skip onboarding step for new hire
+    skipStep (id: ID!, step: Int!): Boolean
+
+    # Complete new hire process
+    completeHire (id: ID!): Boolean
+}
+
+type NewHire {
+    id: ID!
+
+    firstName: String
+
+    lastName: String
+
+    # New Hire's private e-mail
+    email: String
+
+    # Override for generated company e-mail address
+    override: String
+
+    # Is the New Hire a U.S. resident?
+    isResident: String
+
+    # Step in the onboarding process the New Hire is on
+    step: Int
+
+    # Google Drive ID for New Hire's contract document
+    contractId: String
+
+    # Google Drive ID for HR folder for New Hire
+    folderId: String
+
+    # OAuth credentials used to complete onboarding tasks
+    credentials: JSON
+}
+
+# Input for file uploads -- used by apollo-upload-server
+input Upload {
+    name: String!
+    type: String!
+    size: Int!
+    path: String!
+}
+
+type Settings {
+    # List of company personnel
+    personnel: [Personnel!]!
+
+    # Settings specific to ClickTime
+    clicktime: ClickTimeSettings
+
+    # Settings specific to the timesheet reporter
+    timesheetReporter: TimesheetReporterSettings
+}
+
+type ClickTimeSettings {
+    # API key
+    key: String
+
+    # UID used to fetch report via API
+    uid: String
+
+    # Report ID
+    reportId: String
+
+    # Username associated with the API key
+    username: String
+}
+
+type TimesheetReporterSettings {
+    # A list of timesheet reports to be sent
+    queue: [TimesheetReport]
+
+    # Whether automatic reporting is enabled
+    enabled: Boolean
+
+    # Whether to notify personnel when the reports are sent out
+    notifyPersonnel: Boolean
+
+    # Message to be sent along with the report
+    message: Message
+}
+
+type TimesheetReport {
+    # Who to send the report to
+    recipients: [String!]!
+
+    # Who to copy on the report e-mail
+    cc: [String!]!
+
+    # Description for the report
+    description: String
+
+    # Which projects are included in the report
+    projectsToInclude: [String!]!
+}
+
+type Message {
+    body: MessageBody
+
+    # Name of the reporter's sender
+    sender: String
+
+    # Signature to attach to the message
+    signature: String
+}
+
+type MessageBody {
+    # Message sent with the timesheet report
+    report: String
+
+    # Message sent with notification to personnel
+    notify: String
+}
+
+type Personnel {
+    # First and last name
+    name: String
+
+    # Company e-mail address
+    email: String
+}

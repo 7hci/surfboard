@@ -21,7 +21,7 @@ exports.addUserToClickTime = (contractor, socket) => {
     + ` --name="${contractor.getFullName()}"`
     + ` --email=${contractor.getEmail()}`;
 
-  if (process.env.NODE_ENV === 'testing') command += ' --test';
+  if (process.env.NODE_ENV === 'test') command += ' --test';
 
   const failureUpdate = { text: 'Problem adding user to ClickTime', status: 'failure', task: 'addUserToClickTime' };
   return new Bluebird((resolve) => {

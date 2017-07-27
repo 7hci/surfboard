@@ -8,7 +8,7 @@ const CLEAR_SIGNATURE = 'CLEAR_SIGNATURE';
 export const setSignatureData = createAction(SET_SIGNATURE_DATA);
 export const clearSignature = createAction(CLEAR_SIGNATURE);
 
-// REDUCER
+// REDUCERS
 const dataReducer = (state = {}, action) => {
   switch (action.type) {
     case SET_SIGNATURE_DATA: return action.payload;
@@ -23,3 +23,6 @@ const clearReducer = (state = false, action) => {
 };
 export default combineReducers({ data: dataReducer, clear: clearReducer });
 
+// SELECTORS
+export const selectSignatureData = state => state.signature.data;
+export const selectSignatureClear = state => state.signature.clear;

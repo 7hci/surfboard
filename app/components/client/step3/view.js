@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import { Page, InputGroupText, TabbedNav, Link } from '../../shared';
 
 const Step3 = (props) => {
+  props.updateForm();
   const { activeTab, spinner, message, src, handleTabSelected, handleUpload, handleSubmit } = props;
   const second = 'Optional - Use if contracting as business entity';
   const uploadMessages = [

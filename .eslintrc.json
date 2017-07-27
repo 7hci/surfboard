@@ -4,7 +4,7 @@
     "browser": true
   },
   "parserOptions": {
-    "ecmaVersion": 7,
+    "ecmaVersion": 8,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
@@ -22,8 +22,11 @@
       "error",
       "never"
     ],
+    "spaced-comment": 0,
     "no-console": "off",
+    "no-underscore-dangle": 0,
     "no-unused-expressions": 0,
+    "no-confusing-arrow": 0,
     "react/prop-types": 0,
     "jsx-a11y/no-noninteractive-element-interactions": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]

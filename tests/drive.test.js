@@ -4,9 +4,19 @@ jest.mock('log4js', () => require('./mocks/log4js'));
 jest.mock('../server/lib/google-auth', () => require('./mocks/google-auth'));
 
 const nock = require('nock');
-const Contractor = require('./mocks/contractor');
+const NewHire = require('./mocks/newhire');
 const config = require('config');
 const drive = require('../server/lib/drive');
+
+const newHire = new NewHire({
+  firstName: 'Jon',
+  lastName: 'Snow',
+  privateEmail: 'jonsnow@thenorth.com',
+  override: '',
+  isResident: true,
+  contractId: 'testid_contract',
+  folderId: 'testid_folder'
+});
 
 describe('drive', () => {
   describe('createFolder', () => {
@@ -16,7 +26,7 @@ describe('drive', () => {
         .post('/drive/v3/files')
         .query(true)
         .reply(200, mockResponse);
-      return expect(drive.createFolder(new Contractor(), {})).resolves.toBe('testid_folder');
+      return expect(drive.createFolder(newHire, {})).resolves.toBe('testid_folder');
     });
   });
   describe('addFile', () => {
@@ -27,7 +37,7 @@ describe('drive', () => {
         .query(true)
         .reply(200, mockResponse);
       const fileObj = { name: 'mock_file', id: 'mock_folder_id' };
-      return expect(drive.addFile(new Contractor(), {}, fileObj, 'mock_file_id')).resolves.toBe('testid_file');
+      return expect(drive.addFile(newHire, {}, fileObj, 'mock_file_id')).resolves.toBe('testid_file');
     });
   });
   describe('shareFolder', () => {
@@ -38,7 +48,7 @@ describe('drive', () => {
         .post(/drive\/v3\/files\/.*\/permissions/)
         .query(true)
         .reply(200, mockResponse);
-      return expect(drive.shareFolder(new Contractor(), {}, 'mock_folder_id')).resolves.toBe('testid_shared');
+      return expect(drive.shareFolder(newHire, {}, 'mock_folder_id')).resolves.toBe('testid_shared');
     });
   });
   describe('getTasksFromFile', () => {

@@ -49,6 +49,7 @@ domain.createContractorEmail = (contractor, socket, credentials) => {
         socket.emit('update',
           { text: 'Problem creating e-mail for contractor', status: 'failure', task: 'createContractorEmail' });
       }
+      return Promise.resolve();
     })
     .catch((err) => {
       logger.error(err);

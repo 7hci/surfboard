@@ -6,8 +6,18 @@ jest.mock('../server/lib/google-auth', () => require('./mocks/google-auth'));
 const nock = require('nock');
 const config = require('config');
 const domain = require('../server/lib/domain');
-const Contractor = require('./mocks/contractor');
+const NewHire = require('./mocks/newhire');
 const Socket = require('./mocks/socket');
+
+const newHire = new NewHire({
+  firstName: 'Jon',
+  lastName: 'Snow',
+  privateEmail: 'jonsnow@thenorth.com',
+  override: '',
+  isResident: true,
+  contractId: 'testid_contract',
+  folderId: 'testid_folder'
+});
 
 describe('domain', () => {
   describe('createContractorEmail', () => {
@@ -19,7 +29,7 @@ describe('domain', () => {
         .once()
         .reply(200, mockResponse);
       const socket = new Socket();
-      return domain.createContractorEmail(new Contractor(), socket, {})
+      return domain.createContractorEmail(newHire, socket, {})
         .then(() => {
           expect(socket.emitted[0].status).toBe('success');
         });
@@ -31,7 +41,7 @@ describe('domain', () => {
         .once()
         .reply(404);
       const socket = new Socket();
-      return domain.createContractorEmail(new Contractor(), socket, {})
+      return domain.createContractorEmail(newHire, socket, {})
         .then(() => {
           expect(socket.emitted[0].status).toBe('failure');
         });

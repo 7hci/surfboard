@@ -4,8 +4,6 @@
 
 const request = require('request-promise').defaults({ simple: false });
 const config = require('config');
-const Bluebird = require('bluebird');
-const models = require('../db/models');
 const logger = require('log4js').getLogger('app');
 const googleAuth = require('./google-auth');
 const welcomeTemplate = require('../views/email/welcome-template');
@@ -121,12 +119,7 @@ gmail.getMessageFromFile = (contractor, template) => {
  * @returns the encoded e-mail
  */
 gmail.generateEncodedEmail = (contractor, message, subject, usePrivateEmail, cc) => {
-  let recipient;
-  if (usePrivateEmail) {
-    recipient = contractor.privateEmail;
-  } else {
-    recipient = contractor.getEmail();
-  }
+  const recipient = usePrivateEmail ? contractor.email : contractor.getEmail();
   const rawData = [
     'Content-Type: text/plain; charset="UTF-8"\n',
     'MIME-Version: 1.0\n',
@@ -141,50 +134,35 @@ gmail.generateEncodedEmail = (contractor, message, subject, usePrivateEmail, cc)
 };
 
 /**
- * Main function to send the contractor a link to their MSSA
- * @param formData form input values
- * @param id new hire id
- * @param credentials Google auth credentials stored in the user's sessions
- * @returns the encoded e-mail
+ * Send the contractor a link to their MSSA
+ * @param {Object} formData form input values
+ * @param {Object} newHire
+ * @param {Object} credentials Google auth credentials stored in the user's sessions
  */
-gmail.sendContract = (formData, id, credentials) => {
-  const message =
-    `${formData.message}\n\nhttp://surfboard.7hci.com/talent?id=${id}`;
-  const cc = formData.cc;
-  let person;
-
-  return Bluebird.all([
-    googleAuth.getAccessToken(credentials),
-    models.NewHire.findById(id)
-  ])
-    .then((result) => {
-      const token = result[0];
-      person = result[1];
-      const contractor = { privateEmail: person.email };
-      const gmailUrl = `${config.get('google.baseUrl')}/gmail/v1/users/me/messages/send`;
-      return request.post({
-        url: gmailUrl,
-        qs: {
-          access_token: token,
-          userId: 'me'
-        },
-        json: true,
-        body: {
-          raw: gmail.generateEncodedEmail(contractor, message, 'Master Subcontractor Service Agreement', true, cc)
-        }
-      });
-    })
-    .then((messageData) => {
-      if ('id' in messageData) {
-        logger.info('Sent MSSA e-mail');
-        person.step = 3;
-        return person.save();
+gmail.sendContract = (formData, newHire, credentials) => googleAuth.getAccessToken(credentials)
+  .then((token) => {
+    const contractor = { email: newHire.email };
+    const message = `${formData.message}\n\nhttp://surfboard.7hci.com/talent?id=${newHire.id}`;
+    const cc = formData.cc;
+    const raw = gmail.generateEncodedEmail(contractor, message, 'Master Subcontractor Service Agreement', true, cc);
+    const gmailUrl = `${config.get('google.baseUrl')}/gmail/v1/users/me/messages/send`;
+    return request.post({
+      url: gmailUrl,
+      qs: {
+        access_token: token,
+        userId: 'me'
+      },
+      json: true,
+      body: {
+        raw
       }
-      throw new Error('Failed to successfully send e-mail');
-    })
-    .then(() => ({ newHire: person }))
-    .catch((err) => {
-      logger.error(err);
-      return { error: `Server returned error: ${err.message}` };
     });
-};
+  })
+  .then((messageData) => {
+    if ('id' in messageData) {
+      logger.info('Sent MSSA e-mail');
+      newHire.set('step', 3);
+      return newHire.save();
+    }
+    throw new Error('Failed to successfully send e-mail');
+  });

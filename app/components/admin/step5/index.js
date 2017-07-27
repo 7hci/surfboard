@@ -1,28 +1,32 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import io from 'socket.io-client';
+import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
+import mutations from '../../../graphql/mutations';
+import actions from '../../../redux/actions';
+import selectors from '../../../redux/selectors';
+import { status } from '../../../constants';
 import Before from './before';
 import After from './after';
-import actions from '../../../redux/actions';
-import { status } from '../../../constants';
 
 let socket;
 
 class Step5Container extends React.Component {
   componentDidMount() {
-    this.props.dispatch(actions.getTasks());
-    this.props.dispatch(actions.setOnboardingProgress(status.NOT_STARTED));
+    const { dispatch } = this.props;
+    dispatch(actions.resetTasks());
+    dispatch(actions.setProgress(status.NOT_STARTED));
     socket = io();
     socket.on('finish', () => {
-      this.props.dispatch(actions.setSpinnerVisibility(false));
-      this.props.dispatch(actions.setOnboardingProgress(status.DONE));
+      dispatch(actions.setSpinnerVisibility(false));
+      dispatch(actions.setProgress(status.DONE));
     });
     socket.on('server_error', () => {
       console.log('Server error');
-      this.props.dispatch(actions.setSpinnerVisibility(false));
+      dispatch(actions.setSpinnerVisibility(false));
     });
     socket.on('update', (update) => {
-      this.props.dispatch(actions.updateTask(update));
+      dispatch(actions.updateTask(update));
     });
   }
 
@@ -34,19 +38,25 @@ class Step5Container extends React.Component {
     return this.props.progress === status.NOT_STARTED ? <Before {...this.props} /> : <After {...this.props} />;
   }
 }
-
-const mapStateToProps =
-  ({ currentHire: { id }, tasks, spinner, onboardingProgress, form: { onboarding } }) =>
-    ({ id, tasks, spinner, progress: onboardingProgress, form: onboarding });
-const mergeProps = (stateProps, { dispatch }, ownProps) => Object.assign({ dispatch }, stateProps, ownProps, {
-  handleClickSkip: () => {
-    dispatch(actions.skipStep(6, stateProps.id));
-  },
+const mapStateToProps = state => ({
+  id: selectors.selectId(state),
+  tasks: selectors.selectTasks(state),
+  spinner: selectors.selectSpinner(state),
+  progress: selectors.selectProgress(state),
+  form: state.form.onboarding
+});
+const mapDataToProps = ({ ownProps: { id, form, dispatch }, mutate: skipStep }) => ({
+  handleClickReject: () => skipStep({ variables: { step: 6, id } })
+    .then(() => { dispatch(actions.replace('/admin/6')); }),
   handleClickStart: () => {
     dispatch(actions.setSpinnerVisibility(true));
-    dispatch(actions.setOnboardingProgress(status.STARTED));
-    dispatch(actions.startOnboarding(socket, stateProps.form, stateProps.id));
-  }
+    dispatch(actions.setProgress(status.STARTED));
+    socket.emit('onboard', form, id);
+  },
+  handleClickSkip: () => skipStep({ variables: { step: 6, id } })
+    .then(() => { dispatch(actions.replace('/admin/6')); })
 });
-
-export default connect(mapStateToProps, null, mergeProps)(Step5Container);
+export default compose(
+  connect(mapStateToProps),
+  graphql(mutations.skipStep, { props: mapDataToProps })
+)(Step5Container);

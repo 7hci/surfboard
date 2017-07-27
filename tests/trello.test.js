@@ -5,8 +5,17 @@ jest.mock('log4js', () => require('./mocks/log4js'));
 const nock = require('nock');
 const config = require('config');
 const trello = require('../server/lib/trello');
-const Contractor = require('./mocks/contractor');
-const Socket = require('./mocks/socket');
+const NewHire = require('./mocks/newhire');
+
+const newHire = new NewHire({
+  firstName: 'Jon',
+  lastName: 'Snow',
+  privateEmail: 'jonsnow@thenorth.com',
+  override: '',
+  isResident: true,
+  contractId: 'testid_contract',
+  folderId: 'testid_folder'
+});
 
 describe('trello', () => {
   describe('addBoard', () => {
@@ -16,7 +25,7 @@ describe('trello', () => {
         .post('/boards')
         .query(true)
         .reply(200, mockResponse);
-      return expect(trello.addBoard(new Contractor())).resolves.toBe('testid_board');
+      return expect(trello.addBoard(newHire)).resolves.toBe('testid_board');
     });
   });
 

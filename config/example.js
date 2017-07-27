@@ -2,9 +2,6 @@ module.exports = {
   api: {
     key: '###'
   },
-  db: {
-    password: '###'
-  },
   google: {
     clientId: '###',
     clientSecret: '###',
@@ -35,10 +32,6 @@ module.exports = {
     team: {
       id: '###',
       members: [
-        {
-          name: '###',
-          id: '###'
-        },
         {
           name: '###',
           id: '###'
