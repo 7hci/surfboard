@@ -1,0 +1,210 @@
+@import "bootstrap";
+@import "../../node_modules/font-awesome/scss/font-awesome";
+$use-all: true;
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow-x:hidden;
+}
+
+a, a:link, a:visited, a:active {
+  outline: none;
+  color: $brand-success;
+}
+
+a.btn-success, a.btn-danger {
+   color: #ffffff;
+}
+
+a.btn-secondary {
+  color: grey;
+}
+
+.page-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.page-container {
+  @extend .container;
+  height: 100%;
+}
+
+.page-row {
+  @extend .row;
+  @extend .justify-content-center;
+  @extend .align-items-center;
+  min-height: 100%;
+}
+
+.page-card {
+  @extend .card;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0.3rem 0.3rem lightgrey;
+}
+
+.page-header {
+  @extend .card-header;
+  @extend .card-success;
+  color: #ffffff;
+  display: block;
+  text-align: center;
+}
+
+.card-item {
+  @extend .list-group-item;
+  list-style: none;
+}
+
+.card-item:hover {
+  cursor: pointer;
+  background: whitesmoke;
+}
+
+.input-group-label {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.input-group-check {
+  @extend .form-check;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+%status {
+  display: flex;
+  align-items: center;
+}
+
+.loading {
+  @extend %status;
+  color: $gray-lighter;
+}
+
+.success {
+  @extend %status;
+  color: $brand-success;
+}
+
+.failure {
+  @extend %status;
+  color: $brand-danger;
+}
+
+.fullscreen-content {
+  @extend .fixed-top;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 85%;
+}
+
+.fullscreen-footer {
+  @extend .fixed-bottom;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem;
+  height: 15%;
+}
+
+.tab-content {
+  width: 100%;
+  height: 175px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: solid 1px #DDD;
+}
+
+.nav-item:hover {
+  cursor:pointer;
+}
+
+.spinner {
+  position: fixed;
+  opacity: .4;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.spinner > img {
+  width: 12vh;
+  height: 12vh;
+}
+
+// Transition animations
+
+%slide {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slide-enter {
+  @extend %slide;
+  opacity: 0.01;
+  transform: translate3d(100%, 0, 0);
+}
+
+.slide-enter.slide-enter-active {
+  @extend %slide;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: all ease-out 400ms;
+}
+
+.slide-leave {
+  @extend %slide;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.slide-leave.slide-leave-active {
+  @extend %slide;
+  opacity: 0.01;
+  transform: translate3d(-100%, 0, 0);
+  transition: all ease-out 400ms;
+}
+
+.slide-appear {
+  @extend %slide;
+  opacity: 0.01;
+  transform: translate3d(100%, 0, 0);
+}
+
+.slide-appear.slide-appear-active {
+  @extend %slide;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: all ease-out 400ms;
+}
+
+// Dropzone file upload customization
+
+.dropzone {
+  height: 175px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: dashed 1px #DDD;
+  border-radius: .25rem;
+  color: grey;
+}
+.dropzone > i {
+  color: grey;
+}
+
+// div inserted by PDFObject library
+
+.pdfobject {
+  //background: url(/img/loading.gif) no-repeat center center fixed;
+  background: url(/img/loading.gif) center center/12vh 12vh no-repeat fixed;
+}
